@@ -1,0 +1,24 @@
+{
+  "name": "AiTomo (아이친구)",
+  "short_name": "AiTomo",
+  "description": "한일 커플 및 주부를 위한 육아 정보 교류 커뮤니티",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#FEFAF4",
+  "theme_color": "#FEFAF4",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "https://api.iconify.design/solar/tea-cup-bold-duotone.svg?color=%23eb855e",
+      "sizes": "192x192",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "https://api.iconify.design/solar/tea-cup-bold-duotone.svg?color=%23eb855e",
+      "sizes": "512x512",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

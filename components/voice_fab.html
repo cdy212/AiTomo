@@ -1,0 +1,66 @@
+<!-- Voice First Global FAB -->
+<div class="fixed bottom-[80px] md:bottom-8 right-4 md:right-8 z-[90] flex flex-col items-end gap-3 reveal-up" style="--index: 10;">
+    
+    <!-- Input Trigger CTA -->
+    <div id="voice-tooltip" class="bg-textmain text-white px-4 py-2.5 rounded-t-2xl rounded-bl-2xl rounded-br-sm shadow-ambient text-[13px] font-bold hidden md:block opacity-0 translate-y-2 transition-all duration-300">
+        "답십리 보육원 추천해줘" 🎙️
+    </div>
+
+    <button id="voice-fabBtn" class="relative group bg-accent hover:bg-[#E39371] text-white w-16 h-16 md:w-18 md:h-18 rounded-full shadow-[0_12px_25px_rgba(240,165,132,0.4)] flex items-center justify-center transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] hover:scale-105 active:scale-95">
+        <!-- Pulse effect rings -->
+        <div class="absolute inset-0 rounded-full animate-ping bg-accent/30 pointer-events-none group-hover:bg-accent/40 hidden"></div>
+        <iconify-icon icon="solar:microphone-3-bold" class="text-3xl drop-shadow-md z-10 transition-transform group-hover:scale-110"></iconify-icon>
+    </button>
+</div>
+
+<!-- Core Script for Voice FAB -->
+<script>
+    setTimeout(() => {
+        const fab = document.getElementById('voice-fabBtn');
+        const tooltip = document.getElementById('voice-tooltip');
+        
+        let fabTimer;
+        
+        // Show tooltip on load briefly
+        setTimeout(() => {
+            if(tooltip) {
+                tooltip.classList.remove('opacity-0', 'translate-y-2');
+                tooltip.classList.add('opacity-100', 'translate-y-0');
+            }
+        }, 1500);
+
+        setTimeout(() => {
+            if(tooltip) {
+                tooltip.classList.add('opacity-0', 'translate-y-2');
+                tooltip.classList.remove('opacity-100', 'translate-y-0');
+            }
+        }, 5000);
+
+        fab.addEventListener('mouseenter', () => {
+            tooltip.classList.remove('opacity-0', 'translate-y-2');
+            tooltip.classList.add('opacity-100', 'translate-y-0');
+        });
+
+        fab.addEventListener('mouseleave', () => {
+            tooltip.classList.add('opacity-0', 'translate-y-2');
+            tooltip.classList.remove('opacity-100', 'translate-y-0');
+        });
+
+        // Click Action Simulation
+        fab.addEventListener('click', () => {
+            fab.querySelector('div').classList.remove('hidden'); // Show ping
+            // In a real app, bind Web Speech API logic here
+            tooltip.innerText = "듣는 중입니다...";
+            tooltip.classList.remove('opacity-0', 'translate-y-2');
+            tooltip.classList.add('opacity-100', 'translate-y-0');
+            
+            setTimeout(() => {
+               fab.querySelector('div').classList.add('hidden'); // Hide ping
+               tooltip.innerText = "음료 한잔 먼저 마실게요!";
+               setTimeout(()=>{
+                   tooltip.classList.add('opacity-0');
+               }, 1500);
+            }, 3000);
+        });
+    }, 100);
+</script>
