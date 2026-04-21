@@ -180,16 +180,17 @@
                     </label>
                     
                     <div class="relative bg-white border border-black/5 rounded-2xl shadow-inner-highlight outline-none focus-within:ring-2 focus-within:ring-accent/50 transition-all ring-1 ring-black/[0.02]">
-                        <textarea placeholder="해당 장소나 정보에 대한 경험을 텍스트나 음성으로 남겨주세요...&#10;(예: 유모차 진입로가 편해요, 대기가 길어요)" class="w-full h-40 bg-transparent resize-none outline-none p-4 text-[14px] font-medium text-textmain placeholder:text-textmuted leading-relaxed" required></textarea>
+                        <textarea id="wiki-memo" placeholder="해당 장소나 정보에 대한 경험을 텍스트나 음성으로 남겨주세요...&#10;(예: 유모차 진입로가 편해요, 대기가 길어요)" class="w-full h-40 bg-transparent resize-none outline-none p-4 text-[14px] font-medium text-textmain placeholder:text-textmuted leading-relaxed" required></textarea>
                         
                         <!-- Embedded Voice Button inside TextArea -->
                         <div class="absolute bottom-3 right-3 flex items-center gap-2">
-                            <div class="px-3 hidden md:block text-[11px] font-bold text-accent bg-accent/10 rounded-full items-center h-8 leading-8 animate-pulse">
+                            <div id="voice-status" class="px-3 hidden text-[11px] font-bold text-accent bg-accent/10 rounded-full flex items-center h-8 leading-8 animate-pulse transition-colors">
                                 입력 준비
                             </div>
-                            <button type="button" class="w-12 h-12 bg-accent text-white rounded-full flex items-center justify-center shadow-lg hover:scale-105 active:scale-95 transition-spring group overflow-hidden relative">
+                            <button id="voice-btn" type="button" class="w-12 h-12 bg-accent text-white rounded-full flex items-center justify-center shadow-lg hover:scale-105 active:scale-95 transition-spring group overflow-hidden relative">
                                 <div class="absolute inset-0 bg-white/20 scale-0 group-hover:scale-100 transition-transform rounded-full origin-center"></div>
-                                <iconify-icon icon="solar:microphone-3-bold" class="text-2xl"></iconify-icon>
+                                <div id="voice-ping" class="absolute inset-0 rounded-full animate-ping bg-white/40 pointer-events-none hidden"></div>
+                                <iconify-icon icon="solar:microphone-3-bold" class="text-2xl relative z-10"></iconify-icon>
                             </button>
                         </div>
                     </div>
@@ -231,6 +232,69 @@
 
         document.addEventListener("DOMContentLoaded", () => {
             loadComponent("c-nav", "components/nav.html");
+
+            // Voice Recognition Logic for Wiki Memo
+            const voiceBtn = document.getElementById('voice-btn');
+            const voiceStatus = document.getElementById('voice-status');
+            const voicePing = document.getElementById('voice-ping');
+            const memoArea = document.getElementById('wiki-memo');
+            
+            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+            let isRecording = false;
+            let recognition = null;
+
+            if (SpeechRecognition) {
+                recognition = new SpeechRecognition();
+                recognition.lang = 'ko-KR';
+                recognition.interimResults = false;
+                recognition.maxAlternatives = 1;
+
+                recognition.onstart = function() {
+                    isRecording = true;
+                    voicePing.classList.remove('hidden');
+                    voiceStatus.classList.remove('hidden');
+                    voiceStatus.innerText = "듣는 중...";
+                    voiceStatus.classList.replace('bg-accent/10', 'bg-red-500/10');
+                    voiceStatus.classList.replace('text-accent', 'text-red-500');
+                };
+
+                recognition.onresult = function(event) {
+                    const speechResult = event.results[0][0].transcript;
+                    const currentValue = memoArea.value.trim();
+                    memoArea.value = currentValue ? currentValue + " " + speechResult : speechResult;
+                };
+
+                recognition.onerror = function(event) {
+                    voiceStatus.innerText = "인식 실패";
+                    console.error('Speech recognition error detected:', event.error);
+                };
+
+                recognition.onend = function() {
+                    isRecording = false;
+                    voicePing.classList.add('hidden');
+                    setTimeout(() => {
+                        voiceStatus.innerText = "입력 준비";
+                        voiceStatus.classList.replace('bg-red-500/10', 'bg-accent/10');
+                        voiceStatus.classList.replace('text-red-500', 'text-accent');
+                        voiceStatus.classList.add('hidden');
+                    }, 2000);
+                };
+            }
+
+            if (voiceBtn) {
+                voiceBtn.addEventListener('click', () => {
+                    if (!SpeechRecognition) {
+                        alert("이 브라우저에서는 음성 인식을 지원하지 않습니다.");
+                        return;
+                    }
+                    
+                    if (isRecording) {
+                        recognition.stop();
+                    } else {
+                        recognition.start();
+                    }
+                });
+            }
         });
     </script>
 </body>
