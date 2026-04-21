@@ -17,8 +17,8 @@
         <!-- User Section & Language Toggle -->
         <div class="flex items-center gap-1 md:gap-3">
             <!-- Language Toggle -->
-            <button class="bg-black/[0.03] hover:bg-black/10 border border-black/[0.05] text-textmain px-3 py-1.5 rounded-full font-extrabold text-[12px] flex items-center gap-1 transition-colors">
-                <span class="text-accent">KR</span><span class="text-black/20 mx-0.5">|</span><span class="text-textmuted">JP</span>
+            <button id="lang-toggle-btn" class="bg-black/[0.03] hover:bg-black/10 border border-black/[0.05] text-textmain px-3 py-1.5 rounded-full font-extrabold text-[12px] flex items-center gap-1 transition-colors relative focus:outline-none">
+                <span id="lang-kr-label" class="text-accent transition-colors">KR</span><span class="text-black/20 mx-0.5">|</span><span id="lang-jp-label" class="text-textmuted transition-colors">JP</span>
             </button>
             <!-- Notifications -->
             <button class="bg-black/5 hover:bg-black/10 text-textmain p-2.5 rounded-full font-medium transition-spring flex items-center justify-center relative ml-1">
@@ -35,6 +35,51 @@
         </div>
     </div>
 </nav>
+
+<!-- Dynamically load VoiceManager script if not present -->
+<script>
+    if (typeof window.VoiceManager === 'undefined') {
+        const script = document.createElement('script');
+        script.src = 'js/voiceManager.js';
+        script.onload = initNavLangToggle;
+        document.head.appendChild(script);
+    } else {
+        initNavLangToggle();
+    }
+
+    function initNavLangToggle() {
+        const toggleBtn = document.getElementById('lang-toggle-btn');
+        const krLabel = document.getElementById('lang-kr-label');
+        const jpLabel = document.getElementById('lang-jp-label');
+
+        function updateLangUI(lang) {
+            if (lang === 'ko-KR') {
+                krLabel.classList.replace('text-textmuted', 'text-accent');
+                jpLabel.classList.replace('text-accent', 'text-textmuted');
+            } else {
+                jpLabel.classList.replace('text-textmuted', 'text-accent');
+                krLabel.classList.replace('text-accent', 'text-textmuted');
+            }
+        }
+
+        // 초기 UI 반영
+        if(window.VoiceManager) {
+            updateLangUI(window.VoiceManager.getLang());
+        }
+
+        toggleBtn.addEventListener('click', () => {
+            if(window.VoiceManager) {
+                const newLang = window.VoiceManager.toggleLang();
+                updateLangUI(newLang);
+                console.log("Voice Recognition Language changed to:", newLang);
+            }
+        });
+
+        window.addEventListener('aitomo_lang_changed', (e) => {
+            updateLangUI(e.detail);
+        });
+    }
+</script>
 
 <!-- Bottom Mobile Tab Bar (Visible only on mobile sm/md) -->
 <nav class="md:hidden fixed bottom-0 left-0 right-0 z-[100] bg-white/95 backdrop-blur-xl border-t border-black/[0.05] pb-safe drop-shadow-[0_-5px_15px_rgba(0,0,0,0.03)]">

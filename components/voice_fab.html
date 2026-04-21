@@ -44,64 +44,47 @@
             tooltip.classList.remove('opacity-100', 'translate-y-0');
         });
 
-        // Web Speech API Integration
-        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-        let isRecording = false;
-        let recognition = null;
-
-        if (SpeechRecognition) {
-            recognition = new SpeechRecognition();
-            recognition.lang = 'ko-KR'; // Can be dynamically set based on Language Toggle
-            recognition.interimResults = false;
-            recognition.maxAlternatives = 1;
-
-            recognition.onstart = function() {
-                isRecording = true;
-                fab.querySelector('div').classList.remove('hidden'); // Show ping
-                tooltip.innerText = "듣는 중입니다...";
-                tooltip.classList.remove('opacity-0', 'translate-y-2');
-                tooltip.classList.add('opacity-100', 'translate-y-0');
-            };
-
-            recognition.onresult = function(event) {
-                const speechResult = event.results[0][0].transcript;
-                tooltip.innerText = '"' + speechResult + '"';
-                // You can dispatch a custom event here to let other pages know what was said
-                window.dispatchEvent(new CustomEvent('voiceInputRecognized', { detail: speechResult }));
-            };
-
-            recognition.onspeechend = function() {
-                recognition.stop();
-            };
-
-            recognition.onerror = function(event) {
-                tooltip.innerText = "음성 인식을 실패했어요.";
-                console.error('Speech recognition error detected: ' + event.error);
-            };
-
-            recognition.onend = function() {
-                isRecording = false;
-                fab.querySelector('div').classList.add('hidden'); // Hide ping
-                setTimeout(() => {
-                    tooltip.classList.add('opacity-0', 'translate-y-2');
-                    tooltip.classList.remove('opacity-100', 'translate-y-0');
-                }, 4000);
-            };
-        }
+        // Web Speech API Integration via VoiceManager
+        let currentRecognition = null;
 
         fab.addEventListener('click', () => {
-            if (!SpeechRecognition) {
-                tooltip.innerText = "이 브라우저에서는 음성 인식을 지원하지 않습니다.";
+            if (currentRecognition) {
+                currentRecognition.stop();
+                currentRecognition = null;
+                return;
+            }
+
+            if (!window.VoiceManager || !window.VoiceManager.isSupported) {
+                tooltip.innerText = "음성 인식을 지원하지 않습니다.";
                 tooltip.classList.remove('opacity-0', 'translate-y-2');
                 tooltip.classList.add('opacity-100', 'translate-y-0');
                 return;
             }
 
-            if (isRecording) {
-                recognition.stop();
-            } else {
-                recognition.start();
-            }
+            currentRecognition = window.VoiceManager.startRecognition({
+                onStart: () => {
+                    fab.querySelector('div').classList.remove('hidden'); // Show ping
+                    tooltip.innerText = window.VoiceManager.getLang() === 'ja-JP' ? "聞いています..." : "듣는 중입니다...";
+                    tooltip.classList.remove('opacity-0', 'translate-y-2');
+                    tooltip.classList.add('opacity-100', 'translate-y-0');
+                },
+                onResult: (speechResult) => {
+                    tooltip.innerText = '"' + speechResult + '"';
+                    window.dispatchEvent(new CustomEvent('voiceInputRecognized', { detail: speechResult }));
+                },
+                onError: (error) => {
+                    tooltip.innerText = "음성 인식 실패";
+                    console.error('Speech recognition error:', error);
+                },
+                onEnd: () => {
+                    currentRecognition = null;
+                    fab.querySelector('div').classList.add('hidden'); // Hide ping
+                    setTimeout(() => {
+                        tooltip.classList.add('opacity-0', 'translate-y-2');
+                        tooltip.classList.remove('opacity-100', 'translate-y-0');
+                    }, 4000);
+                }
+            });
         });
     }, 100);
 </script>

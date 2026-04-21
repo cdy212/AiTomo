@@ -239,60 +239,48 @@
             const voicePing = document.getElementById('voice-ping');
             const memoArea = document.getElementById('wiki-memo');
             
-            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-            let isRecording = false;
-            let recognition = null;
-
-            if (SpeechRecognition) {
-                recognition = new SpeechRecognition();
-                recognition.lang = 'ko-KR';
-                recognition.interimResults = false;
-                recognition.maxAlternatives = 1;
-
-                recognition.onstart = function() {
-                    isRecording = true;
-                    voicePing.classList.remove('hidden');
-                    voiceStatus.classList.remove('hidden');
-                    voiceStatus.innerText = "듣는 중...";
-                    voiceStatus.classList.replace('bg-accent/10', 'bg-red-500/10');
-                    voiceStatus.classList.replace('text-accent', 'text-red-500');
-                };
-
-                recognition.onresult = function(event) {
-                    const speechResult = event.results[0][0].transcript;
-                    const currentValue = memoArea.value.trim();
-                    memoArea.value = currentValue ? currentValue + " " + speechResult : speechResult;
-                };
-
-                recognition.onerror = function(event) {
-                    voiceStatus.innerText = "인식 실패";
-                    console.error('Speech recognition error detected:', event.error);
-                };
-
-                recognition.onend = function() {
-                    isRecording = false;
-                    voicePing.classList.add('hidden');
-                    setTimeout(() => {
-                        voiceStatus.innerText = "입력 준비";
-                        voiceStatus.classList.replace('bg-red-500/10', 'bg-accent/10');
-                        voiceStatus.classList.replace('text-red-500', 'text-accent');
-                        voiceStatus.classList.add('hidden');
-                    }, 2000);
-                };
-            }
+            let currentRecognition = null;
 
             if (voiceBtn) {
                 voiceBtn.addEventListener('click', () => {
-                    if (!SpeechRecognition) {
+                    if (currentRecognition) {
+                        currentRecognition.stop();
+                        currentRecognition = null;
+                        return;
+                    }
+
+                    if (!window.VoiceManager || !window.VoiceManager.isSupported) {
                         alert("이 브라우저에서는 음성 인식을 지원하지 않습니다.");
                         return;
                     }
-                    
-                    if (isRecording) {
-                        recognition.stop();
-                    } else {
-                        recognition.start();
-                    }
+
+                    currentRecognition = window.VoiceManager.startRecognition({
+                        onStart: () => {
+                            voicePing.classList.remove('hidden');
+                            voiceStatus.classList.remove('hidden');
+                            voiceStatus.innerText = "듣는 중...";
+                            voiceStatus.classList.replace('bg-accent/10', 'bg-red-500/10');
+                            voiceStatus.classList.replace('text-accent', 'text-red-500');
+                        },
+                        onResult: (speechResult) => {
+                            const currentValue = memoArea.value.trim();
+                            memoArea.value = currentValue ? currentValue + " " + speechResult : speechResult;
+                        },
+                        onError: (error) => {
+                            voiceStatus.innerText = "인식 실패";
+                            console.error('Speech recognition error:', error);
+                        },
+                        onEnd: () => {
+                            currentRecognition = null;
+                            voicePing.classList.add('hidden');
+                            setTimeout(() => {
+                                voiceStatus.innerText = "입력 준비";
+                                voiceStatus.classList.replace('bg-red-500/10', 'bg-accent/10');
+                                voiceStatus.classList.replace('text-red-500', 'text-accent');
+                                voiceStatus.classList.add('hidden');
+                            }, 2000);
+                        }
+                    });
                 });
             }
         });
