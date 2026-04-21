@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    
+    <!-- PWA Meta Tags -->
+    <meta name="theme-color" content="#FEFAF4">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="AiTomo">
+    <link rel="manifest" href="./manifest.json">
+    <link rel="apple-touch-icon" href="https://api.iconify.design/solar/tea-cup-bold-duotone.svg?color=%23eb855e">
+    
+    <title>AiTomo - 위키 문서 작성</title>
+
+    <!-- Pretendard Font -->
+    <link rel="stylesheet" as="style" crossorigin
+        href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+    <!-- Iconify (Monochrome Unified) -->
+    <script src="https://code.iconify.design/iconify-icon/1.0.7/iconify-icon.min.js"></script>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Style Config -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Pretendard', 'sans-serif'],
+                    },
+                    colors: {
+                        wbg: '#FEFAF4',
+                        accent: '#eb855e',          
+                        accentlight: '#F5B099',
+                        textmain: '#222222',        
+                        textdim: '#6b6a65',         
+                        textmuted: '#9a9994',       
+                        olive: '#808260'            
+                    },
+                    boxShadow: {
+                        'inner-highlight': 'inset 0 1px 0 0 rgba(255,255,255,1)',
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            background-color: #FEFAF4;
+            color: #222222;
+            font-family: 'Pretendard', sans-serif;
+            -webkit-font-smoothing: antialiased;
+            letter-spacing: -0.015em;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+        }
+
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+
+        .cat-radio:checked + label {
+            background-color: #eb855e;
+            color: white;
+            border-color: #eb855e;
+        }
+        
+    </style>
+</head>
+
+<body class="relative selection:bg-accent/20 pb-24 md:pb-0">
+
+    <!-- Global Navigation Included Here -->
+    <div id="c-nav"></div>
+
+    <main class="max-w-2xl mx-auto px-4 pt-20 md:pt-28 pb-32">
+        
+        <!-- Header area -->
+        <div class="flex items-center justify-between mb-6 pb-4 border-b-2 border-textmain">
+            <div class="flex items-center gap-3">
+                <!-- Back routing simulation -->
+                <button onclick="history.back()" class="w-10 h-10 bg-black/5 rounded-full flex items-center justify-center hover:bg-black/10 transition-colors">
+                    <iconify-icon icon="solar:arrow-left-linear" class="text-xl text-textmain"></iconify-icon>
+                </button>
+                <h1 class="text-[22px] md:text-2xl font-extrabold tracking-tight">정보 작성하기</h1>
+            </div>
+            
+            <div class="bg-black/5 px-3 py-1 rounded border border-black/10">
+                <span class="text-[11px] font-bold text-textdim uppercase tracking-wider">익명/비회원 작성 허용됨</span>
+            </div>
+        </div>
+
+        <form>
+            <div class="flex flex-col gap-8">
+                
+                <!-- Category Section -->
+                <section>
+                    <label class="block text-[14px] font-extrabold text-textmain mb-3 flex items-center gap-1.5">
+                        <iconify-icon icon="solar:layers-minimalistic-bold-duotone" class="text-accent"></iconify-icon> 카테고리 (필수)
+                    </label>
+                    <div class="flex flex-wrap gap-2">
+                        <div>
+                            <input type="radio" name="category" id="cat1" class="cat-radio hidden" checked>
+                            <label for="cat1" class="cursor-pointer inline-block px-4 py-2 border border-black/10 rounded-full text-[13px] font-bold text-textdim bg-white transition-all shadow-sm">나들이/여행</label>
+                        </div>
+                        <div>
+                            <input type="radio" name="category" id="cat2" class="cat-radio hidden">
+                            <label for="cat2" class="cursor-pointer inline-block px-4 py-2 border border-black/10 rounded-full text-[13px] font-bold text-textdim bg-white transition-all shadow-sm">맛집/카페</label>
+                        </div>
+                        <div>
+                            <input type="radio" name="category" id="cat3" class="cat-radio hidden">
+                            <label for="cat3" class="cursor-pointer inline-block px-4 py-2 border border-black/10 rounded-full text-[13px] font-bold text-textdim bg-white transition-all shadow-sm">어린이집/학교</label>
+                        </div>
+                        <div>
+                            <input type="radio" name="category" id="cat4" class="cat-radio hidden">
+                            <label for="cat4" class="cursor-pointer inline-block px-4 py-2 border border-black/10 rounded-full text-[13px] font-bold text-textdim bg-white transition-all shadow-sm">병원/약국</label>
+                        </div>
+                        <div>
+                            <input type="radio" name="category" id="cat5" class="cat-radio hidden">
+                            <label for="cat5" class="cursor-pointer inline-block px-4 py-2 border border-black/10 rounded-full text-[13px] font-bold text-textdim bg-white transition-all shadow-sm">한일 문화 팁</label>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Naver Local Search UI -->
+                <section>
+                    <label class="block text-[14px] font-extrabold text-textmain mb-2 flex items-center gap-1.5">
+                        상호명 검색 (네이버 결과 기준)
+                    </label>
+                    <div class="relative group">
+                        <input type="text" placeholder="오소록" class="w-full bg-white border border-black/10 rounded-xl py-3.5 pl-4 pr-12 text-[15px] font-bold text-textmain outline-none focus:ring-2 focus:ring-accent/50 focus:border-accent/50 transition-all shadow-inner-highlight">
+                        <button type="button" class="absolute right-2 top-1/2 -translate-y-1/2 w-10 h-10 flex items-center justify-center text-textmain bg-black/5 hover:bg-black/10 rounded-lg transition-colors">
+                            <iconify-icon icon="solar:magnifer-linear" class="text-xl"></iconify-icon>
+                        </button>
+                    </div>
+                    <p class="text-[12px] text-textdim font-medium mt-2 leading-snug break-keep-all">
+                        주소 검색 시 주소가 검색되지 않으면 상호명과 지역 키워드를 조합해 주세요.<br>
+                        예) 거지랩 신촌, 신촌 거지랩, 대현동 거지랩
+                    </p>
+                    
+                    <!-- Placeholder for Search Results API (Currently hidden) -->
+                    <div id="searchResults" class="hidden mt-3 bg-white border border-black/10 rounded-xl overflow-hidden shadow-sm max-h-48 overflow-y-auto">
+                        <!-- Items will be populated here via JS API -->
+                    </div>
+                </section>
+
+                <!-- Photos Upload -->
+                <section>
+                    <label class="block text-[14px] font-extrabold text-textmain mb-3 flex items-center gap-1.5">
+                        <iconify-icon icon="solar:gallery-bold-duotone" class="text-orange-400"></iconify-icon> 사진 첨부
+                    </label>
+                    
+                    <div class="flex gap-3 overflow-x-auto no-scrollbar snap-x pb-2">
+                        <!-- Add Photo Button -->
+                        <div class="snap-start shrink-0 w-24 h-24 border-2 border-dashed border-black/15 bg-white/50 rounded-2xl flex flex-col items-center justify-center cursor-pointer hover:bg-black/5 hover:border-accent/50 transition-colors">
+                            <iconify-icon icon="solar:camera-add-linear" class="text-2xl text-textdim mb-1"></iconify-icon>
+                            <span class="text-[10px] font-bold text-textmuted">0 / 5</span>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Memo/Voice Section -->
+                <section>
+                    <label class="block text-[14px] font-extrabold text-textmain mb-3 flex justify-between items-end">
+                        <div class="flex items-center gap-1.5">
+                            <iconify-icon icon="solar:text-field-bold-duotone" class="text-accent"></iconify-icon> 메모 <span class="text-accent">*</span>
+                        </div>
+                        <span class="text-[11px] text-textmuted font-medium bg-black/5 px-2 rounded">타이핑이 힘들면 우측 마이크를 누르세요.</span>
+                    </label>
+                    
+                    <div class="relative bg-white border border-black/5 rounded-2xl shadow-inner-highlight outline-none focus-within:ring-2 focus-within:ring-accent/50 transition-all ring-1 ring-black/[0.02]">
+                        <textarea placeholder="해당 장소나 정보에 대한 경험을 텍스트나 음성으로 남겨주세요...&#10;(예: 유모차 진입로가 편해요, 대기가 길어요)" class="w-full h-40 bg-transparent resize-none outline-none p-4 text-[14px] font-medium text-textmain placeholder:text-textmuted leading-relaxed" required></textarea>
+                        
+                        <!-- Embedded Voice Button inside TextArea -->
+                        <div class="absolute bottom-3 right-3 flex items-center gap-2">
+                            <div class="px-3 hidden md:block text-[11px] font-bold text-accent bg-accent/10 rounded-full items-center h-8 leading-8 animate-pulse">
+                                입력 준비
+                            </div>
+                            <button type="button" class="w-12 h-12 bg-accent text-white rounded-full flex items-center justify-center shadow-lg hover:scale-105 active:scale-95 transition-spring group overflow-hidden relative">
+                                <div class="absolute inset-0 bg-white/20 scale-0 group-hover:scale-100 transition-transform rounded-full origin-center"></div>
+                                <iconify-icon icon="solar:microphone-3-bold" class="text-2xl"></iconify-icon>
+                            </button>
+                        </div>
+                    </div>
+                </section>
+
+                <div class="pt-4 border-t border-black/5 pb-10">
+                    <button type="submit" class="w-full bg-textmain text-white font-extrabold text-[15px] py-4 rounded-xl shadow-md hover:bg-black/80 transition-colors flex items-center justify-center gap-2">
+                        정보 등록하기 <iconify-icon icon="solar:plain-2-linear"></iconify-icon>
+                    </button>
+                    <p class="text-center text-[11px] text-textmuted font-semibold mt-4">작성된 글은 익명으로 안전하게 공유됩니다.</p>
+                </div>
+
+            </div>
+        </form>
+
+    </main>
+
+    <!-- Sub-page doesn't require global floating Voice FAB if there's an embedded one in the form -->
+    
+    <script>
+        async function loadComponent(id, url) {
+            try {
+                const response = await fetch(url);
+                if (response.ok) {
+                    const text = await response.text();
+                    document.getElementById(id).innerHTML = text;
+                    
+                    Array.from(document.getElementById(id).querySelectorAll('script')).forEach(oldScript => {
+                        const newScript = document.createElement('script');
+                        Array.from(oldScript.attributes).forEach(attr => newScript.setAttribute(attr.name, attr.value));
+                        newScript.appendChild(document.createTextNode(oldScript.innerHTML));
+                        oldScript.parentNode.replaceChild(newScript, oldScript);
+                    });
+                }
+            } catch (error) {
+                console.error(`Error loading component ${url}:`, error);
+            }
+        }
+
+        document.addEventListener("DOMContentLoaded", () => {
+            loadComponent("c-nav", "components/nav.html");
+        });
+    </script>
+</body>
+
+</html>

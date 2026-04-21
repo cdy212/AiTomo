@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    
+    <!-- PWA Meta Tags -->
+    <meta name="theme-color" content="#FEFAF4">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="AiTomo">
+    <link rel="manifest" href="./manifest.json">
+    <link rel="apple-touch-icon" href="https://api.iconify.design/solar/tea-cup-bold-duotone.svg?color=%23eb855e">
+    
+    <title>AiTomo - 커피라운지</title>
+
+    <!-- Pretendard Font -->
+    <link rel="stylesheet" as="style" crossorigin
+        href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+    <!-- Iconify (Monochrome Unified) -->
+    <script src="https://code.iconify.design/iconify-icon/1.0.7/iconify-icon.min.js"></script>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Style Config -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Pretendard', 'sans-serif'],
+                    },
+                    colors: {
+                        // Warm Editorial Palette
+                        wbg: '#FEFAF4',
+                        accent: '#eb855e',          // Warm vibrant orange/terracotta
+                        accentlight: '#F5B099',
+                        textmain: '#222222',        // Soft offset black
+                        textdim: '#6b6a65',         // Warm gray
+                        textmuted: '#9a9994',       // Soft warm gray
+                        olive: '#808260'            // Earthy subtle tone for sub-tags
+                    },
+                    boxShadow: {
+                        'inner-highlight': 'inset 0 1px 0 0 rgba(255,255,255,1)',
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            background-color: #FEFAF4;
+            color: #222222;
+            font-family: 'Pretendard', sans-serif;
+            -webkit-font-smoothing: antialiased;
+            letter-spacing: -0.015em;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Fix Scroll Bug natively */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+
+        .scroll-safe {
+            -webkit-overflow-scrolling: touch;
+        }
+
+        /* Chat bubbles specific */
+        .chat-bubble-receive {
+            border-bottom-left-radius: 0.25rem;
+        }
+        .chat-bubble-send {
+            border-bottom-right-radius: 0.25rem;
+        }
+        
+    </style>
+</head>
+
+<body class="relative selection:bg-accent/20 pb-28 md:pb-0">
+
+    <!-- Global Navigation Included Here -->
+    <div id="c-nav"></div>
+
+    <main class="max-w-3xl mx-auto px-4 pt-20 md:pt-28 pb-32">
+        
+        <!-- Header -->
+        <div class="flex items-center justify-between mb-8 pb-4 border-b-2 border-textmain">
+            <div class="flex flex-col gap-1">
+                <div class="flex items-center gap-2">
+                    <iconify-icon icon="solar:cup-hot-line-duotone" class="text-3xl text-accent"></iconify-icon>
+                    <h1 class="text-[24px] md:text-3xl font-extrabold tracking-tight">커피라운지</h1>
+                </div>
+                <p class="text-[13px] md:text-[14px] text-textdim font-semibold ml-10">눈치보지 않고 가벼운 마음으로 육아 고민을 던지는 곳</p>
+            </div>
+        </div>
+
+        <!-- Chat Feed Type List -->
+        <div class="flex flex-col gap-8">
+
+            <!-- Chat Thread 1 -->
+            <div class="flex flex-col gap-2">
+                <!-- User Marker -->
+                <div class="flex items-center justify-center mb-4">
+                    <span class="bg-black/5 text-textdim text-[11px] font-bold px-3 py-1 rounded-full border border-black/[0.03]">10분 전</span>
+                </div>
+                
+                <!-- Main Question -->
+                <div class="flex items-end gap-3 flex-row">
+                    <div class="w-10 h-10 rounded-full bg-accentlight/20 text-accent flex items-center justify-center font-extrabold text-[14px] shrink-0 border border-accentlight">
+                        익명
+                    </div>
+                    <div class="flex flex-col items-start gap-1 max-w-[85%]">
+                        <span class="text-textmuted text-[11px] font-bold ml-1 flex items-center gap-1.5"><iconify-icon icon="solar:routing-linear"></iconify-icon> 용산구 맘</span>
+                        <div class="bg-white p-4 rounded-[1.25rem] chat-bubble-receive border border-black/5 shadow-sm">
+                            <span class="bg-gray-100 text-gray-600 text-[10px] font-bold px-2 py-0.5 rounded border border-gray-200 mb-2 inline-block">답십리</span>
+                            <p class="font-bold text-[15px] text-textmain leading-snug break-keep-all">아니 애가 갑자기 열이 나는데 일본인 남편이 당황해서 한국어로 병원 예약을 못잡아요. 어쩌죠? 팁좀 ㅠ</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Reply Actions -->
+                <div class="pl-14 flex items-center gap-3">
+                    <button class="text-[12px] font-bold text-textdim hover:text-accent transition-colors flex items-center gap-1">
+                        <iconify-icon icon="solar:heart-linear"></iconify-icon> 공감 12
+                    </button>
+                    <button class="text-[12px] font-bold text-textdim hover:text-accent transition-colors flex items-center gap-1">
+                        <iconify-icon icon="solar:chat-line-linear"></iconify-icon> 답변 남기기
+                    </button>
+                </div>
+
+                <!-- Asynchronous Replies -->
+                <div class="flex flex-col gap-3 mt-3 pl-10 md:pl-14 border-l-2 border-black/5 ml-5 md:ml-7 pb-4">
+                    
+                    <div class="flex items-end gap-2 flex-row">
+                        <div class="w-8 h-8 rounded-full bg-gray-100 text-gray-500 flex items-center justify-center font-bold text-[12px] shrink-0 border border-gray-200">
+                            한일
+                        </div>
+                        <div class="flex flex-col items-start gap-1 max-w-[90%]">
+                            <div class="bg-white p-3 rounded-2xl chat-bubble-receive border border-black/5 shadow-sm flex flex-col">
+                                <p class="text-[14px] font-medium text-textmain leading-snug break-keep-all">저희 집이랑 완전 똑같네요 ㅠㅠ 일단 똑닥 앱부터 깔아주시는게 제일 빨라요.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flex items-end gap-2 flex-row">
+                        <div class="w-8 h-8 rounded-full bg-olive/10 text-olive flex items-center justify-center font-bold text-[12px] shrink-0 border border-olive/20">
+                            동네
+                        </div>
+                        <div class="flex flex-col items-start gap-1 max-w-[90%]">
+                            <div class="bg-white p-3 rounded-2xl chat-bubble-receive border border-black/5 shadow-sm flex flex-col">
+                                <p class="text-[14px] font-medium text-textmain leading-snug break-keep-all">남편분한테 다문화가정지원센터 통역 번호라도 쥐어주세요! 급할 때 최고입니다.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- Chat Thread 2 -->
+            <div class="flex flex-col gap-2">
+                <!-- User Marker -->
+                <div class="flex items-center justify-center mb-4">
+                    <span class="bg-black/5 text-textdim text-[11px] font-bold px-3 py-1 rounded-full border border-black/[0.03]">1시간 전</span>
+                </div>
+                
+                <!-- Main Question -->
+                <div class="flex items-end gap-3 flex-row">
+                    <div class="w-10 h-10 rounded-full bg-gray-100 text-gray-500 flex items-center justify-center font-extrabold text-[14px] shrink-0 border border-gray-200">
+                        익명
+                    </div>
+                    <div class="flex flex-col items-start gap-1 max-w-[85%]">
+                        <span class="text-textmuted text-[11px] font-bold ml-1 flex items-center gap-1.5"><iconify-icon icon="solar:diploma-linear"></iconify-icon> 일본문화</span>
+                        <div class="bg-[#FAF8F5] p-4 rounded-[1.25rem] chat-bubble-receive border border-black/5 shadow-inner-highlight">
+                            <p class="font-bold text-[15px] text-textmain leading-snug break-keep-all">어린이집 소풍 도시락을 싸는데 일본식으로(캐릭터 벤토) 싸가면 너무 눈에 띌까요? 괜히 아이가 유난 떤다고 생각될까 걱정되네요.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Reply Actions -->
+                <div class="pl-14 flex items-center gap-3">
+                    <button class="text-[12px] font-bold text-textdim hover:text-accent transition-colors flex items-center gap-1">
+                        <iconify-icon icon="solar:heart-linear"></iconify-icon> 공감 5
+                    </button>
+                    <button class="text-[12px] font-bold text-textdim hover:text-accent transition-colors flex items-center gap-1">
+                        <iconify-icon icon="solar:chat-line-linear"></iconify-icon> 답변 남기기
+                    </button>
+                </div>
+            </div>
+
+        </div>
+
+    </main>
+
+    <!-- Global Voice FAB (For mobile compatibility or floating action) Included Here -->
+    <div id="c-voiceUi" class="hidden md:block"></div>
+
+    <!-- Fixed Bottom Chat Input Layer -->
+    <div class="fixed bottom-[64px] md:bottom-0 left-0 right-0 z-[90] bg-white/95 backdrop-blur-xl border-t border-black/5 pt-3 pb-8 md:pb-6 px-4 drop-shadow-[0_-10px_20px_rgba(0,0,0,0.02)]">
+        <div class="max-w-3xl mx-auto">
+            
+            <div class="flex items-center gap-2 mb-2 px-1">
+                <span class="bg-black/5 px-2.5 py-1 rounded-md text-[11px] font-bold text-textdim border border-black/5 flex items-center gap-1 cursor-pointer hover:bg-black/10 transition-colors">
+                    <iconify-icon icon="solar:hashtag-linear"></iconify-icon> 카테고리
+                </span>
+                <span class="text-[11px] text-textmuted font-semibold">음성으로 이야기하시면 AI가 자동으로 게시글을 등록해 드립니다.</span>
+            </div>
+
+            <div class="flex flex-row items-center gap-2 bg-wbg ring-1 ring-black/5 rounded-full p-1.5 focus-within:ring-accent focus-within:bg-white transition-all shadow-inner-highlight">
+                
+                <!-- Voice Button First -->
+                <button class="bg-accent text-white p-3 rounded-full flex items-center justify-center shadow-md hover:scale-[1.05] active:scale-95 transition-spring shrink-0 group">
+                    <iconify-icon icon="solar:microphone-3-bold" class="text-[22px] group-hover:animate-pulse"></iconify-icon>
+                </button>
+                
+                <input type="text" placeholder="고민을 남겨주시면 다함께 도와드릴게요." class="flex-1 bg-transparent border-none outline-none text-[15px] font-semibold text-textmain placeholder:text-textmuted/80 py-2 px-3 tracking-tight" />
+                
+                <button class="text-textmuted hover:text-accent transition-colors p-2 shrink-0 flex items-center justify-center">
+                    <iconify-icon icon="solar:camera-add-linear" class="text-xl"></iconify-icon>
+                </button>
+                <button class="bg-black/5 hover:bg-black/10 text-textmain font-bold p-2.5 rounded-full shrink-0 flex items-center justify-center transition-colors mr-0.5">
+                    <iconify-icon icon="solar:plain-bold-duotone" class="text-xl"></iconify-icon>
+                </button>
+
+            </div>
+        </div>
+    </div>
+
+
+    <script>
+        // Component Loader Script
+        async function loadComponent(id, url) {
+            try {
+                const response = await fetch(url);
+                if (response.ok) {
+                    const text = await response.text();
+                    document.getElementById(id).innerHTML = text;
+                    
+                    // 스크립트 강제 파싱 및 실행
+                    Array.from(document.getElementById(id).querySelectorAll('script')).forEach(oldScript => {
+                        const newScript = document.createElement('script');
+                        Array.from(oldScript.attributes).forEach(attr => newScript.setAttribute(attr.name, attr.value));
+                        newScript.appendChild(document.createTextNode(oldScript.innerHTML));
+                        oldScript.parentNode.replaceChild(newScript, oldScript);
+                    });
+                }
+            } catch (error) {
+                console.error(`Error loading component ${url}:`, error);
+            }
+        }
+
+        document.addEventListener("DOMContentLoaded", () => {
+            // Load Comps
+            loadComponent("c-nav", "components/nav.html");
+            // Voice ui is loaded visually on PC context or managed in nav, but bottom tab manages its own voice button context natively
+        });
+    </script>
+</body>
+
+</html>

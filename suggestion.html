@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    
+    <!-- PWA Meta Tags -->
+    <meta name="theme-color" content="#FEFAF4">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="AiTomo">
+    <link rel="manifest" href="./manifest.json">
+    <link rel="apple-touch-icon" href="https://api.iconify.design/solar/tea-cup-bold-duotone.svg?color=%23eb855e">
+    
+    <title>AiTomo - 건의 보드</title>
+
+    <!-- Pretendard Font -->
+    <link rel="stylesheet" as="style" crossorigin
+        href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+    <!-- Iconify (Monochrome Unified) -->
+    <script src="https://code.iconify.design/iconify-icon/1.0.7/iconify-icon.min.js"></script>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Style Config -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Pretendard', 'sans-serif'],
+                    },
+                    colors: {
+                        wbg: '#FEFAF4',
+                        accent: '#eb855e',          
+                        accentlight: '#F5B099',
+                        textmain: '#222222',        
+                        textdim: '#6b6a65',         
+                        textmuted: '#9a9994',       
+                        olive: '#808260'            
+                    },
+                    boxShadow: {
+                        'inner-highlight': 'inset 0 1px 0 0 rgba(255,255,255,1)',
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            background-color: #FEFAF4;
+            color: #222222;
+            font-family: 'Pretendard', sans-serif;
+            -webkit-font-smoothing: antialiased;
+            letter-spacing: -0.015em;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+        }
+
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+
+        .scroll-safe {
+            -webkit-overflow-scrolling: touch;
+        }
+        
+        .vote-btn-active {
+            color: #eb855e !important;
+            background-color: rgba(235, 133, 94, 0.1) !important;
+            border-color: rgba(235, 133, 94, 0.4) !important;
+        }
+    </style>
+</head>
+
+<body class="relative selection:bg-accent/20 pb-24 md:pb-0">
+
+    <!-- Global Navigation Included Here -->
+    <div id="c-nav"></div>
+
+    <main class="max-w-4xl mx-auto px-4 pt-20 md:pt-28 pb-32">
+        
+        <!-- Header -->
+        <div class="flex items-center justify-between mb-8 pb-4 border-b-2 border-textmain">
+            <div class="flex flex-col gap-1">
+                <div class="flex items-center gap-2">
+                    <iconify-icon icon="solar:inbox-in-bold-duotone" class="text-3xl text-accent"></iconify-icon>
+                    <h1 class="text-[24px] md:text-3xl font-extrabold tracking-tight">건의 및 로드맵 투표</h1>
+                </div>
+                <p class="text-[13px] md:text-[14px] text-textdim font-semibold ml-10">아이디어와 불편한 점을 모아 앱의 우선 개발 순서를 정합니다.</p>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 items-start">
+
+            <!-- Ranking Board (Left/Main Content) -->
+            <div class="md:col-span-2 flex flex-col gap-4">
+                
+                <h3 class="text-lg font-extrabold text-textmain flex items-center gap-2 mb-2">
+                    <iconify-icon icon="solar:flame-bold-duotone" class="text-orange-500"></iconify-icon> 현재 투표 진행중 (Top 3)
+                </h3>
+
+                <!-- Vote Item (Rank 1) -->
+                <div class="bg-white p-5 rounded-3xl border border-black/5 shadow-sm ring-1 ring-black/[0.02] flex items-start gap-5 hover:bg-[#FAF8F5] transition-colors group cursor-pointer">
+                    <!-- Upvote Block -->
+                    <div class="flex flex-col items-center shrink-0">
+                        <button class="vote-btn-active w-12 h-14 bg-black/[0.02] rounded-xl flex flex-col items-center justify-center border border-black/5 transition-all outline-none">
+                            <iconify-icon icon="solar:alt-arrow-up-bold" class="text-lg mb-0.5"></iconify-icon>
+                            <span class="font-extrabold text-[15px] leading-none">142</span>
+                        </button>
+                    </div>
+                    <!-- Content Block -->
+                    <div class="flex flex-col w-full h-full justify-between">
+                        <div>
+                            <span class="bg-black/5 text-textmain font-bold text-[10px] px-2 py-0.5 rounded uppercase tracking-widest mb-2 inline-block shadow-inner-highlight">진행 중</span>
+                            <h4 class="font-bold text-[16px] text-textmain mb-1.5 leading-snug group-hover:text-accent transition-colors break-keep-all">앱 내에서 실시간 일본어 <-> 한국어 자막 번역 버튼을 만들어주세요!</h4>
+                            <p class="text-[13px] text-textmuted line-clamp-2 leading-relaxed font-medium">커피라운지에서 긴 글을 읽을 때 남편한테 바로 보여줄 수 있도록 스위치처럼 달린 플래시 번역기가 필요합니다.</p>
+                        </div>
+                        <div class="flex items-center gap-2 mt-3 text-[11px] font-bold text-textdim">
+                            <iconify-icon icon="solar:chat-line-linear" class="text-[14px]"></iconify-icon> 코멘트 12개
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Vote Item (Rank 2) -->
+                <div class="bg-white p-5 rounded-3xl border border-black/5 shadow-sm ring-1 ring-black/[0.02] flex items-start gap-5 hover:bg-[#FAF8F5] transition-colors group cursor-pointer">
+                    <!-- Upvote Block -->
+                    <div class="flex flex-col items-center shrink-0">
+                        <button class="text-textmuted hover:text-accent hover:bg-accent/10 w-12 h-14 bg-black/[0.02] rounded-xl flex flex-col items-center justify-center border border-black/5 shadow-inner-highlight transition-all outline-none">
+                            <iconify-icon icon="solar:alt-arrow-up-bold" class="text-lg mb-0.5"></iconify-icon>
+                            <span class="font-extrabold text-[15px] leading-none">89</span>
+                        </button>
+                    </div>
+                    <!-- Content Block -->
+                    <div class="flex flex-col w-full h-full justify-between">
+                        <div>
+                            <span class="bg-black/5 text-textmain font-bold text-[10px] px-2 py-0.5 rounded uppercase tracking-widest mb-2 inline-block shadow-inner-highlight">검토 중</span>
+                            <h4 class="font-bold text-[16px] text-textmain mb-1.5 leading-snug group-hover:text-accent transition-colors break-keep-all">지역별(구/동) 위키 게시판 필터링 강화</h4>
+                            <p class="text-[13px] text-textmuted line-clamp-2 leading-relaxed font-medium">지금은 키워드 검색만 되는데, 아예 탭으로 서울시 용산구, 강남구 등으로 위키 글이 분리되었으면 좋겠습니다.</p>
+                        </div>
+                        <div class="flex items-center gap-2 mt-3 text-[11px] font-bold text-textdim">
+                            <iconify-icon icon="solar:chat-line-linear" class="text-[14px]"></iconify-icon> 코멘트 4개
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Vote Item (Rank 3) -->
+                <div class="bg-white p-5 rounded-3xl border border-black/5 shadow-sm ring-1 ring-black/[0.02] flex items-start gap-5 hover:bg-[#FAF8F5] transition-colors group cursor-pointer">
+                    <!-- Upvote Block -->
+                    <div class="flex flex-col items-center shrink-0">
+                        <button class="text-textmuted hover:text-accent hover:bg-accent/10 w-12 h-14 bg-black/[0.02] rounded-xl flex flex-col items-center justify-center border border-black/5 shadow-inner-highlight transition-all outline-none">
+                            <iconify-icon icon="solar:alt-arrow-up-bold" class="text-lg mb-0.5"></iconify-icon>
+                            <span class="font-extrabold text-[15px] leading-none">53</span>
+                        </button>
+                    </div>
+                    <!-- Content Block -->
+                    <div class="flex flex-col w-full h-full justify-between">
+                        <div>
+                            <span class="bg-blue-500/10 text-blue-600 font-bold text-[10px] px-2 py-0.5 rounded uppercase tracking-widest mb-2 inline-block border border-blue-500/20">플랜 확정</span>
+                            <h4 class="font-bold text-[16px] text-textmain mb-1.5 leading-snug group-hover:text-accent transition-colors break-keep-all">프로필 및 마이페이지 통합 북마크 스크랩 기능</h4>
+                        </div>
+                        <div class="flex items-center gap-2 mt-3 text-[11px] font-bold text-textdim">
+                            <iconify-icon icon="solar:chat-line-linear" class="text-[14px]"></iconify-icon> 코멘트 0개
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Suggestion Input Area (Right Panel) -->
+            <div class="md:col-span-1 bg-[#F6F1EA] rounded-[1.5rem] p-6 border border-black/[0.03] shadow-inner-highlight sticky top-[80px]">
+                
+                <div class="flex items-center gap-2 mb-4">
+                    <iconify-icon icon="solar:clapperboard-edit-linear" class="text-2xl text-accent"></iconify-icon>
+                    <h3 class="text-[18px] font-bold text-textmain">새로운 아이디어</h3>
+                </div>
+
+                <p class="text-[13px] font-medium text-textmuted mb-6 leading-relaxed break-keep-all">
+                    개발되었으면 하는 기능이나 불편사항을 남겨주시면 관리자가 안건으로 올려드립니다. 추천을 많이 받은 안건부터 개발됩니다.
+                </p>
+
+                <!-- Voice Input Call To Action -->
+                <div class="border border-textmain/10 bg-white/50 rounded-2xl p-4 flex flex-col items-center text-center gap-3 mb-4">
+                    <button class="bg-accent text-white p-4 rounded-full shadow-md hover:scale-110 active:scale-95 transition-spring group">
+                        <iconify-icon icon="solar:microphone-3-bold" class="text-[26px] group-hover:animate-pulse"></iconify-icon>
+                    </button>
+                    <span class="text-[12px] font-bold text-textdim">"마이크 버튼을 누르고 음성으로 남기기"</span>
+                </div>
+
+                <div class="text-center font-bold text-textmuted text-[11px] mb-4">OR</div>
+
+                <!-- Text Input Fallback -->
+                <textarea class="w-full h-24 bg-white border border-black/5 rounded-xl outline-none p-3 text-[13px] font-medium text-textmain placeholder:text-textmuted resize-none focus:ring-2 focus:ring-accent/50 transition-all shadow-inner-highlight mb-3" placeholder="텍스트로 제안사항을 자세히 적어주세요..."></textarea>
+                
+                <button class="w-full bg-textmain text-white font-bold text-[14px] py-3 rounded-xl hover:bg-black/80 transition-colors shadow-sm">
+                    의견 제출하기
+                </button>
+
+            </div>
+
+        </div>
+
+    </main>
+
+    <!-- Global Voice FAB Container -->
+    <div id="c-voiceUi" class="hidden md:block"></div>
+
+    <script>
+        async function loadComponent(id, url) {
+            try {
+                const response = await fetch(url);
+                if (response.ok) {
+                    const text = await response.text();
+                    document.getElementById(id).innerHTML = text;
+                    
+                    Array.from(document.getElementById(id).querySelectorAll('script')).forEach(oldScript => {
+                        const newScript = document.createElement('script');
+                        Array.from(oldScript.attributes).forEach(attr => newScript.setAttribute(attr.name, attr.value));
+                        newScript.appendChild(document.createTextNode(oldScript.innerHTML));
+                        oldScript.parentNode.replaceChild(newScript, oldScript);
+                    });
+                }
+            } catch (error) {
+                console.error(`Error loading component ${url}:`, error);
+            }
+        }
+
+        document.addEventListener("DOMContentLoaded", () => {
+            loadComponent("c-nav", "components/nav.html");
+            loadComponent("c-voiceUi", "components/voice_fab.html");
+        });
+    </script>
+</body>
+
+</html>

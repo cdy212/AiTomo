@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+
+    <!-- PWA Meta Tags -->
+    <meta name="theme-color" content="#FEFAF4">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="AiTomo">
+    <link rel="manifest" href="./manifest.json">
+    <link rel="apple-touch-icon" href="https://api.iconify.design/solar/tea-cup-bold-duotone.svg?color=%23eb855e">
+
+    <title>AiTomo - 정보 위키</title>
+
+    <!-- Pretendard Font -->
+    <link rel="stylesheet" as="style" crossorigin
+        href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+    <!-- Iconify (Monochrome Unified) -->
+    <script src="https://code.iconify.design/iconify-icon/1.0.7/iconify-icon.min.js"></script>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Style Config -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Pretendard', 'sans-serif'],
+                    },
+                    colors: {
+                        // Warm Editorial Palette
+                        wbg: '#FEFAF4',
+                        accent: '#eb855e',
+                        accentlight: '#F5B099',
+                        textmain: '#222222',
+                        textdim: '#6b6a65',
+                        textmuted: '#9a9994',
+                        olive: '#808260'
+                    },
+                    boxShadow: {
+                        'inner-highlight': 'inset 0 1px 0 0 rgba(255,255,255,1)',
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            background-color: #FEFAF4;
+            color: #222222;
+            font-family: 'Pretendard', sans-serif;
+            -webkit-font-smoothing: antialiased;
+            letter-spacing: -0.015em;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Fix Scroll Bug natively */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+
+        .scroll-safe {
+            -webkit-overflow-scrolling: touch;
+        }
+
+        /* Wiki Specific Hover */
+        .wiki-row {
+            transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .wiki-row:hover {
+            background-color: #FAF8F5;
+            padding-left: 1.5rem;
+        }
+    </style>
+</head>
+
+<body class="relative selection:bg-accent/20 pb-24 md:pb-0">
+
+    <!-- Global Navigation Included Here -->
+    <div id="c-nav"></div>
+
+    <main class="max-w-4xl mx-auto px-4 pt-20 md:pt-28 pb-32">
+
+        <!-- Header -->
+        <div class="flex items-center justify-between mb-8 pb-4 border-b-2 border-textmain">
+            <div class="flex flex-col gap-1">
+                <div class="flex items-center gap-2">
+                    <iconify-icon icon="solar:document-text-line-duotone" class="text-3xl text-accent"></iconify-icon>
+                    <h1 class="text-[24px] md:text-3xl font-extrabold tracking-tight">수집된 정보 위키 (Wiki)</h1>
+                </div>
+                <p class="text-[13px] md:text-[14px] text-textdim font-semibold ml-10">애기 머리 잘깎는 방법, 점 싸게 잘 빼주는 피부과,
+                    사람적고 깨끗한 실외 수영장, 길거리 무서운 진상 대처법 등<br>아빠 엄마의 일상 생존에 꼭 필요한 꿀팁들을 공유합니다.</p>
+            </div>
+            <a href="wiki_write.html"
+                class="hidden md:flex bg-textmain text-white px-5 py-2.5 rounded-full font-bold text-sm items-center gap-2 hover:scale-[1.02] active:scale-95 transition-all shadow-sm">
+                <iconify-icon icon="solar:pen-new-square-linear"></iconify-icon> 새 위키 문서 작성
+            </a>
+        </div>
+
+        <!-- Search Bar -->
+        <div
+            class="bg-white border border-black/5 rounded-2xl flex items-center p-2 mb-8 shadow-sm ring-1 ring-black/[0.03] focus-within:ring-accent/50 focus-within:border-accent/30 transition-all">
+            <iconify-icon icon="solar:minimalistic-magnifer-linear" class="text-textmuted text-2xl ml-3"></iconify-icon>
+            <input type="text" placeholder="키워드나 궁금한 내용을 검색해보세요 (예: 답십리 소아과)"
+                class="flex-1 bg-transparent border-none outline-none font-semibold text-textmain px-3 py-2 placeholder:text-textmuted">
+            <button
+                class="bg-black/5 text-textmain px-4 py-2 rounded-xl text-[13px] font-bold hover:bg-black/10 transition-colors">검색</button>
+        </div>
+
+        <!-- Wiki Directory Structure -->
+        <div class="flex flex-col md:flex-row gap-8 items-start">
+
+            <!-- Left Side Category Index -->
+            <aside class="w-full md:w-64 shrink-0 flex flex-col gap-2 sticky top-[80px]">
+                <h3 class="text-[11px] font-extrabold text-olive tracking-wider uppercase mb-2">디렉토리 (Directory)</h3>
+
+                <a href="#"
+                    class="flex items-center justify-between px-3 py-2 bg-textmain text-white rounded-xl font-bold text-[14px] transition-colors shadow-sm">
+                    <div class="flex items-center gap-2"><iconify-icon icon="solar:routing-linear"
+                            class="text-lg"></iconify-icon> 나들이/여행</div>
+                    <span class="text-[11px] bg-white/20 px-2 py-0.5 rounded-full">42</span>
+                </a>
+                <a href="#"
+                    class="flex items-center justify-between px-3 py-2 hover:bg-black/5 text-textdim hover:text-textmain rounded-xl font-bold text-[14px] transition-colors">
+                    <div class="flex items-center gap-2"><iconify-icon icon="solar:hospital-linear"
+                            class="text-lg"></iconify-icon> 병원/약국</div>
+                    <span class="text-[11px] bg-black/5 px-2 py-0.5 rounded-full">18</span>
+                </a>
+                <a href="#"
+                    class="flex items-center justify-between px-3 py-2 hover:bg-black/5 text-textdim hover:text-textmain rounded-xl font-bold text-[14px] transition-colors">
+                    <div class="flex items-center gap-2"><iconify-icon icon="solar:book-bookmark-linear"
+                            class="text-lg"></iconify-icon> 어린이집/유치원</div>
+                    <span class="text-[11px] bg-black/5 px-2 py-0.5 rounded-full">5</span>
+                </a>
+                <a href="#"
+                    class="flex items-center justify-between px-3 py-2 hover:bg-black/5 text-textdim hover:text-textmain rounded-xl font-bold text-[14px] transition-colors">
+                    <div class="flex items-center gap-2"><iconify-icon icon="solar:diploma-linear"
+                            class="text-lg"></iconify-icon> 한일문화·생활 팁</div>
+                    <span class="text-[11px] bg-black/5 px-2 py-0.5 rounded-full">87</span>
+                </a>
+            </aside>
+
+            <!-- Right Side Matrix Content -->
+            <div class="flex-1 w-full flex flex-col gap-5">
+
+                <div class="flex items-center justify-between">
+                    <h2 class="text-xl font-extrabold text-textmain flex items-center gap-2">
+                        <iconify-icon icon="solar:routing-linear" class="text-accent"></iconify-icon> 나들이/여행 (42)
+                    </h2>
+                    <select
+                        class="bg-transparent border-none text-[13px] font-bold text-textdim outline-none cursor-pointer">
+                        <option>최신 업데이트순</option>
+                        <option>가나다순</option>
+                        <option>조회순</option>
+                    </select>
+                </div>
+
+                <div
+                    class="bg-white rounded-3xl border border-black/5 shadow-sm overflow-hidden ring-1 ring-black/[0.02]">
+                    <!-- Wiki Item -->
+                    <a href="#"
+                        class="wiki-row flex flex-col sm:flex-row sm:items-center px-6 py-5 border-b border-black/[0.04] last:border-b-0 group">
+                        <div class="flex-1 pr-4">
+                            <h4
+                                class="text-[16px] font-bold text-textmain mb-1 group-hover:text-accent transition-colors leading-snug">
+                                어린이대공원 상상나라 관람 및 동선 최적화 루트</h4>
+                            <p class="text-[13px] font-medium text-textmuted line-clamp-1 leading-relaxed">주말 주차장 진입 팁과
+                                상상나라 내부에서 연령별 부스 이동을 최대한 편하게 하는 방법에 대한 요약</p>
+                        </div>
+                        <div class="mt-3 sm:mt-0 flex items-center gap-3 shrink-0">
+                            <span
+                                class="text-[11px] font-bold bg-gray-100 text-gray-500 px-2 py-1 rounded border border-gray-200">#광진구</span>
+                            <div class="flex items-center gap-1 text-[11px] font-semibold text-textdim">
+                                <iconify-icon icon="solar:history-linear"></iconify-icon> 2시간 전 수정
+                            </div>
+                        </div>
+                    </a>
+
+                    <!-- Wiki Item -->
+                    <a href="#"
+                        class="wiki-row flex flex-col sm:flex-row sm:items-center px-6 py-5 border-b border-black/[0.04] last:border-b-0 group">
+                        <div class="flex-1 pr-4">
+                            <h4
+                                class="text-[16px] font-bold text-textmain mb-1 group-hover:text-accent transition-colors leading-snug">
+                                강릉 경포대 - 유모차 진입 가능 식당 및 경로</h4>
+                            <p class="text-[13px] font-medium text-textmuted line-clamp-1 leading-relaxed">아기랑 여행 시 유모차가
+                                턱 걸림 없이 들어갈 수 있는 오션뷰 횟집 및 식당 등 정리본</p>
+                        </div>
+                        <div class="mt-3 sm:mt-0 flex items-center gap-3 shrink-0">
+                            <span
+                                class="text-[11px] font-bold bg-gray-100 text-gray-500 px-2 py-1 rounded border border-gray-200">#강릉</span>
+                            <div class="flex items-center gap-1 text-[11px] font-semibold text-textdim">
+                                <iconify-icon icon="solar:history-linear"></iconify-icon> 어제 수정
+                            </div>
+                        </div>
+                    </a>
+
+                    <!-- Wiki Item -->
+                    <a href="#"
+                        class="wiki-row flex flex-col sm:flex-row sm:items-center px-6 py-5 border-b border-black/[0.04] last:border-b-0 group">
+                        <div class="flex-1 pr-4">
+                            <div class="flex items-center gap-2 mb-1">
+                                <iconify-icon icon="solar:star-fall-bold-duotone"
+                                    class="text-orange-400"></iconify-icon>
+                                <h4
+                                    class="text-[16px] font-bold text-textmain group-hover:text-accent transition-colors leading-snug">
+                                    서울 시내 실내 동물원(아쿠아리움 포함) 전격 비교표</h4>
+                            </div>
+                            <p class="text-[13px] font-medium text-textmuted line-clamp-1 leading-relaxed">코엑스, 롯데월드, 일산
+                                아쿠아플라넷 등 입장료 및 일본인 할인 혜택 등 통합 가이드</p>
+                        </div>
+                        <div class="mt-3 sm:mt-0 flex items-center gap-3 shrink-0">
+                            <span
+                                class="text-[11px] font-bold bg-black/5 text-textmain px-2 py-1 rounded border border-black/10">에디터
+                                추천</span>
+                            <div class="flex items-center gap-1 text-[11px] font-semibold text-textdim">
+                                <iconify-icon icon="solar:history-linear"></iconify-icon> 2일 전 수정
+                            </div>
+                        </div>
+                    </a>
+
+                </div>
+            </div>
+
+        </div>
+
+    </main>
+
+    <!-- Global Voice FAB Container -->
+    <div id="c-voiceUi"></div>
+
+    <!-- Mobile Sticky Action Button -->
+    <div
+        class="md:hidden fixed bottom-[64px] left-0 right-0 p-4 bg-gradient-to-t from-wbg via-wbg/80 to-transparent z-40 pointer-events-none">
+        <a href="wiki_write.html"
+            class="w-full bg-textmain text-white py-3.5 rounded-2xl font-bold text-[14px] flex items-center justify-center gap-2 shadow-[0_5px_15px_rgba(0,0,0,0.1)] pointer-events-auto active:scale-95 transition-transform">
+            <iconify-icon icon="solar:pen-new-square-linear" class="text-lg"></iconify-icon> 정보 위키 작성
+        </a>
+    </div>
+
+    <script>
+        // Component Loader Script
+        async function loadComponent(id, url) {
+            try {
+                const response = await fetch(url);
+                if (response.ok) {
+                    const text = await response.text();
+                    document.getElementById(id).innerHTML = text;
+
+                    Array.from(document.getElementById(id).querySelectorAll('script')).forEach(oldScript => {
+                        const newScript = document.createElement('script');
+                        Array.from(oldScript.attributes).forEach(attr => newScript.setAttribute(attr.name, attr.value));
+                        newScript.appendChild(document.createTextNode(oldScript.innerHTML));
+                        oldScript.parentNode.replaceChild(newScript, oldScript);
+                    });
+                }
+            } catch (error) {
+                console.error(`Error loading component ${url}:`, error);
+            }
+        }
+
+        document.addEventListener("DOMContentLoaded", () => {
+            loadComponent("c-nav", "components/nav.html");
+            // Load Voice FAB (Desktop fixed style)
+            loadComponent("c-voiceUi", "components/voice_fab.html");
+        });
+    </script>
+</body>
+
+</html>

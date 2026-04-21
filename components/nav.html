@@ -7,11 +7,11 @@
         </a>
         
         <!-- Global Nav (Hidden on Mobile) -->
-        <div class="hidden md:flex gap-10 text-[15px] font-semibold text-textmuted">
-            <a href="index.html" id="nav-home" class="flex items-center gap-1.5 transition-colors"><iconify-icon icon="solar:home-smile-linear"></iconify-icon> 홈</a>
-            <a href="qna.html" id="nav-qna" class="hover:text-textmain transition-colors duration-200 flex items-center gap-1.5"><iconify-icon icon="solar:mask-happly-linear"></iconify-icon> 익명 질문방</a>
-            <a href="wiki.html" id="nav-wiki" class="hover:text-textmain transition-colors duration-200 flex items-center gap-1.5"><iconify-icon icon="solar:document-text-linear"></iconify-icon> 정보 교류</a>
-            <a href="suggestion.html" id="nav-suggestion" class="hover:text-textmain transition-colors duration-200 flex items-center gap-1.5"><iconify-icon icon="solar:inbox-in-linear"></iconify-icon> 건의 (피드백)</a>
+        <div class="hidden md:flex gap-4 md:gap-8 text-[15px] font-semibold text-textmuted items-center">
+            <a href="index.html" id="nav-home" class="flex items-center gap-1.5 transition-colors px-2 py-1"><iconify-icon icon="solar:home-smile-linear"></iconify-icon> 홈</a>
+            <a href="qna.html" id="nav-qna" class="hover:text-textmain bg-accent/10 px-4 py-2 rounded-full text-accent font-extrabold transition-colors duration-200 flex items-center gap-1.5"><iconify-icon icon="solar:cup-hot-bold-duotone"></iconify-icon> 커피라운지(익명)</a>
+            <a href="wiki.html" id="nav-wiki" class="hover:text-textmain transition-colors duration-200 flex items-center gap-1.5 px-2 py-1"><iconify-icon icon="solar:document-text-linear"></iconify-icon> 정보 교류</a>
+            <a href="suggestion.html" id="nav-suggestion" class="hover:text-textmain transition-colors duration-200 flex items-center gap-1.5 px-2 py-1"><iconify-icon icon="solar:inbox-in-linear"></iconify-icon> 건의 (피드백)</a>
         </div>
         
         <!-- User Section & Language Toggle -->
@@ -25,12 +25,12 @@
                 <iconify-icon icon="solar:bell-linear" class="text-[22px]"></iconify-icon>
                 <span class="absolute top-1 right-1 w-2.5 h-2.5 bg-red-400 rounded-full border-2 border-white"></span>
             </button>
-            <!-- Login -->
-            <a href="login.html" class="hidden md:flex ml-2 bg-textmain text-white px-4 py-2.5 rounded-full font-bold text-[13px] hover:bg-black/80 transition-colors shadow-sm items-center gap-1.5">
-                <iconify-icon icon="solar:user-rounded-linear" class="text-[16px]"></iconify-icon> 로그인
+            <!-- Host Introduction (Replaced Login) -->
+            <a href="host.html" class="hidden md:flex ml-2 bg-textmain text-white px-4 py-2.5 rounded-full font-bold text-[13px] hover:bg-black/80 transition-colors shadow-sm items-center gap-1.5">
+                <iconify-icon icon="solar:hand-heart-linear" class="text-[16px]"></iconify-icon> 주인장 소개
             </a>
-            <a href="login.html" class="md:hidden ml-1 bg-black/5 hover:bg-black/10 text-textmain p-2.5 rounded-full font-medium transition-spring flex items-center justify-center">
-                <iconify-icon icon="solar:user-rounded-linear" class="text-[22px]"></iconify-icon>
+            <a href="host.html" class="md:hidden ml-1 bg-black/5 hover:bg-black/10 text-textmain p-2.5 rounded-full font-medium transition-spring flex items-center justify-center">
+                <iconify-icon icon="solar:hand-heart-linear" class="text-[22px]"></iconify-icon>
             </a>
         </div>
     </div>
@@ -39,13 +39,15 @@
 <!-- Bottom Mobile Tab Bar (Visible only on mobile sm/md) -->
 <nav class="md:hidden fixed bottom-0 left-0 right-0 z-[100] bg-white/95 backdrop-blur-xl border-t border-black/[0.05] pb-safe drop-shadow-[0_-5px_15px_rgba(0,0,0,0.03)]">
     <div class="flex justify-around items-center h-16 px-2">
-        <a href="index.html" id="tab-home" class="flex flex-col items-center gap-1 w-full text-textdim">
+        <a href="index.html" id="tab-home" class="flex flex-col items-center gap-1 w-full text-textdim hover:text-textmain transition-colors">
             <iconify-icon icon="solar:home-smile-linear" class="text-2xl"></iconify-icon>
             <span class="text-[10px] font-bold">홈</span>
         </a>
-        <a href="qna.html" id="tab-qna" class="flex flex-col items-center gap-1 w-full text-textdim hover:text-textmain transition-colors">
-            <iconify-icon icon="solar:mask-happly-line-duotone" class="text-2xl"></iconify-icon>
-            <span class="text-[10px] font-bold">익명질문</span>
+        <a href="qna.html" id="tab-qna" class="flex flex-col items-center gap-1 w-full text-accent transition-colors relative">
+            <div class="absolute -top-3 bg-accent w-10 h-10 rounded-full flex items-center justify-center shadow-lg border-[3px] border-white">
+                <iconify-icon icon="solar:cup-hot-bold-duotone" class="text-xl text-white"></iconify-icon>
+            </div>
+            <span class="text-[10px] font-extrabold mt-6">커피라운지</span>
         </a>
         <a href="wiki.html" id="tab-wiki" class="flex flex-col items-center gap-1 w-full text-textdim hover:text-textmain transition-colors">
             <iconify-icon icon="solar:document-text-linear" class="text-2xl"></iconify-icon>

@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    
+    <!-- PWA Meta Tags -->
+    <meta name="theme-color" content="#FEFAF4">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="AiTomo">
+    <link rel="manifest" href="./manifest.json">
+    <link rel="apple-touch-icon" href="https://api.iconify.design/solar/tea-cup-bold-duotone.svg?color=%23eb855e">
+    
+    <title>AiTomo - 로그인</title>
+
+    <!-- Pretendard Font -->
+    <link rel="stylesheet" as="style" crossorigin
+        href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+    <!-- Iconify -->
+    <script src="https://code.iconify.design/iconify-icon/1.0.7/iconify-icon.min.js"></script>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Style Config -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Pretendard', 'sans-serif'],
+                    },
+                    colors: {
+                        wbg: '#FEFAF4',
+                        accent: '#eb855e',          
+                        textmain: '#222222',        
+                        textdim: '#6b6a65',         
+                        textmuted: '#9a9994',       
+                    },
+                    boxShadow: {
+                        'btn-kakao': '0 4px 14px 0 rgba(254, 229, 0, 0.4)',
+                        'btn-line': '0 4px 14px 0 rgba(0, 195, 0, 0.3)',
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            background-color: #FEFAF4;
+            color: #222222;
+            font-family: 'Pretendard', sans-serif;
+            -webkit-font-smoothing: antialiased;
+            margin: 0;
+            height: 100vh;
+            overflow: hidden; /* No scrolling on splash */
+            background-image: radial-gradient(circle at top right, rgba(235, 133, 94, 0.08) 0%, transparent 40%),
+                              radial-gradient(circle at bottom left, rgba(235, 133, 94, 0.05) 0%, transparent 40%);
+        }
+    </style>
+</head>
+
+<body class="selection:bg-accent/20 flex flex-col items-center justify-between p-6">
+
+    <!-- Top Left Back Button -->
+    <div class="w-full max-w-md pt-4">
+        <button onclick="location.href='index.html'" class="w-10 h-10 bg-black/5 rounded-full flex items-center justify-center hover:bg-black/10 transition-colors">
+            <iconify-icon icon="solar:close-circle-linear" class="text-2xl text-textmain"></iconify-icon>
+        </button>
+    </div>
+
+    <!-- Main Branding Area -->
+    <div class="flex flex-col items-center text-center w-full max-w-md gap-4 -mt-10">
+        <!-- Main Logo / Image representation -->
+        <div class="w-24 h-24 bg-white rounded-3xl shadow-sm border border-black/5 flex items-center justify-center mb-2 shadow-[0_10px_30px_rgba(235,133,94,0.15)] ring-1 ring-black/[0.02]">
+            <iconify-icon icon="solar:tea-cup-bold-duotone" class="text-6xl text-accent"></iconify-icon>
+        </div>
+        
+        <!-- Typography -->
+        <div>
+            <h1 class="text-3xl font-extrabold text-textmain tracking-tight flex items-center justify-center gap-1.5 mb-2">
+                AiTomo <span class="text-[14px] bg-accent/10 text-accent px-2 py-0.5 rounded-full mt-1">아이친구</span>
+            </h1>
+            <p class="text-[15px] font-medium text-textdim break-keep-all leading-relaxed">
+                한일 부모님들의 따뜻한 모바일 사랑방,<br>
+                육아 정보와 동네 꿀팁을 음성으로 나누세요.
+            </p>
+        </div>
+    </div>
+
+    <!-- Social Login Buttons Region -->
+    <div class="w-full max-w-md flex flex-col gap-3 pb-8">
+        
+        <!-- Kakao -->
+        <button class="w-full h-14 bg-[#FEE500] hover:bg-[#FEE500]/90 text-black/90 font-bold text-[15px] rounded-2xl flex items-center justify-center relative shadow-btn-kakao transition-transform active:scale-95">
+            <svg class="absolute left-6 w-5 h-5" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><path d="M16 2.66675C8.636 2.66675 2.66663 6.94541 2.66663 12.2227C2.66663 15.6534 4.88 18.6654 8.21733 20.3014C7.81867 21.6 7.02663 24.3214 6.9333 24.6734C6.8173 25.1014 7.23463 25.0747 7.50263 24.8961C7.88 24.6467 12.0626 21.8414 13.568 20.8401C14.3547 21.0027 15.1666 21.0881 16 21.0881C23.364 21.0881 29.3333 16.8094 29.3333 11.5321C29.3333 6.25475 23.364 2.66675 16 2.66675Z" fill="black"/></svg>
+            카카오 로그인
+        </button>
+
+        <!-- LINE (For Japanese Users) -->
+        <button class="w-full h-14 bg-[#00C300] hover:bg-[#00C300]/90 text-white font-bold text-[15px] rounded-2xl flex items-center justify-center relative shadow-btn-line transition-transform active:scale-95">
+            <svg class="absolute left-6 w-6 h-6" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M24 10.304C24 4.622 18.625 0 12 0C5.375 0 0 4.622 0 10.304C0 15.342 4.148 19.588 9.605 20.407C10.026 20.496 11.007 20.768 11.161 21.365V21.366C11.238 21.654 10.597 24 10.597 24C10.597 24 10.334 25.176 11.458 24.641C12.583 24.106 17.514 21.139 20.25 18.232C22.612 15.688 24 13.125 24 10.304Z" fill="white"/><path d="M7.48197 12.083V7.935C7.48197 7.747 7.33297 7.595 7.14997 7.595H6.48397C6.30097 7.595 6.15197 7.747 6.15197 7.935V12.753C6.15197 12.84 6.18897 12.923 6.25297 12.984C6.31597 13.045 6.39997 13.08 6.48597 13.08H10.158C10.341 13.08 10.49 12.928 10.49 12.741V12.083C10.49 11.895 10.34 11.745 10.158 11.745H7.48397L7.48197 12.083ZM16.326 13.08H16.993C17.176 13.08 17.325 12.928 17.325 12.741V7.935C17.325 7.747 17.176 7.595 16.995 7.595H16.328C16.145 7.595 15.996 7.747 15.996 7.935V12.753C15.996 12.94 16.143 13.08 16.326 13.08ZM12.196 13.08H12.863C13.046 13.08 13.195 12.928 13.195 12.741V7.935C13.195 7.747 13.046 7.595 12.865 7.595H12.198C12.015 7.595 11.866 7.747 11.866 7.935V12.753C11.866 12.94 12.013 13.08 12.196 13.08ZM13.882 13.064C13.911 13.076 13.943 13.082 13.974 13.082C14.075 13.082 14.17 13.037 14.234 12.955L16.273 10.147V12.755C16.273 12.942 16.422 13.094 16.604 13.094H17.271C17.454 13.094 17.603 12.942 17.603 12.755V7.936C17.603 7.748 17.454 7.596 17.271 7.596H16.657C16.626 7.596 16.595 7.603 16.565 7.615C16.467 7.653 16.386 7.734 16.353 7.828V7.839L14.475 10.428V7.92C14.475 7.732 14.326 7.58 14.143 7.58H13.475C13.292 7.58 13.143 7.732 13.143 7.92V12.738C13.143 12.871 13.218 12.986 13.332 13.045C13.351 13.054 13.364 13.056 13.382 13.064H13.882Z" fill="white"/></svg>
+            LINE 로그인
+        </button>
+
+        <!-- Google -->
+        <button class="w-full h-14 bg-white hover:bg-gray-50 text-textmain font-bold text-[15px] rounded-2xl flex items-center justify-center relative border border-black/10 transition-transform active:scale-95 shadow-sm">
+            <iconify-icon icon="flat-color-icons:google" class="absolute left-6 text-2xl"></iconify-icon>
+            Google 계정으로 시작
+        </button>
+
+        <!-- Divider -->
+        <div class="flex items-center gap-4 my-3 opacity-60">
+            <div class="flex-1 h-px bg-black/10"></div>
+            <span class="text-[11px] font-bold text-textdim tracking-widest uppercase">Or</span>
+            <div class="flex-1 h-px bg-black/10"></div>
+        </div>
+
+        <button onclick="location.href='index.html'" class="w-full font-bold text-[14px] text-textdim underline underline-offset-4 decoration-black/20 hover:text-textmain transition-colors">
+            로그인 없이 위키 구경하기
+        </button>
+
+    </div>
+
+</body>
+
+</html>
