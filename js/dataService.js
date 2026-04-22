@@ -88,6 +88,48 @@ window.DataService = {
             saveLocalPosts(collectionName, posts);
             return newPost.id;
         }
+    },
+
+    getPost: async (collectionName, id) => {
+        if (db) {
+            // Firebase 구현 (생략)
+            return null; // 차후 firebase-firestore의 getDoc() 사용
+        } else {
+            const posts = getLocalPosts(collectionName);
+            return posts.find(p => p.id === id.toString()) || null;
+        }
+    },
+
+    getReplies: async (collectionName, postId) => {
+        if (db) {
+            // Firebase sub-collection 조회
+            return []; // 차후 구현
+        } else {
+            return getLocalPosts(`${collectionName}_replies_${postId}`).sort((a,b) => new Date(a.createdAt) - new Date(b.createdAt));
+        }
+    },
+
+    addReply: async (collectionName, postId, data) => {
+        if (db) {
+            // Firebase sub-collection 에 추가
+            return null; 
+        } else {
+            const repliesKey = `${collectionName}_replies_${postId}`;
+            const replies = getLocalPosts(repliesKey);
+            const newReply = { id: Date.now().toString(), postId, ...data, createdAt: new Date().toISOString() };
+            replies.push(newReply);
+            localStorage.setItem(`mock_${repliesKey}`, JSON.stringify(replies));
+            
+            // 본글의 댓글 수 업데이트
+            const posts = getLocalPosts(collectionName);
+            const postIdx = posts.findIndex(p => p.id === postId.toString());
+            if (postIdx >= 0) {
+                posts[postIdx].comments = (posts[postIdx].comments || 0) + 1;
+                saveLocalPosts(collectionName, posts);
+            }
+            
+            return newReply.id;
+        }
     }
 };
 
