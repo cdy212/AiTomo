@@ -252,6 +252,144 @@ window.DataService = {
             }
             return true;
         }
+    },
+
+    // 게시글 수정 (content 등 일부 필드 업데이트)
+    updatePost: async (collectionName, postId, fields) => {
+        if (db) {
+            try {
+                const postRef = doc(db, collectionName, postId);
+                await updateDoc(postRef, { ...fields });
+                return true;
+            } catch (e) {
+                console.error("[DataService] updatePost 실패:", e);
+                return false;
+            }
+        } else {
+            const posts = getLocalPosts(collectionName);
+            const idx = posts.findIndex(p => p.id === postId.toString());
+            if (idx >= 0) {
+                posts[idx] = { ...posts[idx], ...fields };
+                saveLocalPosts(collectionName, posts);
+            }
+            return true;
+        }
+    },
+
+    // 게시글 삭제
+    deletePost: async (collectionName, postId) => {
+        if (db) {
+            try {
+                const { deleteDoc } = await import("https://www.gstatic.com/firebasejs/10.9.0/firebase-firestore.js");
+                const postRef = doc(db, collectionName, postId);
+                await deleteDoc(postRef);
+                return true;
+            } catch (e) {
+                console.error("[DataService] deletePost 실패:", e);
+                return false;
+            }
+        } else {
+            const posts = getLocalPosts(collectionName).filter(p => p.id !== postId.toString());
+            saveLocalPosts(collectionName, posts);
+            return true;
+        }
+    },
+
+    // === 동네꿀팁 (dongnaeTips) API ===
+
+    getTips: async (options = {}) => {
+        if (db) {
+            try {
+                // 기본 최신순 100건 조회 (추후 거리순 필터링은 클라이언트에서 처리)
+                const q = query(
+                    collection(db, 'dongnaeTips'),
+                    orderBy("createdAt", "desc"),
+                    limit(100)
+                );
+                const snapshot = await getDocs(q);
+                let tips = snapshot.docs.map(d => ({
+                    id: d.id,
+                    ...d.data(),
+                    createdAt: toISO(d.data().createdAt)
+                }));
+                if (options.category && options.category !== 'all') {
+                    tips = tips.filter(t => t.category === options.category);
+                }
+                return tips;
+            } catch (e) {
+                console.error("[DataService] getTips 실패:", e);
+                return [];
+            }
+        } else {
+            let tips = getLocalPosts('dongnaeTips');
+            if (options.category && options.category !== 'all') {
+                tips = tips.filter(t => t.category === options.category);
+            }
+            return tips.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+        }
+    },
+
+    addTip: async (data) => {
+        if (db) {
+            try {
+                const payload = { 
+                    ...data, 
+                    createdAt: serverTimestamp(), 
+                    likes: 0, 
+                    likedBy: [],
+                    status: 'active' 
+                };
+                const docRef = await addDoc(collection(db, 'dongnaeTips'), payload);
+                return docRef.id;
+            } catch (e) {
+                console.error("[DataService] addTip 실패:", e);
+                return null;
+            }
+        } else {
+            const tips = getLocalPosts('dongnaeTips');
+            const newTip = {
+                id: Date.now().toString(),
+                ...data,
+                likes: 0,
+                likedBy: [],
+                status: 'active',
+                createdAt: new Date().toISOString()
+            };
+            tips.unshift(newTip);
+            saveLocalPosts('dongnaeTips', tips);
+            return newTip.id;
+        }
+    },
+
+    likeTip: async (docId, uid) => {
+        if (db) {
+            try {
+                const { arrayUnion } = await import("https://www.gstatic.com/firebasejs/10.9.0/firebase-firestore.js");
+                const tipRef = doc(db, 'dongnaeTips', docId);
+                
+                await updateDoc(tipRef, {
+                    likes: increment(1),
+                    likedBy: arrayUnion(uid)
+                });
+                return true;
+            } catch (e) {
+                console.error("[DataService] likeTip 실패:", e);
+                return false;
+            }
+        } else {
+            const tips = getLocalPosts('dongnaeTips');
+            const idx = tips.findIndex(t => t.id === docId.toString());
+            if (idx >= 0) {
+                if (!tips[idx].likedBy) tips[idx].likedBy = [];
+                if (!tips[idx].likedBy.includes(uid)) {
+                    tips[idx].likedBy.push(uid);
+                    tips[idx].likes = (tips[idx].likes || 0) + 1;
+                    saveLocalPosts('dongnaeTips', tips);
+                    return true;
+                }
+            }
+            return false;
+        }
     }
 };
 

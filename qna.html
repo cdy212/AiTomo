@@ -5,55 +5,30 @@
     <meta charset="UTF-8">
     <meta name="viewport"
         content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    
-    <!-- PWA Meta Tags -->
     <meta name="theme-color" content="#FEFAF4">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="default">
-    <meta name="apple-mobile-web-app-title" content="AiTomo">
-    <link rel="manifest" href="./manifest.json">
-    <link rel="apple-touch-icon" href="https://api.iconify.design/solar/tea-cup-bold-duotone.svg?color=%23eb855e">
-    
-    <title>AiTomo - 커피라운지</title>
-
-    <!-- Pretendard Font -->
+    <title>커피라운지 DEV</title>
     <link rel="stylesheet" as="style" crossorigin
         href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
-    <!-- Iconify (Monochrome Unified) -->
     <script src="https://code.iconify.design/iconify-icon/1.0.7/iconify-icon.min.js"></script>
-    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-
-    <!-- Style Config -->
     <script>
         tailwind.config = {
             theme: {
                 extend: {
-                    fontFamily: {
-                        sans: ['Pretendard', 'sans-serif'],
-                    },
+                    fontFamily: { sans: ['Pretendard', 'sans-serif'] },
                     colors: {
-                        // Warm Editorial Palette
-                        wbg: '#FEFAF4',
-                        accent: '#eb855e',          // Warm vibrant orange/terracotta
-                        accentlight: '#F5B099',
-                        textmain: '#222222',        // Soft offset black
-                        textdim: '#6b6a65',         // Warm gray
-                        textmuted: '#9a9994',       // Soft warm gray
-                        olive: '#808260'            // Earthy subtle tone for sub-tags
+                        wbg: '#FEFAF4', accent: '#eb855e', accentlight: '#F5B099',
+                        textmain: '#222222', textdim: '#6b6a65', textmuted: '#9a9994', olive: '#808260'
                     },
-                    boxShadow: {
-                        'inner-highlight': 'inset 0 1px 0 0 rgba(255,255,255,1)',
-                    }
+                    boxShadow: { 'inner-highlight': 'inset 0 1px 0 0 rgba(255,255,255,1)' }
                 }
             }
         }
     </script>
-
     <style>
         body {
-            background-color: #FEFAF4;
-            color: #222222;
+            background: #FEFAF4;
+            color: #222;
             font-family: 'Pretendard', sans-serif;
             -webkit-font-smoothing: antialiased;
             letter-spacing: -0.015em;
@@ -62,7 +37,6 @@
             padding: 0;
         }
 
-        /* Fix Scroll Bug natively */
         .no-scrollbar::-webkit-scrollbar {
             display: none;
         }
@@ -72,251 +46,785 @@
             scrollbar-width: none;
         }
 
-        .scroll-safe {
-            -webkit-overflow-scrolling: touch;
-        }
-
-        /* Chat bubbles specific */
-        .chat-bubble-receive {
+        .chat-bubble-left {
             border-bottom-left-radius: 0.25rem;
         }
-        .chat-bubble-send {
-            border-bottom-right-radius: 0.25rem;
+
+        /* 이미지 썸네일 */
+        .img-thumb {
+            position: relative;
+            display: inline-block;
         }
-        
+
+        .img-thumb .rm-img {
+            position: absolute;
+            top: -6px;
+            right: -6px;
+            background: rgba(0, 0, 0, .55);
+            color: #fff;
+            border-radius: 50%;
+            width: 18px;
+            height: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 10px;
+        }
+
+        /* 마이크 녹음 애니 */
+        .mic-on {
+            background: #ef4444 !important;
+            animation: mpulse 1s infinite;
+        }
+
+        @keyframes mpulse {
+
+            0%,
+            100% {
+                transform: scale(1)
+            }
+
+            50% {
+                transform: scale(1.08)
+            }
+        }
+
+        /* 피드 진입 */
+        .post-entry {
+            animation: slideUp .35s cubic-bezier(.16, 1, .3, 1) both;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(18px)
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0)
+            }
+        }
+
+        /* 삭제 페이드아웃 */
+        .post-exit {
+            animation: fadeOut .3s ease forwards;
+        }
+
+        @keyframes fadeOut {
+            to {
+                opacity: 0;
+                transform: translateY(-8px);
+                max-height: 0;
+                margin: 0;
+                padding: 0;
+                overflow: hidden
+            }
+        }
+
+        /* 인라인 수정 textarea - 큰 화면 및 자동 높이 조절 */
+        .edit-textarea {
+            width: 100%;
+            resize: none;
+            border: none;
+            outline: none;
+            background: #f8f5f0;
+            border-radius: 10px;
+            padding: 10px 12px;
+            font-size: 15px;
+            font-weight: 700;
+            color: #222222;
+            font-family: 'Pretendard', sans-serif;
+            letter-spacing: -0.015em;
+            line-height: 1.7;
+            min-height: 100px;
+            box-sizing: border-box;
+            overflow-y: hidden;
+        }
+
+        /* 로딩 스피너 */
+        .spin {
+            animation: spin .8s linear infinite;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg)
+            }
+        }
+
+        .cat-badge {
+            background: #f3f3f0;
+            color: #6b6a65;
+            font-size: 10px;
+            font-weight: 700;
+            padding: 1px 7px;
+            border-radius: 4px;
+            border: 1px solid rgba(0, 0, 0, .07);
+            display: inline-block;
+            margin-bottom: 5px;
+        }
+
+        /* Step 3: 답변 영역 기본 오픈 */
+        .reply-area {
+            overflow: visible;
+            height: auto;
+        }
+
+        .reply-entry {
+            animation: slideUp .25s cubic-bezier(.16, 1, .3, 1) both;
+        }
     </style>
 </head>
 
-<body class="relative selection:bg-accent/20 pb-28 md:pb-0">
+<body class="relative selection:bg-accent/20 pb-40">
 
-    <!-- Global Navigation Included Here -->
     <div id="c-nav"></div>
 
-    <main class="max-w-3xl mx-auto px-4 pt-20 md:pt-28 pb-32">
-        
-        <!-- Header -->
-        <div class="flex items-center justify-between mb-8 pb-4 border-b-2 border-textmain">
-            <div class="flex flex-col gap-1">
-                <div class="flex items-center gap-2">
-                    <iconify-icon icon="solar:cup-hot-line-duotone" class="text-3xl text-accent"></iconify-icon>
-                    <h1 class="text-[24px] md:text-3xl font-extrabold tracking-tight">커피라운지</h1>
-                </div>
-                <p class="text-[13px] md:text-[14px] text-textdim font-semibold ml-10">눈치보지 않고 가벼운 마음으로 육아 고민을 던지는 곳</p>
+    <!-- ===== Header ===== -->
+    <header class="sticky top-0 z-50 bg-wbg/95 backdrop-blur-xl border-b border-black/[0.06]">
+        <div class="max-w-2xl mx-auto px-4 h-14 flex items-center justify-between">
+            <div class="flex items-center gap-2">
+                <iconify-icon icon="solar:cup-hot-line-duotone" class="text-2xl text-accent"></iconify-icon>
+                <h1 class="text-[20px] font-extrabold tracking-tight">커피라운지</h1>
+                <!-- DB 연결 상태 표시 -->
+                <span id="db-badge"
+                    class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-gray-100 text-gray-400 border border-gray-200 ml-1">연결
+                    중...</span>
+            </div>
+            <!-- 로그인 토글 (개발용) -->
+            <button id="login-toggle"
+                class="text-[12px] font-bold px-3 py-1.5 rounded-full border border-black/10 bg-white hover:bg-black/5 transition flex items-center gap-1.5">
+                <iconify-icon id="login-icon" icon="solar:user-circle-linear" class="text-base"></iconify-icon>
+                <span id="login-label">익명</span>
+            </button>
+        </div>
+    </header>
+
+    <!-- ===== 피드 ===== -->
+    <main class="max-w-2xl mx-auto px-4 pt-4 pb-10">
+        <p class="text-[12px] text-textmuted font-semibold mb-4 ml-1">눈치보지 않고 가벼운 마음으로 육아 고민을 던지는 곳</p>
+        <div id="feed" class="flex flex-col gap-8">
+            <!-- 초기 로딩 -->
+            <div id="feed-loading" class="py-16 text-center text-textmuted">
+                <iconify-icon icon="solar:cup-hot-line-duotone"
+                    class="text-4xl text-accent/40 block mx-auto mb-2 spin"></iconify-icon>
+                <p class="text-[13px] font-semibold">불러오는 중...</p>
             </div>
         </div>
-
-        <!-- Chat Feed Type List -->
-        <div id="qna-content" class="flex flex-col gap-8 pb-10">
-            <div class="p-8 text-center text-textdim font-semibold">불러오는 중...</div>
-        </div>
-
     </main>
 
-    <!-- Global Voice FAB (For mobile compatibility or floating action) Included Here -->
-    <div id="c-voiceUi" class="hidden md:block"></div>
+    <!-- ===== 하단 입력바 ===== -->
+    <div
+        class="fixed bottom-[64px] md:bottom-0 left-0 right-0 z-[90] bg-white/95 backdrop-blur-xl border-t border-black/5 pt-3 pb-8 md:pb-5 px-4">
+        <div class="max-w-2xl mx-auto">
+            <!-- 이미지 미리보기 -->
+            <div id="img-preview-row" class="hidden gap-2 mb-2 flex-wrap"></div>
 
-    <!-- Fixed Bottom Chat Input Layer -->
-    <div class="fixed bottom-[64px] md:bottom-0 left-0 right-0 z-[90] bg-white/95 backdrop-blur-xl border-t border-black/5 pt-3 pb-8 md:pb-6 px-4 drop-shadow-[0_-10px_20px_rgba(0,0,0,0.02)]">
-        <div class="max-w-3xl mx-auto">
-            
             <div class="flex items-center gap-2 mb-2 px-1">
-                <span class="bg-black/5 px-2.5 py-1 rounded-md text-[11px] font-bold text-textdim border border-black/5 flex items-center gap-1 cursor-pointer hover:bg-black/10 transition-colors">
-                    <iconify-icon icon="solar:hashtag-linear"></iconify-icon> 동네이웃
-                </span>
-                <span class="text-[11px] text-textmuted font-semibold">따뜻한 답변을 남겨주시면 큰 도움이 됩니다.</span>
+                <button id="cat-btn"
+                    class="bg-black/5 px-2.5 py-1 rounded-md text-[11px] font-bold text-textdim border border-black/5 flex items-center gap-1 hover:bg-black/10 transition">
+                    <iconify-icon icon="solar:hashtag-linear"></iconify-icon>
+                    <span id="cat-label">카테고리</span>
+                </button>
+                <span class="text-[11px] text-textmuted font-semibold">음성으로 이야기하면 자동 등록됩니다.</span>
             </div>
 
-            <div class="flex flex-row items-center gap-2 bg-wbg ring-1 ring-black/5 rounded-full p-1.5 focus-within:ring-accent focus-within:bg-white transition-all shadow-inner-highlight">
-                
-                <!-- Voice Button First -->
-                <button class="bg-accent text-white p-3 rounded-full flex items-center justify-center shadow-md hover:scale-[1.05] active:scale-95 transition-spring shrink-0 group">
-                    <iconify-icon icon="solar:microphone-3-bold" class="text-[22px] group-hover:animate-pulse"></iconify-icon>
+            <div
+                class="flex flex-row items-center gap-2 bg-wbg ring-1 ring-black/5 rounded-full p-1.5 focus-within:ring-accent focus-within:bg-white transition-all shadow-inner-highlight">
+                <button id="mic-btn"
+                    class="bg-accent text-white p-3 rounded-full flex items-center justify-center shadow-md hover:scale-105 active:scale-95 transition shrink-0"
+                    title="음성 입력">
+                    <iconify-icon id="mic-icon" icon="solar:microphone-3-bold" class="text-[22px]"></iconify-icon>
                 </button>
-                
-                <input id="reply-input" type="text" placeholder="답변을 입력해주세요." class="flex-1 bg-transparent border-none outline-none text-[15px] font-semibold text-textmain placeholder:text-textmuted/80 py-2 px-3 tracking-tight" />
-                
-                <button class="text-textmuted hover:text-accent transition-colors p-2 shrink-0 flex items-center justify-center">
+                <input id="post-input" type="text" placeholder="고민을 남겨주시면 다함께 도와드릴게요."
+                    class="flex-1 bg-transparent border-none outline-none text-[15px] font-semibold text-textmain placeholder:text-textmuted/80 py-2 px-2 tracking-tight" />
+                <button id="img-btn" class="text-textmuted hover:text-accent transition p-2 shrink-0" title="이미지 첨부">
                     <iconify-icon icon="solar:camera-add-linear" class="text-xl"></iconify-icon>
                 </button>
-                <button id="reply-submit-btn" class="bg-black/5 hover:bg-black/10 text-textmain font-bold p-2.5 rounded-full shrink-0 flex items-center justify-center transition-colors mr-0.5">
+                <button id="post-submit"
+                    class="bg-accent text-white p-2.5 rounded-full shrink-0 flex items-center justify-center hover:bg-accentlight transition active:scale-95 mr-0.5"
+                    title="등록">
                     <iconify-icon icon="solar:plain-bold-duotone" class="text-xl"></iconify-icon>
                 </button>
-
             </div>
         </div>
     </div>
 
+    <input type="file" id="file-input" accept="image/*" multiple class="hidden" />
 
+    <!-- ===== 카테고리 바텀시트 ===== -->
+    <div id="cat-sheet" class="hidden fixed inset-0 z-[200]">
+        <div id="cat-overlay" class="absolute inset-0 bg-black/30"></div>
+        <div class="absolute bottom-0 left-0 right-0 bg-white rounded-t-3xl px-5 pt-5 pb-10">
+            <div class="w-10 h-1 bg-black/10 rounded-full mx-auto mb-5"></div>
+            <p class="font-bold text-[15px] mb-4">카테고리 선택</p>
+            <div class="grid grid-cols-3 gap-2" id="cat-grid"></div>
+        </div>
+    </div>
+
+    <!-- ===== 인라인 스크립트 ===== -->
     <script>
-        // Component Loader Script
-        async function loadComponent(id, url) {
-            try {
-                const response = await fetch(url);
-                if (response.ok) {
-                    const text = await response.text();
-                    document.getElementById(id).innerHTML = text;
-                    
-                    // 스크립트 강제 파싱 및 실행
-                    Array.from(document.getElementById(id).querySelectorAll('script')).forEach(oldScript => {
-                        const newScript = document.createElement('script');
-                        Array.from(oldScript.attributes).forEach(attr => newScript.setAttribute(attr.name, attr.value));
-                        newScript.appendChild(document.createTextNode(oldScript.innerHTML));
-                        oldScript.parentNode.replaceChild(newScript, oldScript);
-                    });
-                }
-            } catch (error) {
-                console.error(`Error loading component ${url}:`, error);
-            }
+        // =========================================================
+        // 상수
+        // =========================================================
+        const COLLECTION = 'coffeeLounge';
+        const CATEGORIES = [
+            { key: 'anon', label: '익명 고민', icon: 'solar:ghost-linear' },
+            { key: 'health', label: '병원/건강', icon: 'solar:hospital-linear' },
+            { key: 'food', label: '아기 맛집', icon: 'solar:chef-hat-linear' },
+            { key: 'play', label: '놀이/공원', icon: 'solar:trees-linear' },
+            { key: 'school', label: '어린이집', icon: 'solar:book-bookmark-linear' },
+            { key: 'travel', label: '나들이', icon: 'solar:routing-linear' },
+            { key: 'culture', label: '일본문화', icon: 'solar:diploma-linear' },
+            { key: 'tip', label: '생활 팁', icon: 'solar:star-linear' },
+            { key: 'etc', label: '기타', icon: 'solar:menu-dots-linear' },
+        ];
+
+        // =========================================================
+        // 상태
+        // =========================================================
+        let isLoggedIn = false;
+        let userName = '익명';
+        // 본인 글 추적: localStorage (브라우저 닫아도 유지)
+        const MY_POSTS_KEY = 'aitomo_my_posts';
+        const getMyPosts = () => JSON.parse(localStorage.getItem(MY_POSTS_KEY) || '[]');
+        const addMyPost = id => {
+            const a = getMyPosts();
+            if (!a.includes(id)) { a.push(id); localStorage.setItem(MY_POSTS_KEY, JSON.stringify(a)); }
+        };
+
+        let selectedCat = null;
+        let attachedImgs = [];   // { dataUrl }[]
+        let micListening = false;
+
+        // =========================================================
+        // DOM
+        // =========================================================
+        const feedEl = document.getElementById('feed');
+        const feedLoading = document.getElementById('feed-loading');
+        const postInput = document.getElementById('post-input');
+        const postSubmit = document.getElementById('post-submit');
+        const micBtn = document.getElementById('mic-btn');
+        const micIcon = document.getElementById('mic-icon');
+        const imgBtn = document.getElementById('img-btn');
+        const fileInput = document.getElementById('file-input');
+        const imgPreviewRow = document.getElementById('img-preview-row');
+        const catBtn = document.getElementById('cat-btn');
+        const catLabel = document.getElementById('cat-label');
+        const catSheet = document.getElementById('cat-sheet');
+        const catOverlay = document.getElementById('cat-overlay');
+        const catGrid = document.getElementById('cat-grid');
+        const loginToggle = document.getElementById('login-toggle');
+        const loginLabelEl = document.getElementById('login-label');
+        const loginIcon = document.getElementById('login-icon');
+        const dbBadge = document.getElementById('db-badge');
+
+        // =========================================================
+        // 시간 포맷
+        // =========================================================
+        function getTimeStr(iso) {
+            const diff = Date.now() - new Date(iso).getTime();
+            const m = Math.floor(diff / 60000);
+            if (m < 1) return '방금 전';
+            if (m < 60) return `${m}분 전`;
+            const h = Math.floor(m / 60);
+            if (h < 2) return '1시간 전';
+            if (h < 4) return '3시간 전';
+            if (h < 7) return '6시간 전';
+            if (h < 13) return '12시간 전';
+            const d = Math.floor(h / 24);
+            if (d < 2) return '하루 전';
+            if (d < 3) return '이틀 전';
+            return `${d}일 전`;
         }
 
-        document.addEventListener("DOMContentLoaded", () => {
-            loadComponent("c-nav", "components/nav.html");
+        // =========================================================
+        // 로그인 토글 (개발용)
+        // =========================================================
+        loginToggle.addEventListener('click', () => {
+            isLoggedIn = !isLoggedIn;
+            if (isLoggedIn) {
+                userName = '한일맘';
+                loginLabelEl.textContent = userName;
+                loginIcon.setAttribute('icon', 'solar:user-circle-bold-duotone');
+                loginToggle.classList.add('text-accent', 'border-accent/30', 'bg-accent/5');
+            } else {
+                userName = '익명';
+                loginLabelEl.textContent = '익명';
+                loginIcon.setAttribute('icon', 'solar:user-circle-linear');
+                loginToggle.classList.remove('text-accent', 'border-accent/30', 'bg-accent/5');
+            }
         });
 
-        // ------------------
-        // QNA 상세 렌더링 로직 (DataService 연동)
-        // ------------------
-        let currentPostId = null;
-
-        function getTimeStr(isoString) {
-            const now = new Date();
-            const past = new Date(isoString);
-            const diffMs = now - past;
-            const diffMins = Math.floor(diffMs / 60000);
-            const diffHours = Math.floor(diffMins / 60);
-            const diffDays = Math.floor(diffHours / 24);
-            if (diffMins < 60) return `${Math.max(0, diffMins)}분 전`;
-            if (diffHours < 24) return `${diffHours}시간 전`;
-            return `${diffDays}일 전`;
-        }
-
-        async function renderQna() {
-            const urlParams = new URLSearchParams(window.location.search);
-            currentPostId = urlParams.get('id');
-
-            const container = document.getElementById('qna-content');
-            if (!container) return;
-
-            if (!currentPostId) {
-                container.innerHTML = `<div class="p-8 text-center text-textdim font-semibold">게시글을 찾을 수 없습니다.</div>`;
-                return;
-            }
-
-            const post = await window.DataService.getPost('coffeeLounge', currentPostId);
-            if (!post) {
-                container.innerHTML = `<div class="p-8 text-center text-textdim font-semibold">삭제되었거나 존재하지 않는 게시글입니다.</div>`;
-                return;
-            }
-
-            const replies = await window.DataService.getReplies('coffeeLounge', currentPostId);
-
-            let repliesHtml = '';
-            replies.forEach(reply => {
-                repliesHtml += `
-                    <div class="flex items-end gap-2 flex-row">
-                        <div class="w-8 h-8 rounded-full bg-gray-100 text-gray-500 flex items-center justify-center font-bold text-[12px] shrink-0 border border-gray-200">
-                            동네
-                        </div>
-                        <div class="flex flex-col items-start gap-1 max-w-[90%]">
-                            <div class="bg-white p-3 rounded-2xl chat-bubble-receive border border-black/5 shadow-sm flex flex-col">
-                                <p class="text-[14px] font-medium text-textmain leading-snug break-keep-all">${reply.content}</p>
-                                <span class="text-[10px] text-textmuted mt-1 text-right">${getTimeStr(reply.createdAt)}</span>
-                            </div>
-                        </div>
-                    </div>
-                `;
+        // =========================================================
+        // 카테고리 바텀시트
+        // =========================================================
+        CATEGORIES.forEach(cat => {
+            const b = document.createElement('button');
+            b.className = 'flex flex-col items-center gap-1.5 bg-black/[0.03] hover:bg-accent/10 border border-black/5 rounded-2xl py-3 transition active:scale-95';
+            b.innerHTML = `<iconify-icon icon="${cat.icon}" class="text-2xl text-textdim"></iconify-icon><span class="text-[12px] font-bold text-textmain">${cat.label}</span>`;
+            b.addEventListener('click', () => {
+                selectedCat = cat;
+                catLabel.textContent = cat.label;
+                catSheet.classList.add('hidden');
             });
+            catGrid.appendChild(b);
+        });
+        catBtn.addEventListener('click', () => catSheet.classList.remove('hidden'));
+        catOverlay.addEventListener('click', () => catSheet.classList.add('hidden'));
 
-            container.innerHTML = `
-                <div class="flex flex-col gap-2">
-                    <div class="flex items-center justify-center mb-4">
-                        <span class="bg-black/5 text-textdim text-[11px] font-bold px-3 py-1 rounded-full border border-black/[0.03]">${getTimeStr(post.createdAt)}</span>
-                    </div>
-                    
-                    <div class="flex items-end gap-3 flex-row">
-                        <div class="w-10 h-10 rounded-full bg-accentlight/20 text-accent flex items-center justify-center font-extrabold text-[14px] shrink-0 border border-accentlight">
-                            ${post.author}
-                        </div>
-                        <div class="flex flex-col items-start gap-1 max-w-[85%]">
-                            ${post.region ? `<span class="text-textmuted text-[11px] font-bold ml-1 flex items-center gap-1.5"><iconify-icon icon="solar:routing-linear"></iconify-icon> ${post.region}</span>` : ''}
-                            <div class="bg-white p-4 rounded-[1.25rem] chat-bubble-receive border border-black/5 shadow-sm">
-                                <p class="font-bold text-[15px] text-textmain leading-snug break-keep-all">${post.title}</p>
-                            </div>
-                        </div>
-                    </div>
+        // =========================================================
+        // 이미지 첨부
+        // =========================================================
+        imgBtn.addEventListener('click', () => fileInput.click());
+        fileInput.addEventListener('change', e => {
+            [...e.target.files].forEach(file => {
+                if (attachedImgs.length >= 3) return;
+                const reader = new FileReader();
+                reader.onload = ev => {
+                    attachedImgs.push({ dataUrl: ev.target.result });
+                    renderImgPreview();
+                };
+                reader.readAsDataURL(file);
+            });
+            fileInput.value = '';
+        });
 
-                    <div class="pl-14 flex items-center gap-3">
-                        <button id="like-btn" data-post-id="${post.id}" class="text-[12px] font-bold text-textdim hover:text-accent transition-colors flex items-center gap-1">
-                            <iconify-icon icon="solar:heart-linear"></iconify-icon> <span id="like-count">공감 ${post.likes || 0}</span>
-                        </button>
-                        <button class="text-[12px] font-bold text-textdim hover:text-accent transition-colors flex items-center gap-1">
-                            <iconify-icon icon="solar:chat-line-linear"></iconify-icon> 답변 ${replies.length}
-                        </button>
-                    </div>
-
-                    <div class="flex flex-col gap-3 mt-3 pl-10 md:pl-14 border-l-2 border-black/5 ml-5 md:ml-7 pb-4">
-                        ${repliesHtml}
-                    </div>
-                </div>
-            `;
-
-            // 공감 버튼 이벤트 바인딩 (렌더링 후)
-            const likeBtn = document.getElementById('like-btn');
-            if (likeBtn) {
-                likeBtn.addEventListener('click', async () => {
-                    likeBtn.disabled = true;
-                    const ok = await window.DataService.likePost('coffeeLounge', currentPostId);
-                    if (ok) {
-                        const countEl = document.getElementById('like-count');
-                        const current = parseInt(countEl.textContent.replace('공감 ', '')) || 0;
-                        countEl.textContent = `공감 ${current + 1}`;
-                        likeBtn.classList.add('text-accent');
-                    }
-                });
-            }
+        function renderImgPreview() {
+            if (!attachedImgs.length) { imgPreviewRow.classList.add('hidden'); imgPreviewRow.innerHTML = ''; return; }
+            imgPreviewRow.classList.remove('hidden');
+            imgPreviewRow.classList.add('flex');
+            imgPreviewRow.innerHTML = attachedImgs.map((img, i) => `
+            <div class="img-thumb">
+                <img src="${img.dataUrl}" class="h-16 w-16 object-cover rounded-xl border border-black/10 shadow-sm"/>
+                <span class="rm-img" data-idx="${i}"><iconify-icon icon="solar:close-linear" style="font-size:10px"></iconify-icon></span>
+            </div>`).join('');
+            imgPreviewRow.querySelectorAll('.rm-img').forEach(btn => {
+                btn.addEventListener('click', () => { attachedImgs.splice(+btn.dataset.idx, 1); renderImgPreview(); });
+            });
         }
 
-        async function init() {
-            if (window.DataService) {
-                renderQna();
-            }
+        // =========================================================
+        // 마이크
+        // =========================================================
+        const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+        let recognition = null;
+        if (SR) {
+            recognition = new SR();
+            recognition.lang = 'ko-KR'; recognition.continuous = false; recognition.interimResults = true;
+            recognition.onstart = () => {
+                micListening = true;
+                micBtn.classList.add('mic-on'); micBtn.classList.remove('bg-accent');
+                micIcon.setAttribute('icon', 'solar:microphone-3-bold-duotone');
+                postInput.placeholder = '듣고 있어요...';
+            };
+            recognition.onresult = e => {
+                let t = ''; for (let i = e.resultIndex; i < e.results.length; i++) t += e.results[i][0].transcript;
+                postInput.value = t;
+            };
+            recognition.onend = () => {
+                micListening = false;
+                micBtn.classList.remove('mic-on'); micBtn.classList.add('bg-accent');
+                micIcon.setAttribute('icon', 'solar:microphone-3-bold');
+                postInput.placeholder = '고민을 남겨주시면 다함께 도와드릴게요.';
+            };
+            recognition.onerror = () => recognition.stop();
+            micBtn.addEventListener('click', () => micListening ? recognition.stop() : recognition.start());
+        } else {
+            micBtn.style.opacity = '0.5'; micBtn.title = '이 브라우저는 음성 입력을 지원하지 않습니다.';
         }
 
-        window.addEventListener('DataServiceReady', init);
-        if (window.DataService) init();
+        // =========================================================
+        // 글 등록 → DataService.addPost
+        // =========================================================
+        async function submitPost() {
+            const text = postInput.value.trim();
+            if (!text && !attachedImgs.length) return;
+            if (!window.DataService) { alert('서비스 연결 중입니다. 잠시 후 다시 시도해주세요.'); return; }
 
-        // ------------------
-        // 답변 작성 로직
-        // ------------------
-        document.addEventListener('DOMContentLoaded', () => {
-            const replyInput = document.getElementById('reply-input');
-            const replyBtn = document.getElementById('reply-submit-btn');
+            postSubmit.disabled = true; postSubmit.classList.add('opacity-60');
 
-            const submitReply = async () => {
-                if (!currentPostId || !replyInput.value.trim()) return;
-                
-                const content = replyInput.value.trim();
-                replyInput.value = ''; // 입력창 초기화
-                
-                await window.DataService.addReply('coffeeLounge', currentPostId, {
-                    author: "동네", 
-                    content: content
-                });
-                
-                renderQna(); // 리렌더링
-                window.scrollTo(0, document.body.scrollHeight); // 하단 스크롤
+            const data = {
+                author: userName,
+                isLoggedIn,
+                category: selectedCat ? selectedCat.key : null,
+                categoryLabel: selectedCat ? selectedCat.label : null,
+                content: text,
+                images: attachedImgs.map(i => i.dataUrl),  // Base64 저장
             };
 
-            if(replyBtn) {
-                replyBtn.addEventListener('click', submitReply);
+            try {
+                const newId = await window.DataService.addPost(COLLECTION, data);
+                if (newId) addMyPost(newId);  // 본인 글 sessionStorage 에 기록
+
+                // 입력창 초기화
+                postInput.value = '';
+                attachedImgs = []; renderImgPreview();
+                selectedCat = null; catLabel.textContent = '카테고리';
+
+                // 피드 새로고침
+                await loadFeed();
+            } catch (e) {
+                console.error('[submitPost]', e);
+                alert('등록 중 오류가 발생했습니다.');
+            } finally {
+                postSubmit.disabled = false; postSubmit.classList.remove('opacity-60');
             }
-            if(replyInput) {
-                replyInput.addEventListener('keypress', (e) => {
-                    if (e.key === 'Enter') submitReply();
-                });
-            }
+        }
+
+        postSubmit.addEventListener('click', submitPost);
+        postInput.addEventListener('keydown', e => {
+            if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); submitPost(); }
         });
+
+        // =========================================================
+        // 피드 로드 → DataService.getPosts
+        // =========================================================
+        async function loadFeed() {
+            if (!window.DataService) return;
+            const posts = await window.DataService.getPosts(COLLECTION);
+            renderFeed(posts);
+        }
+
+        // =========================================================
+        // 피드 렌더링
+        // =========================================================
+        function renderFeed(posts) {
+            feedEl.innerHTML = '';
+
+            if (!posts || posts.length === 0) {
+                feedEl.innerHTML = `
+                <div class="py-16 text-center text-textmuted">
+                    <iconify-icon icon="solar:cup-hot-line-duotone" class="text-5xl text-accent/40 block mx-auto mb-3"></iconify-icon>
+                    <p class="font-bold text-[14px]">첫 번째 고민을 남겨보세요!</p>
+                    <p class="text-[12px] mt-1">마이크를 누르거나 텍스트로 입력할 수 있어요.</p>
+                </div>`;
+                return;
+            }
+
+            const myPosts = getMyPosts();
+
+            posts.forEach(post => {
+                const isMe = myPosts.includes(post.id);
+                const avatarBg = post.isLoggedIn
+                    ? 'bg-accentlight/20 border-accentlight text-accent'
+                    : 'bg-gray-100 border-gray-200 text-gray-500';
+                const catHtml = post.categoryLabel
+                    ? `<span class="cat-badge">${post.categoryLabel}</span>` : '';
+                const imgsHtml = (post.images || []).map(src =>
+                    `<img src="${src}" class="rounded-xl max-h-52 object-cover border border-black/5 mt-2 w-full"/>`
+                ).join('');
+                const meActions = isMe ? `
+                <div class="flex gap-2 ml-1 mt-0.5">
+                    <button class="edit-btn text-[11px] font-bold text-textmuted hover:text-accent transition" data-id="${post.id}">수정</button>
+                    <button class="del-btn text-[11px] font-bold text-textmuted hover:text-red-500 transition" data-id="${post.id}">삭제</button>
+                </div>` : '';
+
+                const el = document.createElement('div');
+                el.className = 'flex flex-col gap-1.5 post-entry';
+                el.dataset.id = post.id;
+                el.innerHTML = `
+                <div class="flex flex-col mt-2">
+                    <div class="flex items-start gap-2.5">
+                        <div class="w-9 h-9 rounded-full ${avatarBg} flex items-center justify-center font-extrabold text-[12px] shrink-0 border mt-0.5">
+                            ${(post.author || '익명').slice(0, 2)}
+                        </div>
+                        <div class="flex flex-col items-start gap-1 flex-1 min-w-0">
+                            <div class="bubble-content bg-white px-3.5 py-3 rounded-[1rem] chat-bubble-left border border-black/5 shadow-sm w-full">
+                                ${catHtml}
+                                ${post.content ? `<p class="font-bold text-[14.5px] text-textmain leading-snug break-keep-all whitespace-pre-wrap">${post.content}</p>` : ''}
+                                ${imgsHtml}
+                            </div>
+                            <div class="flex flex-col gap-1.5 ml-1 mt-0.5 w-full">
+                                ${meActions}
+                                <div class="flex items-center gap-3">
+                                    <button class="like-btn text-[12px] font-bold text-textdim hover:text-accent transition flex items-center gap-1" data-id="${post.id}">
+                                        <iconify-icon icon="solar:heart-linear"></iconify-icon> 공감 ${post.likes || 0}
+                                    </button>
+                                    <button class="reply-btn text-[12px] font-bold text-textdim hover:text-accent transition flex items-center gap-1" data-id="${post.id}">
+                                        <iconify-icon icon="solar:chat-line-linear"></iconify-icon> 답변 남기기
+                                    </button>
+                                    <span class="text-[11px] font-semibold text-textmuted ml-auto mr-1">${getTimeStr(post.createdAt)}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div data-reply-area="${post.id}" class="reply-area mt-1 pl-12" data-loaded="true"></div>`;
+                feedEl.appendChild(el);
+
+                // 답변 영역 비동기로 즉시 로드
+                const replyArea = el.querySelector(`[data-reply-area="${post.id}"]`);
+                renderReplyArea(post.id, replyArea);
+            });
+
+            bindFeedActions();
+        }
+
+        // =========================================================
+        // 피드 이벤트 바인딩 (Step 2: 인라인 수정 + 삭제 애니메이션)
+        // =========================================================
+        function bindFeedActions() {
+
+            // ---- 인라인 수정 ----
+            feedEl.querySelectorAll('.edit-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const postEl = feedEl.querySelector(`[data-id="${btn.dataset.id}"]`);
+                    const bubble = postEl?.querySelector('.bubble-content');
+                    if (!bubble || bubble.dataset.editing === 'true') return;
+
+                    const currentText = bubble.querySelector('p')?.textContent || '';
+                    bubble.dataset.editing = 'true';
+
+                    // 기존 p 태그 숨기고 textarea 삽입
+                    const originalHtml = bubble.innerHTML;
+                    bubble.innerHTML = `
+                    <textarea class="edit-textarea" id="edit-ta-${btn.dataset.id}">${currentText}</textarea>
+                    <div class="flex gap-2 mt-2">
+                        <button class="save-edit text-[12px] font-bold text-white bg-accent px-3 py-1 rounded-full hover:bg-accentlight transition" data-id="${btn.dataset.id}">저장</button>
+                        <button class="cancel-edit text-[12px] font-bold text-textmuted hover:text-textmain px-2 py-1 transition" data-id="${btn.dataset.id}">취소</button>
+                    </div>`;
+
+                    const ta = bubble.querySelector('textarea');
+                    // 자동 높이 조절
+                    ta.addEventListener('input', () => {
+                        ta.style.height = 'auto';
+                        ta.style.height = ta.scrollHeight + 'px';
+                    });
+                    ta.focus();
+                    ta.style.height = 'auto';
+                    ta.style.height = ta.scrollHeight + 'px';
+                    ta.setSelectionRange(ta.value.length, ta.value.length);
+                    ta.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+                    // 저장
+                    bubble.querySelector('.save-edit').addEventListener('click', async () => {
+                        const newText = ta.value.trim();
+                        if (!newText) return;
+                        btn.disabled = true;
+                        await window.DataService.updatePost(COLLECTION, btn.dataset.id, { content: newText });
+                        bubble.dataset.editing = 'false';
+                        await loadFeed();
+                    });
+
+                    // 취소
+                    bubble.querySelector('.cancel-edit').addEventListener('click', () => {
+                        bubble.innerHTML = originalHtml;
+                        bubble.dataset.editing = 'false';
+                    });
+                });
+            });
+
+            // ---- 삭제 (페이드아웃 후 실제 삭제) ----
+            feedEl.querySelectorAll('.del-btn').forEach(btn => {
+                btn.addEventListener('click', async () => {
+                    if (!confirm('이 글을 삭제할까요?')) return;
+                    const postEl = feedEl.querySelector(`[data-id="${btn.dataset.id}"]`);
+                    if (postEl) {
+                        postEl.classList.add('post-exit');
+                        await new Promise(r => setTimeout(r, 280)); // 애니메이션 대기
+                    }
+                    await window.DataService.deletePost(COLLECTION, btn.dataset.id);
+                    await loadFeed();
+                });
+            });
+
+            // ---- 공감 (중복 방지 - localStorage 추적) ----
+            const LIKED_KEY = 'aitomo_liked_posts';
+            const getLiked = () => JSON.parse(localStorage.getItem(LIKED_KEY) || '[]');
+            const setLiked = id => { const a = getLiked(); if (!a.includes(id)) { a.push(id); localStorage.setItem(LIKED_KEY, JSON.stringify(a)); } };
+
+            feedEl.querySelectorAll('.like-btn').forEach(btn => {
+                const alreadyLiked = getLiked().includes(btn.dataset.id);
+                if (alreadyLiked) {
+                    btn.disabled = true;
+                    btn.classList.add('text-accent');
+                    btn.querySelector('iconify-icon').setAttribute('icon', 'solar:heart-bold');
+                }
+                btn.addEventListener('click', async () => {
+                    if (getLiked().includes(btn.dataset.id)) return;
+                    setLiked(btn.dataset.id);
+                    btn.disabled = true;
+                    btn.classList.add('text-accent');
+                    btn.querySelector('iconify-icon').setAttribute('icon', 'solar:heart-bold');
+                    await window.DataService.likePost(COLLECTION, btn.dataset.id);
+                    // 공감 수만 즉시 반영 (전체 리렌더 번 줄이기)
+                    const txt = btn.querySelector('span') || btn.lastChild;
+                    const cur = parseInt(btn.textContent.replace(/[^0-9]/g, '')) || 0;
+                    btn.innerHTML = `<iconify-icon icon="solar:heart-bold"></iconify-icon> 공감 ${cur + 1}`;
+                    btn.disabled = true;
+                });
+            });
+
+            // ---- 답변 남기기 (입력창으로 포커스 이동) ----
+            feedEl.querySelectorAll('.reply-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const postId = btn.dataset.id;
+                    const replyArea = feedEl.querySelector(`[data-reply-area="${postId}"]`);
+                    if (replyArea) {
+                        const input = replyArea.querySelector('.reply-input');
+                        if (input) {
+                            input.focus();
+                            input.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                        }
+                    }
+                });
+            });
+        }
+
+        // =========================================================
+        // Step 3: 답변 영역 렌더링
+        // =========================================================
+        async function renderReplyArea(postId, container) {
+            // 기존 답변 로드
+            let replies = [];
+            try { replies = await window.DataService.getReplies(COLLECTION, postId); } catch (e) { }
+
+            const repliesHtml = replies.map(r => `
+            <div class="reply-entry flex items-end gap-2 mt-2">
+                <div class="w-7 h-7 rounded-full bg-gray-100 text-gray-500 flex items-center justify-center font-bold text-[11px] shrink-0 border border-gray-200">
+                    ${(r.author || '동네').slice(0, 2)}
+                </div>
+                <div class="bg-white px-3 py-2 rounded-2xl border border-black/5 shadow-sm max-w-[85%]">
+                    ${r.imageUrl ? `<img src="${r.imageUrl}" class="rounded-lg max-h-32 object-cover w-full mb-1"/>` : ''}
+                    ${r.content ? `<p class="text-[13px] font-medium text-textmain leading-snug">${r.content}</p>` : ''}
+                </div>
+            </div>`).join('');
+
+            container.innerHTML = `
+            <div class="border-l-2 border-black/5 ml-3 pl-3 pb-2">
+                <!-- 기존 답변 목록 -->
+                <div id="replies-list-${postId}" class="flex flex-col gap-1">
+                    ${repliesHtml || '<p class="text-[12px] text-textmuted py-2 ml-1">첫 번째 답변을 남겨보세요!</p>'}
+                </div>
+                <!-- 답변 입력줄 -->
+                <div class="flex items-center gap-2 mt-3 bg-black/[0.02] rounded-2xl p-2 ring-1 ring-black/5">
+                    <button class="reply-mic-btn bg-accent text-white p-2 rounded-full flex items-center justify-center shrink-0 hover:scale-105 transition active:scale-95" data-post="${postId}" title="음성 입력">
+                        <iconify-icon icon="solar:microphone-3-bold" class="text-[16px]"></iconify-icon>
+                    </button>
+                    <input type="text" class="reply-input flex-1 bg-transparent border-none outline-none text-[13px] font-semibold text-textmain placeholder:text-textmuted py-1 px-1" placeholder="답변을 남겨주세요..." data-post="${postId}"/>
+                    <button class="reply-img-btn text-textmuted hover:text-accent transition p-1.5 shrink-0" data-post="${postId}" title="이미지">
+                        <iconify-icon icon="solar:camera-add-linear" class="text-[16px]"></iconify-icon>
+                    </button>
+                    <button class="reply-send-btn bg-accent text-white p-2 rounded-full shrink-0 flex items-center justify-center hover:bg-accentlight transition active:scale-95" data-post="${postId}">
+                        <iconify-icon icon="solar:plain-bold-duotone" class="text-[15px]"></iconify-icon>
+                    </button>
+                </div>
+                <!-- 답변 이미지 미리보기 -->
+                <div class="reply-img-preview hidden flex gap-2 mt-1 flex-wrap" data-post="${postId}"></div>
+                <input type="file" class="reply-file-input hidden" accept="image/*" data-post="${postId}"/>
+            </div>`;
+
+            // 답변 입력 이벤트 바인딩
+            bindReplyInput(postId, container);
+        }
+
+        // =========================================================
+        // Step 3: 답변 입력 바인딩
+        // =========================================================
+        function bindReplyInput(postId, container) {
+            const input = container.querySelector('.reply-input');
+            const sendBtn = container.querySelector('.reply-send-btn');
+            const imgBtn2 = container.querySelector('.reply-img-btn');
+            const fileIn = container.querySelector('.reply-file-input');
+            const preview = container.querySelector('.reply-img-preview');
+            const micBtn2 = container.querySelector('.reply-mic-btn');
+            let replyImg = null;
+
+            // 이미지 첨부
+            imgBtn2.addEventListener('click', () => fileIn.click());
+            fileIn.addEventListener('change', e => {
+                const file = e.target.files[0]; if (!file) return;
+                const reader = new FileReader();
+                reader.onload = ev => {
+                    replyImg = ev.target.result;
+                    preview.classList.remove('hidden'); preview.classList.add('flex');
+                    preview.innerHTML = `<div class="relative"><img src="${replyImg}" class="h-12 w-12 object-cover rounded-lg border border-black/10"/><span class="absolute -top-1 -right-1 bg-black/50 text-white rounded-full w-4 h-4 flex items-center justify-center text-[9px] cursor-pointer" id="rm-reply-img">×</span></div>`;
+                    preview.querySelector('#rm-reply-img').addEventListener('click', () => {
+                        replyImg = null; preview.innerHTML = ''; preview.classList.add('hidden');
+                    });
+                };
+                reader.readAsDataURL(file); fileIn.value = '';
+            });
+
+            // 답변 마이크
+            const SR2 = window.SpeechRecognition || window.webkitSpeechRecognition;
+            if (SR2) {
+                const rec2 = new SR2(); rec2.lang = 'ko-KR'; rec2.continuous = false; rec2.interimResults = true;
+                let listening2 = false;
+                rec2.onstart = () => { listening2 = true; micBtn2.classList.add('mic-on'); micBtn2.classList.remove('bg-accent'); input.placeholder = '듣고 있어요...'; };
+                rec2.onresult = e => { let t = ''; for (let i = e.resultIndex; i < e.results.length; i++) t += e.results[i][0].transcript; input.value = t; };
+                rec2.onend = () => { listening2 = false; micBtn2.classList.remove('mic-on'); micBtn2.classList.add('bg-accent'); input.placeholder = '답변을 남겨주세요...'; };
+                rec2.onerror = () => rec2.stop();
+                micBtn2.addEventListener('click', () => listening2 ? rec2.stop() : rec2.start());
+            }
+
+            // 답변 전송
+            const doSend = async () => {
+                const text = input.value.trim();
+                if (!text && !replyImg) return;
+                if (!window.DataService) { alert('서비스 연결 중입니다.'); return; }
+
+                sendBtn.disabled = true;
+                const data = { author: userName, content: text };
+                if (replyImg) data.imageUrl = replyImg;
+
+                await window.DataService.addReply(COLLECTION, postId, data);
+
+                // 입력창 초기화
+                input.value = ''; replyImg = null;
+                preview.innerHTML = ''; preview.classList.add('hidden');
+
+                // 답변 목록 즈가 렌더링
+                const listEl = container.querySelector(`#replies-list-${postId}`);
+                const newEl = document.createElement('div');
+                newEl.className = 'reply-entry flex items-end gap-2 mt-2';
+                newEl.innerHTML = `
+                <div class="w-7 h-7 rounded-full bg-accentlight/20 text-accent flex items-center justify-center font-bold text-[11px] shrink-0 border border-accentlight">
+                    ${(userName || '동네').slice(0, 2)}
+                </div>
+                <div class="bg-white px-3 py-2 rounded-2xl border border-black/5 shadow-sm max-w-[85%]">
+                    ${data.imageUrl ? `<img src="${data.imageUrl}" class="rounded-lg max-h-32 object-cover w-full mb-1"/>` : ''}
+                    ${text ? `<p class="text-[13px] font-medium text-textmain leading-snug">${text}</p>` : ''}
+                </div>`;
+                listEl.querySelector('p')?.remove(); // "첫 번째" 메시지 제거
+                listEl.appendChild(newEl);
+
+                sendBtn.disabled = false;
+            };
+
+            sendBtn.addEventListener('click', doSend);
+            input.addEventListener('keydown', e => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); doSend(); } });
+        }
+
+        // =========================================================
+        // DataService 준비 후 피드 로드
+        // =========================================================
+        function onDataServiceReady() {
+            // DB 연결 상태 배지 업데이트
+            const isFirebase = !!(window.DataService && window.DataService._db !== null);
+            dbBadge.textContent = 'Firebase';
+            dbBadge.className = 'text-[10px] font-bold px-2 py-0.5 rounded-full border ml-1 ' +
+                'bg-orange-50 text-orange-500 border-orange-200';
+
+            loadFeed();
+        }
+
+        window.addEventListener('DataServiceReady', onDataServiceReady);
+        if (window.DataService) onDataServiceReady();
+
+        // =========================================================
+        // Nav 로드
+        // =========================================================
+        async function loadComponent(id, url) {
+            try { const r = await fetch(url); if (r.ok) document.getElementById(id).innerHTML = await r.text(); } catch (e) { }
+        }
+        document.addEventListener('DOMContentLoaded', () => loadComponent('c-nav', 'components/nav.html'));
     </script>
+
+    <!-- DataService 모듈 로드 (type=module 필수) -->
     <script type="module" src="js/dataService.js"></script>
 </body>
 

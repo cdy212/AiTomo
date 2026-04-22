@@ -11,6 +11,7 @@
             <a href="index.html" id="nav-home" class="flex items-center gap-1.5 transition-colors px-2 py-1"><iconify-icon icon="solar:home-smile-linear"></iconify-icon> 홈</a>
             <a href="qna.html" id="nav-qna" class="hover:text-textmain bg-accent/10 px-4 py-2 rounded-full text-accent font-extrabold transition-colors duration-200 flex items-center gap-1.5"><iconify-icon icon="solar:cup-hot-bold-duotone"></iconify-icon> 커피라운지(익명)</a>
             <a href="wiki.html" id="nav-wiki" class="hover:text-textmain transition-colors duration-200 flex items-center gap-1.5 px-2 py-1"><iconify-icon icon="solar:document-text-linear"></iconify-icon> 정보 교류</a>
+            <a href="dongnae.html" id="nav-dongnae" class="hover:text-textmain transition-colors duration-200 flex items-center gap-1.5 px-2 py-1"><iconify-icon icon="solar:map-point-linear"></iconify-icon> 동네꿀팁</a>
             <a href="suggestion.html" id="nav-suggestion" class="hover:text-textmain transition-colors duration-200 flex items-center gap-1.5 px-2 py-1"><iconify-icon icon="solar:inbox-in-linear"></iconify-icon> 건의 (피드백)</a>
         </div>
         
@@ -102,6 +103,10 @@
             <iconify-icon icon="solar:inbox-in-linear" class="text-2xl"></iconify-icon>
             <span class="text-[10px] font-bold">건의</span>
         </a>
+        <a href="dongnae.html" id="tab-dongnae" class="flex flex-col items-center gap-1 w-full text-textdim hover:text-textmain transition-colors">
+            <iconify-icon icon="solar:map-point-linear" class="text-2xl"></iconify-icon>
+            <span class="text-[10px] font-bold">꿀팁</span>
+        </a>
     </div>
 </nav>
 
@@ -113,7 +118,8 @@
             'index.html': ['nav-home', 'tab-home'],
             'qna.html': ['nav-qna', 'tab-qna'],
             'wiki.html': ['nav-wiki', 'tab-wiki'],
-            'suggestion.html': ['nav-suggestion', 'tab-suggestion']
+            'suggestion.html': ['nav-suggestion', 'tab-suggestion'],
+            'dongnae.html': ['nav-dongnae', 'tab-dongnae']
         };
         const activeIds = pageMappers[path];
         if (activeIds) {
