@@ -216,62 +216,11 @@
                 </div>
 
                 <!-- Clean Typographical Feed -->
-                <div class="flex flex-col gap-3">
-
-                    <!-- Feed Item -->
-                    <a href="#"
-                        class="block bg-white p-5 rounded-[1.25rem] border border-black/[0.04] shadow-sm hover:bg-[#FAF8F5] transition-colors outline-none focus-visible:ring-2 focus-visible:ring-accent group">
-                        <div class="flex items-start gap-4">
-                            <div
-                                class="hidden sm:flex w-10 h-10 rounded-full bg-accentlight/30 text-accent items-center justify-center font-extrabold text-[14px] shrink-0 border border-accentlight mt-1">
-                                익명</div>
-                            <div class="flex-1">
-                                <span
-                                    class="bg-gray-100 text-gray-600 text-[11px] font-bold px-2 py-0.5 rounded border border-gray-200 mb-2 inline-block">답십리</span>
-                                <h4
-                                    class="font-bold text-[16px] text-textmain mb-2 leading-snug break-keep-all group-hover:text-accent transition-colors">
-                                    아니 애가 갑자기 열이 나는데 일본인 남편이 당황해서 한국어로 병원 예약을 못잡아요. 어쩌죠? 팁좀 ㅠ</h4>
-                                <div
-                                    class="flex items-center justify-between text-[13px] text-textdim font-semibold mt-3">
-                                    <div class="flex items-center gap-3">
-                                        <span class="flex items-center gap-1 text-accent"><iconify-icon
-                                                icon="solar:chat-line-bold" class="text-[14px]"></iconify-icon> 답변
-                                            4</span>
-                                        <span class="flex items-center gap-1"><iconify-icon icon="solar:heart-linear"
-                                                class="text-[14px]"></iconify-icon> 공감 12</span>
-                                    </div>
-                                    <span>10분 전</span>
-                                </div>
-                            </div>
-                        </div>
-                    </a>
-
-                    <!-- Feed Item -->
-                    <a href="#"
-                        class="block bg-white p-5 rounded-[1.25rem] border border-black/[0.04] shadow-sm hover:bg-[#FAF8F5] transition-colors outline-none focus-visible:ring-2 focus-visible:ring-accent group">
-                        <div class="flex items-start gap-4">
-                            <div
-                                class="hidden sm:flex w-10 h-10 rounded-full bg-gray-100 text-gray-500 items-center justify-center font-extrabold text-[14px] shrink-0 border border-gray-200 mt-1">
-                                익명</div>
-                            <div class="flex-1">
-                                <span
-                                    class="bg-gray-100 text-gray-600 text-[11px] font-bold px-2 py-0.5 rounded border border-gray-200 mb-2 inline-block">일본문화</span>
-                                <h4
-                                    class="font-bold text-[16px] text-textmain mb-2 leading-snug break-keep-all group-hover:text-accent transition-colors">
-                                    어린이집 소풍 도시락을 싸는데 일본식으로 싸가면 너무 눈에 띌까요?</h4>
-                                <div
-                                    class="flex items-center justify-between text-[13px] text-textdim font-semibold mt-3">
-                                    <div class="flex items-center gap-3">
-                                        <span class="flex items-center gap-1"><iconify-icon
-                                                icon="solar:chat-line-linear" class="text-[14px]"></iconify-icon> 답변
-                                            2</span>
-                                    </div>
-                                    <span>1시간 전</span>
-                                </div>
-                            </div>
-                        </div>
-                    </a>
-
+                <div id="coffee-lounge-feed" class="flex flex-col gap-3">
+                    <div class="p-8 text-center text-textdim font-semibold flex flex-col items-center">
+                        <iconify-icon icon="line-md:loading-loop" class="text-3xl text-accent mb-2"></iconify-icon>
+                        게시글을 불러오는 중...
+                    </div>
                 </div>
             </div>
 
@@ -412,7 +361,101 @@
 
             document.querySelectorAll('.reveal-up:not(.is-visible)').forEach(el => observer.observe(el));
         });
+
+        // ------------------
+        // 커피라운지 피드 렌더링 로직 (DataService 연동)
+        // ------------------
+        function renderCoffeeLounge(posts) {
+            const container = document.getElementById('coffee-lounge-feed');
+            if (!container) return;
+
+            if (!posts || posts.length === 0) {
+                container.innerHTML = `<div class="p-8 text-center text-textdim font-semibold">첫 번째로 고민을 남겨주세요!</div>`;
+                return;
+            }
+
+            container.innerHTML = ''; // 기존 로딩 삭제
+            
+            posts.forEach(post => {
+                // 경과 시간 계산
+                const now = new Date();
+                const past = new Date(post.createdAt);
+                const diffMs = now - past;
+                const diffMins = Math.floor(diffMs / 60000);
+                const diffHours = Math.floor(diffMins / 60);
+                const diffDays = Math.floor(diffHours / 24);
+                let timeStr = "";
+                if (diffMins < 60) timeStr = `${diffMins}분 전`;
+                else if (diffHours < 24) timeStr = `${diffHours}시간 전`;
+                else timeStr = `${diffDays}일 전`;
+
+                const html = `
+                    <a href="qna.html?id=${post.id}" class="block bg-white p-5 rounded-[1.25rem] border border-black/[0.04] shadow-sm hover:bg-[#FAF8F5] transition-colors outline-none focus-visible:ring-2 focus-visible:ring-accent group">
+                        <div class="flex items-start gap-4">
+                            <div class="hidden sm:flex w-10 h-10 rounded-full bg-gray-100 text-gray-500 items-center justify-center font-extrabold text-[14px] shrink-0 border border-gray-200 mt-1">익명</div>
+                            <div class="flex-1">
+                                ${post.region ? `<span class="bg-gray-100 text-gray-600 text-[11px] font-bold px-2 py-0.5 rounded border border-gray-200 mb-2 inline-block">${post.region}</span>` : ''}
+                                <h4 class="font-bold text-[16px] text-textmain mb-2 leading-snug break-keep-all group-hover:text-accent transition-colors">${post.title}</h4>
+                                <div class="flex items-center justify-between text-[13px] text-textdim font-semibold mt-3">
+                                    <div class="flex items-center gap-3">
+                                        <span class="flex items-center gap-1 ${post.comments > 0 ? 'text-accent' : ''}">
+                                            <iconify-icon icon="${post.comments > 0 ? 'solar:chat-line-bold' : 'solar:chat-line-linear'}" class="text-[14px]"></iconify-icon> 답변 ${post.comments}
+                                        </span>
+                                        <span class="flex items-center gap-1"><iconify-icon icon="solar:heart-linear" class="text-[14px]"></iconify-icon> 공감 ${post.likes}</span>
+                                    </div>
+                                    <span>${timeStr}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                `;
+                container.insertAdjacentHTML('beforeend', html);
+            });
+        }
+
+        async function loadFeed() {
+            if (window.DataService) {
+                const data = await window.DataService.getPosts('coffeeLounge');
+                renderCoffeeLounge(data);
+            }
+        }
+
+        // DataService가 준비되면 Feed 렌더링
+        window.addEventListener('DataServiceReady', loadFeed);
+        // 만약 이미 스크립트 로드 되어있다면 즉시 로드 (Fallback)
+        if (window.DataService) loadFeed();
+
+        // ------------------
+        // 게시글 작성 (UI 간이 연동 및 모듈화 검증용)
+        // ------------------
+        setTimeout(() => {
+            // nav.html 과 기타 컴포넌트 렌더링 완료 전엔 DOM이 없을 수 있음.
+            // 여기선 기존 페이지에 있는 본 화면의 "커피라운지에 고민 남기기" 버튼을 타겟. (html: button 안쪽 혹은 별도 아이디)
+            // '아이디'가 따로 없으니 텍스트 기반 매핑 또는 쿼리 셀렉터 사용.
+            const addPostBtn = document.querySelector('button .solar\\:cup-hot-linear')?.closest('button') || document.querySelector('.lg\\:col-span-8 button.bg-textmain');
+            
+            if (addPostBtn) {
+                addPostBtn.addEventListener('click', async () => {
+                    const title = prompt("커피라운지에 공유할 익명 고민이나 팁을 입력해주세요:");
+                    if (!title) return;
+                    
+                    const region = prompt("관련된 지역 태그(예: 답십리)를 입력할 수 있습니다. 없으면 엔터:") || "";
+
+                    const newPost = {
+                        author: "익명",
+                        region: region,
+                        title: title,
+                        comments: 0,
+                        likes: 0
+                    };
+
+                    await window.DataService.addPost('coffeeLounge', newPost);
+                    loadFeed(); // 렌더링 새로고침
+                });
+            }
+        }, 1000);
     </script>
+    <script type="module" src="js/dataService.js"></script>
 </body>
 
 </html>

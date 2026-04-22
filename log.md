@@ -13,6 +13,11 @@
 ### 📝 현재 작업 중인 포인터 참조
 > **세부 Task 진행 표는 `/plan/v2_task_tracker.md` 문서를 확인 바랍니다.**
 
+### ✔️ [2026-04-22] 데이터 추상화 및 1차 개발 진행 (커피라운지 피드 연동)
+- **프론트엔드-데이터 분리(`js/dataService.js` 설계):** 차후 무료 VM DB 교체를 위해 HTML 종속성을 지우고 `DataService` 추상화 레이어를 만들었습니다. Firebase SDK 코드가 들어있으며, 키가 없거나 에러 시 LocalStorage 에 의존하여 임시로 동작하는 Mock Fallback 로직을 제공합니다.
+- **커피라운지(index.html) 동적 피드 전환:** 하드 코딩되어있던 리뷰 목록(Q&A)을 지우고, `DataService.getPosts('coffeeLounge')`를 통해 가져오고 UI 블럭으로 렌더링하도록 반영.
+- **간편 등록 구현:** "커피라운지에 고민 남기기" 버튼을 누르면 `window.DataService.addPost()` 를 경유하여 바로 피드가 생성되도록 연동 완료.
+
 ### ✔️ [2026-04-21] 세부 진행 내역 (위키/마이크 검색 및 모듈화)
 - **네이버 지역 검색 시뮬레이션 적용:** `wiki_write.html`의 입력 방식을 네이버 지역 API 검색 플로우(상호명 입력 기반) UI로 개편 (`공통지침서.md` 업데이트 완료)
 - **VoiceManager 모듈 전역 적용:** 개별 스크립트에 흩어진 Web Speech API를 `js/voiceManager.js` 로 분리하여 모듈화
