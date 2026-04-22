@@ -246,8 +246,8 @@
                     </div>
 
                     <div class="pl-14 flex items-center gap-3">
-                        <button class="text-[12px] font-bold text-textdim hover:text-accent transition-colors flex items-center gap-1">
-                            <iconify-icon icon="solar:heart-linear"></iconify-icon> 공감 ${post.likes}
+                        <button id="like-btn" data-post-id="${post.id}" class="text-[12px] font-bold text-textdim hover:text-accent transition-colors flex items-center gap-1">
+                            <iconify-icon icon="solar:heart-linear"></iconify-icon> <span id="like-count">공감 ${post.likes || 0}</span>
                         </button>
                         <button class="text-[12px] font-bold text-textdim hover:text-accent transition-colors flex items-center gap-1">
                             <iconify-icon icon="solar:chat-line-linear"></iconify-icon> 답변 ${replies.length}
@@ -259,6 +259,21 @@
                     </div>
                 </div>
             `;
+
+            // 공감 버튼 이벤트 바인딩 (렌더링 후)
+            const likeBtn = document.getElementById('like-btn');
+            if (likeBtn) {
+                likeBtn.addEventListener('click', async () => {
+                    likeBtn.disabled = true;
+                    const ok = await window.DataService.likePost('coffeeLounge', currentPostId);
+                    if (ok) {
+                        const countEl = document.getElementById('like-count');
+                        const current = parseInt(countEl.textContent.replace('공감 ', '')) || 0;
+                        countEl.textContent = `공감 ${current + 1}`;
+                        likeBtn.classList.add('text-accent');
+                    }
+                });
+            }
         }
 
         async function init() {
