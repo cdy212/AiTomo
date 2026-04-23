@@ -6,6 +6,14 @@ let currentMarkers = [];         // { marker, infoWindow, tip } 형태로 저장
 let currentInfoWindow = null;
 let categoryFilters = 'all';
 
+// InfoWindow 닫기 (전역 - 닫기 버튼에서 호출)
+window.closeCurrentInfoWindow = function () {
+    if (currentInfoWindow) {
+        currentInfoWindow.close();
+        currentInfoWindow = null;
+    }
+};
+
 // 마커 클릭 이벤트 트리거 (랭킹에서 호출 시 사용)
 function openMarkerInfoWindow(markerObj) {
     if (!markerObj || !map) return;
@@ -91,8 +99,8 @@ function calcDistance(lat1, lng1, lat2, lng2) {
     const R = 6371;
     const dLat = (lat2 - lat1) * Math.PI / 180;
     const dLng = (lng2 - lng1) * Math.PI / 180;
-    const a = Math.sin(dLat/2) ** 2 +
-              Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) * Math.sin(dLng/2) ** 2;
+    const a = Math.sin(dLat / 2) ** 2 +
+        Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) * Math.sin(dLng / 2) ** 2;
     return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
 }
 
@@ -139,7 +147,7 @@ function _renderRankingPage() {
     const myLng = center ? center.lng() : null;
 
     const visible = _rankingAllSorted.slice(0, _rankingPage * RANKING_PAGE_SIZE);
-    const medals = ['🥇','🥈','🥉'];
+    const medals = ['🥇', '🥈', '🥉'];
 
     listContainer.innerHTML = visible.map((tip, idx) => {
         const style = categoryStyles[tip.category] || categoryStyles['etc'];
@@ -190,30 +198,33 @@ function _renderRankingPage() {
 
 
 // 랭킹 항목 클릭 시 해당 마커로 이동 + InfoWindow 열기
-window.moveToMarker = function(lat, lng) {
+window.moveToMarker = function (lat, lng) {
     if (!map) return;
     const targetLatLng = new naver.maps.LatLng(lat, lng);
     map.morph(targetLatLng, 16, {}, () => {
-        // 이동 완료 후 해당 위치의 마커 InfoWindow 오픈
         const found = currentMarkers.find(m => {
             const pos = m.marker.getPosition();
             return Math.abs(pos.lat() - lat) < 0.0001 && Math.abs(pos.lng() - lng) < 0.0001;
         });
-        if (found) openMarkerInfoWindow(found);
+        if (found) {
+            openMarkerInfoWindow(found);
+            // 랭킹에서 이동 시에도 동일하게 하단 포커스 적용
+            setTimeout(() => map.panBy(0, -210), 100);
+        }
     });
 }
 
 // 좋아요 핸들러 (전역 함수)
-window.likeTipHandler = async function(docId) {
+window.likeTipHandler = async function (docId) {
     // 임시: localStorage를 이용한 디바이스 핑거프린트
     let uid = localStorage.getItem('dummy_uid');
-    if(!uid) {
+    if (!uid) {
         uid = 'user_' + Math.random().toString(36).substr(2, 9);
         localStorage.setItem('dummy_uid', uid);
     }
 
     const success = await window.DataService.likeTip(docId, uid);
-    if(success) {
+    if (success) {
         const tips = await window.DataService.getTips();
         renderMarkers(tips);
     } else {
@@ -222,9 +233,9 @@ window.likeTipHandler = async function(docId) {
 }
 
 // 삭제 핸들러 (전역 함수)
-window.deleteTipHandler = async function(docId) {
+window.deleteTipHandler = async function (docId) {
     if (!confirm("정말 이 제보를 삭제하시겠습니까?")) return;
-    
+
     const tokens = JSON.parse(localStorage.getItem('dongnae_tokens') || '{}');
     const authorToken = tokens[docId];
 
@@ -239,7 +250,7 @@ window.deleteTipHandler = async function(docId) {
         // 캐시 키 삭제
         delete tokens[docId];
         localStorage.setItem('dongnae_tokens', JSON.stringify(tokens));
-        
+
         // 목록 재로딩
         const tips = await window.DataService.getTips();
         renderMarkers(tips);
@@ -249,7 +260,7 @@ window.deleteTipHandler = async function(docId) {
 };
 
 // 임시 수정 핸들러 (메모 수정만 지원)
-window.editTipHandler = async function(docId) {
+window.editTipHandler = async function (docId) {
     const tokens = JSON.parse(localStorage.getItem('dongnae_tokens') || '{}');
     const authorToken = tokens[docId];
 
@@ -277,7 +288,7 @@ window.editTipHandler = async function(docId) {
 const IMAGE_WORKER = 'https://aitomo-navermap.cdy3088.workers.dev/image';
 const IMG_INITIAL_COUNT = 5; // 초기 노출 장수
 
-window.loadNaverImages = async function(galleryId, placeName) {
+window.loadNaverImages = async function (galleryId, placeName) {
     const container = document.getElementById(galleryId);
     if (!container) return;
 
@@ -299,8 +310,8 @@ window.loadNaverImages = async function(galleryId, placeName) {
         ).join('');
 
         const initial = items.slice(0, IMG_INITIAL_COUNT);
-        const rest    = items.slice(IMG_INITIAL_COUNT);
-        const hasMore  = rest.length > 0;
+        const rest = items.slice(IMG_INITIAL_COUNT);
+        const hasMore = rest.length > 0;
 
         container.className = 'relative bg-gray-100 overflow-hidden';
         container.innerHTML = `
@@ -386,6 +397,11 @@ function renderMarkers(tips) {
         // InfoWindow HTML (이미지 갤러리 플레이스홀더 + 아웃링크 포함)
         const infoHtml = `
             <div class="bg-white rounded-2xl shadow-[0_10px_40px_-10px_rgba(0,0,0,0.3)] border border-black/10 overflow-hidden w-64 transform -translate-y-4">
+                <!-- 닫기 버튼 -->
+                <button onclick="window.closeCurrentInfoWindow()"
+                    class="absolute top-2 right-2 z-10 w-7 h-7 bg-black/40 hover:bg-black/70 text-white rounded-full flex items-center justify-center transition-colors backdrop-blur-sm">
+                    <iconify-icon icon="solar:close-linear" class="text-sm"></iconify-icon>
+                </button>
                 <!-- 이미지 갤러리 영역 -->
                 <div id="${galleryId}" class="relative bg-gray-100 h-36 flex items-center justify-center">
                     <div class="text-xs text-gray-400 flex flex-col items-center gap-1">
@@ -431,12 +447,18 @@ function renderMarkers(tips) {
             pixelOffset: new naver.maps.Point(0, -10)
         });
 
-        // 마커 클릭 → InfoWindow 오픈 + 이미지 비동기 로드
+        // 마커 클릭 → InfoWindow 오픈 + 마커를 화면 하단 중앙으로 포커스
         naver.maps.Event.addListener(marker, 'click', () => {
             if (currentInfoWindow) currentInfoWindow.close();
             infoWindow.open(map, marker);
             currentInfoWindow = infoWindow;
-            // DOM이 삽입된 직후 이미지 로드 (짧은 딜레이로 DOM 렌더 대기)
+
+            // 1) 마커 위치로 이동
+            map.panTo(marker.getPosition(), { duration: 300, easing: 'easeOutCubic' });
+            // 2) 이동 완료 후 위쪽으로 offset → 마커가 화면 하단 중앙에 위치, InfoWindow가 위에 온전히 보임
+            setTimeout(() => map.panBy(0, -210), 320);
+
+            // DOM 삽입 후 이미지 로드
             setTimeout(() => window.loadNaverImages(galleryId, tip.placeName), 150);
         });
 
@@ -466,6 +488,11 @@ async function initializeDongnae() {
         initMap(center.lat, center.lng);
         console.log('[initializeDongnae] 지도 초기화 완료');
 
+        // 지도 빈 영역 클릭 시 열린 InfoWindow 자동 닫기
+        naver.maps.Event.addListener(map, 'click', () => {
+            window.closeCurrentInfoWindow();
+        });
+
         // 3. 데이터 로드 및 마커 렌더링
         if (window.DataService) {
             console.log('[initializeDongnae] DataService.getTips() 호출 중...');
@@ -481,7 +508,7 @@ async function initializeDongnae() {
             try {
                 const pos = await fetchCurrentLocation();
                 map.morph(new naver.maps.LatLng(pos.lat, pos.lng), 15);
-            } catch(e) {
+            } catch (e) {
                 alert('위치 정보를 가져올 수 없습니다.');
             }
         });
@@ -505,7 +532,7 @@ function initReportModal() {
     const content = document.getElementById('report-modal-content');
     const btnOpen = document.getElementById('btn-report');
     const btnClose = document.getElementById('btn-close-report');
-    
+
     // 모달 열기
     btnOpen.addEventListener('click', () => {
         modal.classList.remove('hidden');
@@ -598,19 +625,19 @@ function initReportModal() {
             searchResults.querySelectorAll('div[data-idx]').forEach(el => {
                 el.addEventListener('click', () => {
                     const item = items[el.getAttribute('data-idx')];
-                    
+
                     // 네이버 검색 API의 mapx, mapy는 KATECH(TM128) 좌표계입니다.
                     // 이를 Naver 지도 API의 TransCoord 객체를 이용해 WGS84 위경도 좌표로 변환합니다.
                     let lat = map.getCenter().lat();
                     let lng = map.getCenter().lng();
-                    
+
                     // 네이버 검색 API의 mapx, mapy는 경도/위도 * 10^7 값 (WGS84)
                     if (item.mapx && item.mapy) {
                         lng = parseInt(item.mapx, 10) / 1e7;
                         lat = parseInt(item.mapy, 10) / 1e7;
                         console.log(`[좌표변환] ${item.title}: lat=${lat}, lng=${lng}`);
                     }
-                    
+
                     currentSelectedPlace = {
                         placeName: item.title.replace(/<[^>]*>?/gm, ''),
                         address: item.roadAddress || item.address,
@@ -623,7 +650,7 @@ function initReportModal() {
 
                     selectedPlaceName.innerText = currentSelectedPlace.placeName;
                     selectedPlaceAddr.innerText = currentSelectedPlace.address;
-                    
+
                     searchInput.parentElement.parentElement.classList.add('hidden');
                     searchResults.classList.add('hidden');
                     selectedPlaceContainer.classList.remove('hidden');
@@ -647,7 +674,7 @@ function initReportModal() {
     const btnSubmit = document.getElementById('btn-submit-report');
     btnSubmit.addEventListener('click', async () => {
         if (!currentSelectedPlace) return alert("장소를 검색하고 선택해주세요.");
-        
+
         const categoryInput = document.querySelector('input[name="report-category"]:checked');
         if (!categoryInput) return alert("카테고리를 선택해주세요.");
 
@@ -681,17 +708,17 @@ function initReportModal() {
         console.log('[addTip] 저장할 tipData:', tipData);
 
         const docId = await window.DataService.addTip(tipData);
-        
+
         if (docId) {
             alert("동네꿀팁이 제보되었습니다! 🪙");
             closeModal();
             // 폼 초기화
             btnReselect.click();
-            if(categoryInput) categoryInput.checked = false;
+            if (categoryInput) categoryInput.checked = false;
             document.getElementById('report-memo').value = '';
             document.getElementById('etc-category-input').value = '';
             document.getElementById('etc-category-input-wrap').classList.add('hidden');
-            
+
             // 마커 다시 그리기
             const tips = await window.DataService.getTips();
             renderMarkers(tips);
