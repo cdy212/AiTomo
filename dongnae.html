@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>동네꿀팁 - WIKI MOM</title>
+    <title>동네꿀팁 - 동내애기친구</title>
     
     <!-- CSS / Tailwind -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -38,8 +38,8 @@
         }
     </script>
     
-    <!-- 네이버 지도 API (발급된 Client ID 적용) -->
-    <script type="text/javascript" src="https://oapi.map.naver.com/openapi/v3/maps.js?ncpClientId=oc3qe63frx"></script>
+    <!-- 네이버 지도 API (발급된 Client ID 적용, 최신 통합 플랫폼 정책 ncpKeyId 사용) -->
+    <script type="text/javascript" src="https://oapi.map.naver.com/openapi/v3/maps.js?ncpKeyId=oc3qe63frx"></script>
 </head>
 <body class="bg-wbg font-sans text-textmain antialiased selection:bg-accent/20">
 
@@ -50,11 +50,12 @@
             .then(response => response.text())
             .then(data => {
                 document.getElementById('nav-container').innerHTML = data;
-                // 스크립트 태그 재실행
-                const scripts = document.getElementById('nav-container').getElementsByTagName('script');
-                for (let i = 0; i < scripts.length; i++) {
-                    eval(scripts[i].innerText);
-                }
+                Array.from(document.getElementById('nav-container').querySelectorAll('script')).forEach(oldScript => {
+                    const newScript = document.createElement('script');
+                    Array.from(oldScript.attributes).forEach(attr => newScript.setAttribute(attr.name, attr.value));
+                    newScript.appendChild(document.createTextNode(oldScript.innerHTML));
+                    oldScript.parentNode.replaceChild(newScript, oldScript);
+                });
             });
     </script>
 
@@ -94,36 +95,20 @@
                 <iconify-icon icon="solar:target-linear" class="text-2xl text-textmain"></iconify-icon>
             </button>
 
-            <!-- 랭킹 오버레이 위젯 -->
-            <div class="absolute top-4 left-4 md:left-6 right-4 md:right-auto md:w-[320px] bg-white/90 backdrop-blur-md rounded-2xl shadow-xl border border-white p-4 z-20">
-                <div class="flex items-center justify-between cursor-pointer" onclick="document.getElementById('ranking-list').classList.toggle('hidden')">
+            <!-- 랭킹 오버레이 위젯 (하단 배치) -->
+            <div class="absolute bottom-4 left-4 md:left-6 right-4 md:right-auto md:w-[320px] bg-white/90 backdrop-blur-md rounded-2xl shadow-xl border border-white p-4 z-20">
+                <div class="flex items-center justify-between cursor-pointer" onclick="document.getElementById('ranking-list-wrap').classList.toggle('hidden'); this.querySelector('iconify-icon:last-child').setAttribute('icon', document.getElementById('ranking-list-wrap').classList.contains('hidden') ? 'solar:alt-arrow-up-linear' : 'solar:alt-arrow-down-linear')">
                     <h3 class="font-extrabold flex items-center gap-1.5 text-textmain">
-                        <iconify-icon icon="solar:ranking-bold-duotone" class="text-yellow-500 text-xl"></iconify-icon> 주변 인기 꿀팁 TOP 3
+                        <iconify-icon icon="solar:ranking-bold-duotone" class="text-yellow-500 text-xl"></iconify-icon> 주변 인기 꿀팁 TOP 10
                     </h3>
-                    <iconify-icon icon="solar:alt-arrow-down-linear" class="text-textmuted"></iconify-icon>
+                    <iconify-icon icon="solar:alt-arrow-up-linear" class="text-textmuted"></iconify-icon>
                 </div>
-                <!-- 아코디언 리스트 -->
-                <div id="ranking-list" class="hidden mt-3 flex flex-col gap-2">
-                    <div class="flex justify-between items-center bg-gray-50 p-2 rounded-lg border border-black/5">
-                        <div class="flex items-center gap-2">
-                            <span class="font-black text-accent text-sm w-4 text-center">1</span>
-                            <span class="font-bold text-sm text-textmain truncate max-w-[120px]">꿈나무 놀이터</span>
-                        </div>
-                        <div class="flex items-center gap-2 text-xs font-bold text-textmuted">
-                            <span class="bg-[#5BA85B]/10 text-[#5BA85B] px-1.5 py-0.5 rounded">놀이터</span>
-                            <span class="flex items-center gap-0.5 text-accent"><iconify-icon icon="solar:heart-bold"></iconify-icon> 41</span>
-                        </div>
-                    </div>
-                    <div class="flex justify-between items-center bg-gray-50 p-2 rounded-lg border border-black/5">
-                        <div class="flex items-center gap-2">
-                            <span class="font-black text-gray-500 text-sm w-4 text-center">2</span>
-                            <span class="font-bold text-sm text-textmain truncate max-w-[120px]">튼튼 소아과</span>
-                        </div>
-                        <div class="flex items-center gap-2 text-xs font-bold text-textmuted">
-                            <span class="bg-[#E05555]/10 text-[#E05555] px-1.5 py-0.5 rounded">병원</span>
-                            <span class="flex items-center gap-0.5 text-accent"><iconify-icon icon="solar:heart-bold"></iconify-icon> 28</span>
-                        </div>
-                    </div>
+                <!-- 아코디언 래퍼 (기본 펼침) -->
+                <div id="ranking-list-wrap" class="mt-3">
+                    <div id="ranking-list" class="flex flex-col gap-2 max-h-[200px] overflow-y-auto custom-scrollbar"></div>
+                    <button id="ranking-more-btn" class="hidden w-full mt-2 py-2 text-xs font-bold text-accent bg-accent/5 hover:bg-accent/10 rounded-xl transition-colors">
+                        더보기 ▾
+                    </button>
                 </div>
             </div>
         </div>
@@ -233,12 +218,20 @@
                             </div>
                         </label>
                         <label class="cursor-pointer">
-                            <input type="radio" name="report-category" value="etc" class="peer hidden">
+                            <input type="radio" name="report-category" value="etc" class="peer hidden" id="cat-etc-radio">
                             <div class="flex flex-col items-center justify-center p-3 border border-black/10 rounded-xl peer-checked:border-[#9E9E9E] peer-checked:bg-[#9E9E9E]/10 transition-colors">
                                 <iconify-icon icon="solar:map-point-linear" class="text-2xl text-[#9E9E9E] mb-1"></iconify-icon>
                                 <span class="text-[10px] font-bold text-textmain">기타</span>
                             </div>
                         </label>
+                    </div>
+                    <!-- 기타 카테고리 직접 입력 -->
+                    <div id="etc-category-input-wrap" class="hidden mt-3">
+                        <div class="relative">
+                            <iconify-icon icon="solar:pen-linear" class="absolute left-3 top-1/2 -translate-y-1/2 text-textmuted text-lg"></iconify-icon>
+                            <input type="text" id="etc-category-input" placeholder="카테고리를 직접 입력해주세요 (미입력 시 '기타')" maxlength="20"
+                                class="w-full pl-10 pr-4 py-3 bg-wbg border border-[#9E9E9E]/40 rounded-xl focus:outline-none focus:border-[#9E9E9E] focus:ring-2 focus:ring-[#9E9E9E]/20 transition-all text-sm font-medium">
+                        </div>
                     </div>
                 </div>
 

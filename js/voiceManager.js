@@ -3,29 +3,33 @@
 
 window.VoiceManager = (function() {
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-    let currentLang = localStorage.getItem('aitomo_voice_lang') || 'ko-KR';
 
-    // 전역 커스텀 이벤트를 발생시켜 다른 페이지/컴포넌트도 알 수 있게 함
-    function dispatchLangChangeEvent() {
-        window.dispatchEvent(new CustomEvent('aitomo_lang_changed', { detail: currentLang }));
+    function getVoiceLang() {
+        if (window.TranslateManager) {
+            return window.TranslateManager.getLang() === 'ko' ? 'ko-KR' : 'ja-JP';
+        }
+        const saved = localStorage.getItem('aitomo_lang');
+        return saved === 'ko' ? 'ko-KR' : 'ja-JP';
     }
+
+    function dispatchLangChangeEvent() {
+        window.dispatchEvent(new CustomEvent('aitomo_voice_lang_changed', { detail: getVoiceLang() }));
+    }
+
+    // TranslateManager 변경 시 VoiceManager도 이벤트 발생 (호환성 목적)
+    window.addEventListener('aitomo_lang_changed', dispatchLangChangeEvent);
 
     return {
         isSupported: !!SpeechRecognition,
-        
-        getLang: () => currentLang,
-        
+        getLang: getVoiceLang,
         setLang: (lang) => {
-            currentLang = lang;
-            localStorage.setItem('aitomo_voice_lang', lang);
-            dispatchLangChangeEvent();
+            // 이제 TranslateManager가 기준이 됨
         },
-        
         toggleLang: () => {
-            currentLang = (currentLang === 'ko-KR') ? 'ja-JP' : 'ko-KR';
-            localStorage.setItem('aitomo_voice_lang', currentLang);
-            dispatchLangChangeEvent();
-            return currentLang;
+            if (window.TranslateManager) {
+                window.TranslateManager.toggleLang();
+            }
+            return getVoiceLang();
         },
 
         startRecognition: (options) => {
@@ -37,7 +41,7 @@ window.VoiceManager = (function() {
             }
 
             const recognition = new SpeechRecognition();
-            recognition.lang = currentLang;
+            recognition.lang = getVoiceLang();
             recognition.interimResults = false;
             recognition.maxAlternatives = 1;
 

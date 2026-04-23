@@ -238,7 +238,7 @@
                     title="음성 입력">
                     <iconify-icon id="mic-icon" icon="solar:microphone-3-bold" class="text-[22px]"></iconify-icon>
                 </button>
-                <input id="post-input" type="text" placeholder="고민을 남겨주시면 다함께 도와드릴게요."
+                <input id="post-input" type="text" placeholder="아무 주제나 편하게 이야기해요."
                     class="flex-1 bg-transparent border-none outline-none text-[15px] font-semibold text-textmain placeholder:text-textmuted/80 py-2 px-2 tracking-tight" />
                 <button id="img-btn" class="text-textmuted hover:text-accent transition p-2 shrink-0" title="이미지 첨부">
                     <iconify-icon icon="solar:camera-add-linear" class="text-xl"></iconify-icon>
@@ -428,7 +428,7 @@
                 micListening = false;
                 micBtn.classList.remove('mic-on'); micBtn.classList.add('bg-accent');
                 micIcon.setAttribute('icon', 'solar:microphone-3-bold');
-                postInput.placeholder = '고민을 남겨주시면 다함께 도와드릴게요.';
+                postInput.placeholder = '아무 주제나 편하게 이야기해요.';
             };
             recognition.onerror = () => recognition.stop();
             micBtn.addEventListener('click', () => micListening ? recognition.stop() : recognition.start());
@@ -819,7 +819,18 @@
         // Nav 로드
         // =========================================================
         async function loadComponent(id, url) {
-            try { const r = await fetch(url); if (r.ok) document.getElementById(id).innerHTML = await r.text(); } catch (e) { }
+            try {
+                const r = await fetch(url);
+                if (r.ok) {
+                    document.getElementById(id).innerHTML = await r.text();
+                    Array.from(document.getElementById(id).querySelectorAll('script')).forEach(oldScript => {
+                        const newScript = document.createElement('script');
+                        Array.from(oldScript.attributes).forEach(attr => newScript.setAttribute(attr.name, attr.value));
+                        newScript.appendChild(document.createTextNode(oldScript.innerHTML));
+                        oldScript.parentNode.replaceChild(newScript, oldScript);
+                    });
+                }
+            } catch (e) { }
         }
         document.addEventListener('DOMContentLoaded', () => loadComponent('c-nav', 'components/nav.html'));
     </script>

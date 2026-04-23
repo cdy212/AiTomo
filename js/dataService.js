@@ -330,17 +330,21 @@ window.DataService = {
     },
 
     addTip: async (data) => {
+        const authorToken = Math.random().toString(36).substr(2, 9) + Date.now().toString(36);
+        let newDocId = null;
+
         if (db) {
             try {
                 const payload = { 
                     ...data, 
+                    authorToken,
                     createdAt: serverTimestamp(), 
                     likes: 0, 
                     likedBy: [],
                     status: 'active' 
                 };
                 const docRef = await addDoc(collection(db, 'dongnaeTips'), payload);
-                return docRef.id;
+                newDocId = docRef.id;
             } catch (e) {
                 console.error("[DataService] addTip 실패:", e);
                 return null;
@@ -350,6 +354,7 @@ window.DataService = {
             const newTip = {
                 id: Date.now().toString(),
                 ...data,
+                authorToken,
                 likes: 0,
                 likedBy: [],
                 status: 'active',
@@ -357,8 +362,17 @@ window.DataService = {
             };
             tips.unshift(newTip);
             saveLocalPosts('dongnaeTips', tips);
-            return newTip.id;
+            newDocId = newTip.id;
         }
+
+        // 브라우저 로컬 스토리지에 글 비밀키(토큰) 매핑 저장
+        if (newDocId) {
+            const tokens = JSON.parse(localStorage.getItem('dongnae_tokens') || '{}');
+            tokens[newDocId] = authorToken;
+            localStorage.setItem('dongnae_tokens', JSON.stringify(tokens));
+        }
+
+        return newDocId;
     },
 
     likeTip: async (docId, uid) => {
@@ -387,6 +401,48 @@ window.DataService = {
                     saveLocalPosts('dongnaeTips', tips);
                     return true;
                 }
+            }
+            return false;
+        }
+    },
+
+    deleteDongnaeTip: async (docId, authorToken) => {
+        if (db) {
+            try {
+                // 실제 보안은 Firebase Security Rules에서 `resource.data.authorToken == request.resource.data.authorToken` 확인 필요
+                const { deleteDoc } = await import("https://www.gstatic.com/firebasejs/10.9.0/firebase-firestore.js");
+                const tipRef = doc(db, 'dongnaeTips', docId);
+                await deleteDoc(tipRef);
+                return true;
+            } catch (e) {
+                console.error("[DataService] deleteDongnaeTip 실패:", e);
+                return false;
+            }
+        } else {
+            let tips = getLocalPosts('dongnaeTips');
+            tips = tips.filter(t => t.id !== docId.toString());
+            saveLocalPosts('dongnaeTips', tips);
+            return true;
+        }
+    },
+
+    updateDongnaeTip: async (docId, fields, authorToken) => {
+        if (db) {
+            try {
+                const tipRef = doc(db, 'dongnaeTips', docId);
+                await updateDoc(tipRef, fields);
+                return true;
+            } catch (e) {
+                console.error("[DataService] updateDongnaeTip 실패:", e);
+                return false;
+            }
+        } else {
+            const tips = getLocalPosts('dongnaeTips');
+            const idx = tips.findIndex(t => t.id === docId.toString());
+            if (idx >= 0) {
+                tips[idx] = { ...tips[idx], ...fields };
+                saveLocalPosts('dongnaeTips', tips);
+                return true;
             }
             return false;
         }

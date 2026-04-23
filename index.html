@@ -14,7 +14,7 @@
     <link rel="manifest" href="./manifest.json">
     <link rel="apple-touch-icon" href="https://api.iconify.design/solar/tea-cup-bold-duotone.svg?color=%23eb855e">
     
-    <title>WIKI MOM - 음성중심 메인 대시보드</title>
+    <title>동내애기친구 - 음성중심 메인 대시보드</title>
 
     <!-- Pretendard Font -->
     <link rel="stylesheet" as="style" crossorigin
@@ -147,12 +147,13 @@
                 </h1>
                 <p class="text-[15px] md:text-lg text-textmain mt-4 font-bold break-keep-all reveal-up drop-shadow-md bg-white/30 backdrop-blur-sm p-3 rounded-2xl w-max"
                     style="--index: 2;">
-                    마이크로 편하게 한국어/일본어로 물어보세요.<br class="md:hidden">육아 고충부터 맛집까지 언제든 환영합니다.
+                    한일부부 애기 친구분들의 편안한 모임 공간
                 </p>
                 <button
+                    onclick="location.href='qna.html'"
                     class="mt-6 reveal-up bg-textmain text-white px-5 py-3 rounded-full font-bold text-sm hover:scale-[1.02] active:scale-95 transition-spring flex items-center gap-2 shadow-sm"
                     style="--index: 3;">
-                    <iconify-icon icon="solar:cup-hot-linear"></iconify-icon> 커피라운지에 고민 남기기
+                    <iconify-icon icon="solar:cup-hot-linear"></iconify-icon> 커피라운지 수다떨기
                 </button>
             </div>
         </div>
@@ -160,7 +161,7 @@
 
     <!-- Category Filter System (Scroll Bug fix & Chrome Emojis removed) -->
     <!-- 모노톤 아이콘 및 Safe scroll 적용 -->
-    <div class="sticky top-[56px] md:top-[68px] z-40 bg-wbg/95 backdrop-blur-xl border-b border-black/[0.04]">
+    <div class="hidden sticky top-[56px] md:top-[68px] z-40 bg-wbg/95 backdrop-blur-xl border-b border-black/[0.04]">
         <div class="max-w-7xl mx-auto px-4 py-3 sm:py-4 flex gap-2 sm:gap-3 overflow-x-auto no-scrollbar scroll-safe items-center reveal-up"
             style="--index: 4;">
             <div
@@ -270,7 +271,7 @@
         <section class="lg:col-span-4 flex flex-col gap-10">
 
             <!-- Suggestion / Needs Tracker -->
-            <div class="bg-black/5 p-1 rounded-[1.25rem] ring-1 ring-black/5 group">
+            <div class="hidden bg-black/5 p-1 rounded-[1.25rem] ring-1 ring-black/5 group">
                 <div class="bg-[#F6F1EA] rounded-2xl p-6 border border-black/[0.03] shadow-inner-highlight">
                     <div class="flex items-center gap-2 mb-2 font-black text-[18px] text-textmain">
                         <iconify-icon icon="solar:inbox-in-bold-duotone" class="text-2xl text-accent"></iconify-icon>
@@ -412,9 +413,9 @@
                     <a href="qna.html?id=${post.id}" class="block bg-white p-5 rounded-[1.25rem] border border-black/[0.04] shadow-sm hover:bg-[#FAF8F5] transition-colors outline-none focus-visible:ring-2 focus-visible:ring-accent group">
                         <div class="flex items-start gap-4">
                             <div class="hidden sm:flex w-10 h-10 rounded-full bg-gray-100 text-gray-500 items-center justify-center font-extrabold text-[14px] shrink-0 border border-gray-200 mt-1">익명</div>
-                            <div class="flex-1">
+                            <div class="flex-1 min-w-0">
                                 ${post.region ? `<span class="bg-gray-100 text-gray-600 text-[11px] font-bold px-2 py-0.5 rounded border border-gray-200 mb-2 inline-block">${post.region}</span>` : ''}
-                                <h4 class="font-bold text-[16px] text-textmain mb-2 leading-snug break-keep-all group-hover:text-accent transition-colors">${post.title}</h4>
+                                <h4 class="font-bold text-[16px] text-textmain mb-2 leading-snug break-keep-all group-hover:text-accent transition-colors line-clamp-2">${post.content || ''}</h4>
                                 <div class="flex items-center justify-between text-[13px] text-textdim font-semibold mt-3">
                                     <div class="flex items-center gap-3">
                                         <span class="flex items-center gap-1 ${post.comments > 0 ? 'text-accent' : ''}">

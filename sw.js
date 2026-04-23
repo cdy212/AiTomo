@@ -1,4 +1,4 @@
-const CACHE_NAME = 'aitomo-cache-v1';
+const CACHE_NAME = 'aitomo-cache-v2';
 const urlsToCache = [
   './',
   './index.html',
@@ -13,6 +13,23 @@ self.addEventListener('install', event => {
         return cache.addAll(urlsToCache);
       })
   );
+  self.skipWaiting();
+});
+
+self.addEventListener('activate', event => {
+  const cacheAllowlist = [CACHE_NAME];
+  event.waitUntil(
+    caches.keys().then(cacheNames => {
+      return Promise.all(
+        cacheNames.map(cacheName => {
+          if (cacheAllowlist.indexOf(cacheName) === -1) {
+            return caches.delete(cacheName);
+          }
+        })
+      );
+    })
+  );
+  self.clients.claim();
 });
 
 self.addEventListener('fetch', event => {
@@ -33,14 +50,21 @@ self.addEventListener('fetch', event => {
     return;
   }
 
+  // Network First 전략: 먼저 네트워크에 요청하고 실패하면 캐시 사용
   event.respondWith(
-    caches.match(event.request)
-      .then(response => {
-        // 캐시에 있으면 반환, 없으면 네트워크 요청
-        return response || fetch(event.request).catch(err => {
-          console.warn('[SW] 네트워크 요청 실패:', event.request.url, err);
-          throw err;
-        });
-      })
+    fetch(event.request).then(response => {
+      // 네트워크 응답이 유효하면 캐시에 저장
+      if (response && response.status === 200 && response.type === 'basic') {
+        const responseToCache = response.clone();
+        caches.open(CACHE_NAME)
+          .then(cache => {
+            cache.put(event.request, responseToCache);
+          });
+      }
+      return response;
+    }).catch(() => {
+      // 오프라인이거나 네트워크 에러 시 캐시된 응답 반환
+      return caches.match(event.request);
+    })
   );
 });

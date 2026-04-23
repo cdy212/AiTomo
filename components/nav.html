@@ -3,26 +3,30 @@
         <!-- Brand -->
         <a href="index.html" class="flex items-center gap-2 text-textmain font-bold tracking-tight text-xl cursor-pointer">
             <iconify-icon icon="solar:tea-cup-bold" class="text-accent text-2xl"></iconify-icon>
-            WIKI MOM
+            동내애기친구
         </a>
         
         <!-- Global Nav (Hidden on Mobile) -->
         <div class="hidden md:flex gap-4 md:gap-8 text-[15px] font-semibold text-textmuted items-center">
-            <a href="index.html" id="nav-home" class="flex items-center gap-1.5 transition-colors px-2 py-1"><iconify-icon icon="solar:home-smile-linear"></iconify-icon> 홈</a>
-            <a href="qna.html" id="nav-qna" class="hover:text-textmain bg-accent/10 px-4 py-2 rounded-full text-accent font-extrabold transition-colors duration-200 flex items-center gap-1.5"><iconify-icon icon="solar:cup-hot-bold-duotone"></iconify-icon> 커피라운지(익명)</a>
-            <a href="wiki.html" id="nav-wiki" class="hover:text-textmain transition-colors duration-200 flex items-center gap-1.5 px-2 py-1"><iconify-icon icon="solar:document-text-linear"></iconify-icon> 정보 교류</a>
-            <a href="dongnae.html" id="nav-dongnae" class="hover:text-textmain transition-colors duration-200 flex items-center gap-1.5 px-2 py-1"><iconify-icon icon="solar:map-point-linear"></iconify-icon> 동네꿀팁</a>
-            <a href="suggestion.html" id="nav-suggestion" class="hover:text-textmain transition-colors duration-200 flex items-center gap-1.5 px-2 py-1"><iconify-icon icon="solar:inbox-in-linear"></iconify-icon> 건의 (피드백)</a>
+            <a href="/" id="nav-home" class="flex items-center gap-1.5 transition-colors px-2 py-1"><iconify-icon icon="solar:home-smile-linear"></iconify-icon> 홈</a>
+            <a href="qna.html" id="nav-qna" class="hover:text-textmain bg-accent/10 px-4 py-2 rounded-full text-accent font-extrabold transition-colors duration-200 flex items-center gap-1.5"><iconify-icon icon="solar:cup-hot-bold-duotone"></iconify-icon> 커피라운지</a>
+            <a href="dongnae.html" id="nav-dongnae" class="hover:text-textmain transition-colors duration-200 flex items-center gap-1.5 px-2 py-1"><iconify-icon icon="solar:map-point-linear"></iconify-icon> 꿀팁[맵]</a>
+            <a href="suggestion.html" id="nav-suggestion" class="hidden hover:text-textmain transition-colors duration-200 flex items-center gap-1.5 px-2 py-1"><iconify-icon icon="solar:inbox-in-linear"></iconify-icon> 건의</a>
+            <a href="wiki.html" id="nav-wiki" class="hover:text-textmain transition-colors duration-200 flex items-center gap-1.5 px-2 py-1"><iconify-icon icon="solar:document-text-linear"></iconify-icon> 정보교류[공사중]</a>
         </div>
         
         <!-- User Section & Language Toggle -->
         <div class="flex items-center gap-1 md:gap-3">
+            <!-- Install PWA Button (Hidden initially) -->
+            <button id="pwa-install-btn" class="hidden bg-accent text-white hover:bg-[#ff5252] px-3 py-1.5 rounded-full font-bold text-[12px] items-center gap-1 transition-colors shadow-sm focus:outline-none shrink-0">
+                <iconify-icon icon="solar:download-minimalistic-bold-duotone" class="text-sm"></iconify-icon> <span class="hidden md:inline">앱 설치</span>
+            </button>
             <!-- Language Toggle -->
-            <button id="lang-toggle-btn" class="bg-black/[0.03] hover:bg-black/10 border border-black/[0.05] text-textmain px-3 py-1.5 rounded-full font-extrabold text-[12px] flex items-center gap-1 transition-colors relative focus:outline-none">
+            <button id="lang-toggle-btn" class="bg-black/[0.03] hover:bg-black/10 border border-black/[0.05] text-textmain px-3 py-1.5 rounded-full font-extrabold text-[12px] flex items-center gap-1 transition-colors relative focus:outline-none shrink-0">
                 <span id="lang-kr-label" class="text-accent transition-colors">KR</span><span class="text-black/20 mx-0.5">|</span><span id="lang-jp-label" class="text-textmuted transition-colors">JP</span>
             </button>
             <!-- Notifications -->
-            <button class="bg-black/5 hover:bg-black/10 text-textmain p-2.5 rounded-full font-medium transition-spring flex items-center justify-center relative ml-1">
+            <button class="hidden bg-black/5 hover:bg-black/10 text-textmain p-2.5 rounded-full font-medium transition-spring items-center justify-center relative ml-1">
                 <iconify-icon icon="solar:bell-linear" class="text-[22px]"></iconify-icon>
                 <span class="absolute top-1 right-1 w-2.5 h-2.5 bg-red-400 rounded-full border-2 border-white"></span>
             </button>
@@ -37,11 +41,11 @@
     </div>
 </nav>
 
-<!-- Dynamically load VoiceManager script if not present -->
+<!-- Dynamically load TranslateManager script if not present -->
 <script>
-    if (typeof window.VoiceManager === 'undefined') {
+    if (typeof window.TranslateManager === 'undefined') {
         const script = document.createElement('script');
-        script.src = 'js/voiceManager.js';
+        script.src = 'js/translateManager.js';
         script.onload = initNavLangToggle;
         document.head.appendChild(script);
     } else {
@@ -54,7 +58,7 @@
         const jpLabel = document.getElementById('lang-jp-label');
 
         function updateLangUI(lang) {
-            if (lang === 'ko-KR') {
+            if (lang === 'ko') {
                 krLabel.classList.replace('text-textmuted', 'text-accent');
                 jpLabel.classList.replace('text-accent', 'text-textmuted');
             } else {
@@ -64,15 +68,15 @@
         }
 
         // 초기 UI 반영
-        if(window.VoiceManager) {
-            updateLangUI(window.VoiceManager.getLang());
+        if(window.TranslateManager) {
+            updateLangUI(window.TranslateManager.getLang());
         }
 
         toggleBtn.addEventListener('click', () => {
-            if(window.VoiceManager) {
-                const newLang = window.VoiceManager.toggleLang();
+            if(window.TranslateManager) {
+                const newLang = window.TranslateManager.toggleLang();
                 updateLangUI(newLang);
-                console.log("Voice Recognition Language changed to:", newLang);
+                console.log("Language changed to:", newLang);
             }
         });
 
@@ -85,7 +89,7 @@
 <!-- Bottom Mobile Tab Bar (Visible only on mobile sm/md) -->
 <nav class="md:hidden fixed bottom-0 left-0 right-0 z-[100] bg-white/95 backdrop-blur-xl border-t border-black/[0.05] pb-safe drop-shadow-[0_-5px_15px_rgba(0,0,0,0.03)]">
     <div class="flex justify-around items-center h-16 px-2">
-        <a href="index.html" id="tab-home" class="flex flex-col items-center gap-1 w-full text-textdim hover:text-textmain transition-colors">
+        <a href="/" id="tab-home" class="flex flex-col items-center gap-1 w-full text-textdim hover:text-textmain transition-colors">
             <iconify-icon icon="solar:home-smile-linear" class="text-2xl"></iconify-icon>
             <span class="text-[10px] font-bold">홈</span>
         </a>
@@ -95,17 +99,17 @@
             </div>
             <span class="text-[10px] font-extrabold mt-6">커피라운지</span>
         </a>
-        <a href="wiki.html" id="tab-wiki" class="flex flex-col items-center gap-1 w-full text-textdim hover:text-textmain transition-colors">
-            <iconify-icon icon="solar:document-text-linear" class="text-2xl"></iconify-icon>
-            <span class="text-[10px] font-bold">정보교류</span>
+        <a href="dongnae.html" id="tab-dongnae" class="flex flex-col items-center gap-1 w-full text-textdim hover:text-textmain transition-colors">
+            <iconify-icon icon="solar:map-point-linear" class="text-2xl"></iconify-icon>
+            <span class="text-[10px] font-bold">꿀팁[맵]</span>
         </a>
-        <a href="suggestion.html" id="tab-suggestion" class="flex flex-col items-center gap-1 w-full text-textdim hover:text-textmain transition-colors">
+        <a href="suggestion.html" id="tab-suggestion" class="hidden flex flex-col items-center gap-1 w-full text-textdim hover:text-textmain transition-colors">
             <iconify-icon icon="solar:inbox-in-linear" class="text-2xl"></iconify-icon>
             <span class="text-[10px] font-bold">건의</span>
         </a>
-        <a href="dongnae.html" id="tab-dongnae" class="flex flex-col items-center gap-1 w-full text-textdim hover:text-textmain transition-colors">
-            <iconify-icon icon="solar:map-point-linear" class="text-2xl"></iconify-icon>
-            <span class="text-[10px] font-bold">꿀팁</span>
+        <a href="wiki.html" id="tab-wiki" class="flex flex-col items-center gap-1 w-full text-textdim hover:text-textmain transition-colors">
+            <iconify-icon icon="solar:document-text-linear" class="text-2xl"></iconify-icon>
+            <span class="text-[10px] font-bold">정보교류[공사중]</span>
         </a>
     </div>
 </nav>
@@ -113,13 +117,14 @@
 <script>
     // 활성 메뉴 하이라이팅 스크립트 적용
     setTimeout(() => {
-        const path = window.location.pathname.split('/').pop() || 'index.html';
+        const path = window.location.pathname.split('/').pop() || '';
         const pageMappers = {
+            '': ['nav-home', 'tab-home'],
             'index.html': ['nav-home', 'tab-home'],
             'qna.html': ['nav-qna', 'tab-qna'],
-            'wiki.html': ['nav-wiki', 'tab-wiki'],
+            'dongnae.html': ['nav-dongnae', 'tab-dongnae'],
             'suggestion.html': ['nav-suggestion', 'tab-suggestion'],
-            'dongnae.html': ['nav-dongnae', 'tab-dongnae']
+            'wiki.html': ['nav-wiki', 'tab-wiki']
         };
         const activeIds = pageMappers[path];
         if (activeIds) {
@@ -136,4 +141,106 @@
             });
         }
     }, 100);
+
+    // PWA Install Logic
+    let deferredPrompt;
+
+    window.addEventListener('beforeinstallprompt', (e) => {
+        // Prevent the mini-infobar from appearing on mobile
+        e.preventDefault();
+        // Stash the event so it can be triggered later.
+        deferredPrompt = e;
+        
+        // Show UI
+        const installBtn = document.getElementById('pwa-install-btn');
+        const floatingCard = document.getElementById('pwa-floating-card');
+        const closeBtn = document.getElementById('pwa-close-btn');
+        const popupInstallBtn = document.getElementById('pwa-popup-install-btn');
+
+        if (installBtn) {
+            installBtn.classList.remove('hidden');
+            installBtn.classList.add('flex');
+        }
+
+        // Check if user previously closed the popup within 24 hours
+        let showPopup = true;
+        const closedTimeStr = localStorage.getItem('pwa_popup_closed_time');
+        if (closedTimeStr) {
+            const closedTime = parseInt(closedTimeStr, 10);
+            const now = new Date().getTime();
+            // 하루(24시간) = 86,400,000 밀리초
+            if (now - closedTime < 86400000) {
+                showPopup = false;
+            } else {
+                // 하루가 지났으면 캐시 클리어
+                localStorage.removeItem('pwa_popup_closed_time');
+            }
+        }
+
+        if (showPopup && floatingCard) {
+            floatingCard.classList.remove('hidden');
+            // 애니메이션을 위해 약간의 딜레이 후 클래스 추가
+            setTimeout(() => {
+                floatingCard.classList.add('pwa-visible');
+            }, 100);
+        }
+
+        const doInstall = async () => {
+            if (!deferredPrompt) return;
+            deferredPrompt.prompt();
+            const { outcome } = await deferredPrompt.userChoice;
+            if (outcome === 'accepted') {
+                if(floatingCard) floatingCard.classList.add('hidden');
+                if(installBtn) installBtn.classList.add('hidden');
+            }
+            deferredPrompt = null;
+        };
+
+        if (installBtn) installBtn.addEventListener('click', doInstall);
+        if (popupInstallBtn) popupInstallBtn.addEventListener('click', doInstall);
+
+        if (closeBtn) {
+            closeBtn.addEventListener('click', () => {
+                floatingCard.classList.remove('pwa-visible');
+                setTimeout(() => floatingCard.classList.add('hidden'), 500);
+                // 현재 시간을 밀리초로 저장
+                localStorage.setItem('pwa_popup_closed_time', new Date().getTime().toString());
+            });
+        }
+    });
+
+    // PWA Installed Callback
+    window.addEventListener('appinstalled', () => {
+        const installBtn = document.getElementById('pwa-install-btn');
+        const floatingCard = document.getElementById('pwa-floating-card');
+        if (installBtn) installBtn.classList.add('hidden');
+        if (floatingCard) floatingCard.classList.add('hidden');
+        deferredPrompt = null;
+    });
 </script>
+
+<!-- PWA Install Floating Card -->
+<div id="pwa-floating-card" class="hidden fixed bottom-[80px] md:bottom-6 right-4 md:right-6 z-[110] bg-white w-[280px] md:w-80 rounded-2xl shadow-ambient border border-black/5 overflow-hidden translate-y-[120%] transition-transform duration-500 ease-out">
+    <div class="relative w-full h-32 md:h-36 bg-[#F6F1EA]">
+        <img src="img/workers_home.png" alt="앱 소개 이미지" class="w-full h-full object-cover">
+        <button id="pwa-close-btn" class="absolute top-2 right-2 w-7 h-7 bg-black/40 hover:bg-black/60 rounded-full flex items-center justify-center text-white transition-colors cursor-pointer">
+            <iconify-icon icon="solar:close-linear" class="text-sm"></iconify-icon>
+        </button>
+    </div>
+    <div class="p-4 md:p-5">
+        <h3 class="font-extrabold text-textmain text-[16px] mb-1">동내애기친구 앱 설치하기</h3>
+        <p class="text-[12px] text-textmuted font-medium mb-4 leading-snug break-keep-all">
+            바탕화면에 아이콘을 추가하고 더 빠르고 편하게 소통과 육아 정보를 즐겨보세요!
+        </p>
+        <button id="pwa-popup-install-btn" class="w-full bg-accent hover:bg-[#ff5252] text-white font-bold py-2.5 rounded-xl transition-transform active:scale-[0.98] text-[13px] shadow-sm flex justify-center items-center gap-1.5">
+            <iconify-icon icon="solar:download-minimalistic-bold-duotone" class="text-base"></iconify-icon> 바로 설치하기
+        </button>
+    </div>
+</div>
+
+<style>
+    /* PWA Floating animation */
+    .pwa-visible {
+        transform: translateY(0) !important;
+    }
+</style>

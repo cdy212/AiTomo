@@ -6,146 +6,145 @@
     <meta name="viewport"
         content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     
-    <!-- PWA Meta Tags -->
     <meta name="theme-color" content="#FEFAF4">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="default">
-    <meta name="apple-mobile-web-app-title" content="AiTomo">
-    <link rel="manifest" href="./manifest.json">
-    <link rel="apple-touch-icon" href="https://api.iconify.design/solar/tea-cup-bold-duotone.svg?color=%23eb855e">
-    
-    <title>AiTomo - 주인장 소개</title>
+    <title>동내애기친구 - 주인장 인사</title>
 
     <!-- Pretendard Font -->
     <link rel="stylesheet" as="style" crossorigin
         href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
-    <!-- Iconify -->
     <script src="https://code.iconify.design/iconify-icon/1.0.7/iconify-icon.min.js"></script>
-    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
 
-    <!-- Style Config -->
     <script>
         tailwind.config = {
             theme: {
                 extend: {
-                    colors: {
-                        wbg: '#FEFAF4',
-                        wcard: '#FDFBF7',
-                        accent: '#EB855E',
-                        accentlight: '#FFD6C2',
-                        olive: '#6C8061',
-                        textmain: '#2D2721',
-                        textmuted: '#80756A',
-                        textdim: '#ACA297'
-                    },
-                    fontFamily: {
-                        sans: ['Pretendard', '-apple-system', 'BlinkMacSystemFont', 'system-ui', 'Roboto', 'sans-serif'],
-                    },
-                    boxShadow: {
-                        'ambient': '0 20px 60px -15px rgba(0,0,0,0.05)',
-                        'inner-highlight': 'inset 0 1px 1px rgba(255,255,255,0.7)',
-                    }
+                    colors: { wbg: '#FEFAF4', accent: '#EB855E', textmain: '#2D2721', textmuted: '#80756A' },
+                    fontFamily: { sans: ['Pretendard', 'sans-serif'] },
+                    boxShadow: { 'ambient': '0 20px 60px -15px rgba(0,0,0,0.1)' }
                 }
             }
         }
     </script>
     <style>
         body {
-            background-color: #FEFAF4;
             color: #2D2721;
             -webkit-font-smoothing: antialiased;
+            margin: 0; padding: 0;
+            overflow-x: hidden;
         }
-        .reveal-up {
+
+        /* 배경 이미지 고정 */
+        .bg-fixed-cover {
+            position: fixed;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            z-index: -2;
+            background-image: url('img/host_bg.png');
+            background-size: cover;
+            background-position: center;
+        }
+
+        /* 처음엔 투명했다가 텍스트 나올 때 블러 처리로 배경 어둡게/뿌옇게 */
+        .bg-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            z-index: -1;
+            background: rgba(254, 250, 244, 0);
+            backdrop-filter: blur(0px);
+            animation: blurFade 2.5s ease forwards;
+            animation-delay: 1.5s; /* 1.5초간 원본 배경 보여줌 */
+        }
+
+        @keyframes blurFade {
+            0% { background: rgba(254, 250, 244, 0); backdrop-filter: blur(0px); }
+            100% { background: rgba(254, 250, 244, 0.1); backdrop-filter: blur(0px); } /* 배경 이미지가 아예 다 보이도록 블러 제거, 밝기만 살짝 조절 */
+        }
+
+        /* 텍스트가 은은하게 아래에서 위로 올라옴 */
+        .reveal-slow {
             opacity: 0;
-            transform: translateY(1.5rem);
-            transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
-            transition-delay: calc(var(--index, 0) * 80ms);
+            transform: translateY(3rem);
+            animation: fadeUpSlow 2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            animation-delay: 1.8s; /* 오버레이보다 살짝 늦게 시작 */
         }
-        .reveal-up.is-visible {
-            opacity: 1;
-            transform: translateY(0);
+        @keyframes fadeUpSlow {
+            0% { opacity: 0; transform: translateY(3rem); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+        
+        .delay-more {
+            animation-delay: 2.2s; /* 하단 이미지는 좀 더 늦게 */
         }
     </style>
 </head>
 
 <body class="relative selection:bg-accent/20 pb-24 md:pb-0">
 
-    <!-- [Component Mount] Navigation -->
+    <div class="bg-fixed-cover"></div>
+    <div class="bg-overlay"></div>
+
+    <!-- 네비게이션바 마운트 위치 -->
     <div id="c-nav"></div>
 
-    <main class="max-w-3xl mx-auto px-4 py-24 md:py-32">
-        <div class="flex flex-col gap-12 reveal-up" style="--index: 1;">
+    <main class="max-w-2xl mx-auto px-4 py-24 md:py-32 min-h-screen flex flex-col justify-center items-center">
+        
+        <!-- 텍스트 컨테이너 (투명한 글래시즘 적용) -->
+        <div class="reveal-slow bg-white/5 backdrop-blur-[4px] p-8 md:p-12 rounded-[2rem] shadow-[0_8px_32px_0_rgba(0,0,0,0.05)] border border-white/20 w-full space-y-6 leading-relaxed break-keep-all text-[15px] md:text-lg font-bold text-textmain drop-shadow-md">
+            <h1 class="text-3xl font-extrabold text-textmain mb-8 border-b-2 border-accent inline-block pb-2">안녕하세요.</h1>
             
-            <!-- Header Section -->
-            <div class="text-center">
-                <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-accent/10 text-accent mb-4 shrink-0">
-                    <iconify-icon icon="solar:hand-heart-bold-duotone" class="text-3xl"></iconify-icon>
-                </div>
-                <h1 class="text-3xl md:text-4xl font-extrabold tracking-tight text-textmain mb-3 break-keep-all">주인장 소개 및 앱 방향성</h1>
-                <p class="text-lg md:text-xl text-textmuted font-medium break-keep-all">
-                    AiTomo (아이친구) - 한일 커플과 육아 부부를 위한 보이스 중심 커뮤니티
+            <p>
+                한일 부부를 위해 앱을 만들게 된 이유는 편하게 소통하고 정보를 교류하기 위해서입니다.
+            </p>
+            <p>
+                컴퓨터 만지는 것 외에 재주가 많지 않아, 그나마 다른 분들께 도움이 되고자 작업 중입니다.<br>
+                써보시다가 불편한 점 혹은 추가했으면 좋겠다는 부분이 있다면 언제든 <span class="font-bold text-accent">'커피라운지'</span>를 통해 올려주세요.
+            </p>
+            
+            <div class="h-4"></div>
+            
+            <p>
+                타지에서의 어려움과 외로움도 있고,<br>
+                일과 보육을 함께 해야 하는 어려움도 있고,<br>
+                말도 안 통하고 무뚝뚝한 한국인들을 보면 화난 것 같아서 무섭고...
+            </p>
+            
+            <p>
+                이런저런 어려움 속에 아이가 잘 크고 성장하기를 기원하는 건 모두의 마음이지 않을까 싶습니다.<br>
+                그 안에서 정보를 저장하고 교류할 수 있고, 정보의 고립을 막기 위해 만들기 시작했습니다.
+            </p>
+            
+            <div class="h-4"></div>
+            
+            <p class="font-bold">
+                아이 걷는 길 함께하고, 행복한 길을 위해 오늘도 파이팅하며 지내요.<br>
+                인연에 감사하며 건강하고 행복하십시오!
+            </p>
+            
+            <p class="text-right font-extrabold text-xl text-accent mt-8 flex flex-col items-end gap-1">
+                <iconify-icon icon="solar:pen-new-round-bold-duotone" class="text-3xl mb-1 opacity-80"></iconify-icon>
+                - 시온이 아빠가
+            </p>
+
+            <!-- 후원하기 영역 (임시 숨김) -->
+            <div class="hidden mt-10 pt-8 border-t border-black/10 flex flex-col items-center text-center gap-4">
+                <!-- 안내 텍스트 숨김 처리 -->
+                <p class="hidden text-[13px] text-textmain font-bold bg-white/40 backdrop-blur-sm px-4 py-3 rounded-xl border border-white/20">
+                    💡 후원금은 1. 어플 운영 서버비 2. 오프라인 모임 다과비 3. 어플 참여도에 따른 이벤트 등 투명하게 사용 예정입니다.
                 </p>
+                <a href="javascript:void(0);" id="btn-donation" onclick="handleDonationClick()" class="hover:scale-105 transition-transform active:scale-95" style="display:inline-block; padding:14px 28px; background-color:#3182F6; color:#ffffff; text-decoration:none; border-radius:12px; font-weight:900; font-size:16px; text-align:center; box-shadow: 0 4px 14px rgba(49,130,246,0.4);">
+                    <span id="btn-donation-content" style="display:flex; align-items:center; gap:6px;">
+                        <iconify-icon icon="solar:wad-of-money-bold-duotone" class="text-[20px] opacity-70"></iconify-icon>
+                        5,000원 후원하기 (토스)
+                    </span>
+                </a>
             </div>
-
-            <!-- Concept & Direction Box -->
-            <div class="bg-white rounded-3xl p-8 md:p-10 shadow-ambient border border-black/5 reveal-up" style="--index: 2;">
-                <h2 class="text-2xl font-bold text-textmain mb-4 flex items-center gap-2">
-                    <iconify-icon icon="solar:star-fall-bold-duotone" class="text-accent"></iconify-icon> 앱의 핵심 철학과 방향성
-                </h2>
-                <div class="text-textmuted text-[16px] leading-relaxed space-y-4 break-keep-all">
-                    <p>
-                        <strong class="text-textmain">"AiTomo (아이친구)"</strong>는 단순한 텍스트 기반의 카페나 커뮤니티가 아닌, <strong class="text-textmain">가장 진입 장벽이 낮은 편안한 소통 공간</strong>을 지향합니다.
-                    </p>
-                    <p>
-                        육아와 일상에 지쳐 긴 글을 쓰기 힘든 부모님들을 위해 기획되었습니다. 손가락을 쓰는 대신 마이크에 의지해 한국어나 일본어로 가볍게 물어볼 수 있습니다. 
-                    </p>
-                    <div class="bg-[#FAF8F5] p-5 rounded-2xl border border-black/5 mt-4">
-                        <ul class="flex flex-col gap-3 font-semibold">
-                            <li class="flex items-start gap-2">
-                                <iconify-icon icon="solar:check-circle-bold-duotone" class="text-olive text-xl shrink-0 mt-0.5"></iconify-icon>
-                                <span><strong class="text-textmain">편안한 커피라운지:</strong> 눈치보지 않고 질문과 고민을 남기는 카카오톡 스타일의 익명 소통방.</span>
-                            </li>
-                            <li class="flex items-start gap-2">
-                                <iconify-icon icon="solar:check-circle-bold-duotone" class="text-olive text-xl shrink-0 mt-0.5"></iconify-icon>
-                                <span><strong class="text-textmain">직접 듣는 건의사항:</strong> 여러분의 피드백을 통해 2차 고도화 및 콘텐츠 확장을 진행합니다. 사용자 의견이 곧 로드맵입니다.</span>
-                            </li>
-                            <li class="flex items-start gap-2">
-                                <iconify-icon icon="solar:check-circle-bold-duotone" class="text-olive text-xl shrink-0 mt-0.5"></iconify-icon>
-                                <span><strong class="text-textmain">보이스 퍼스트:</strong> 바쁜 순간에도 터치 한 번으로 쉽게 기록하는 음성 인터페이스.</span>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Profile & Contacts -->
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 reveal-up" style="--index: 3;">
-                
-                <!-- Business Card Section -->
-                <div class="bg-black text-white rounded-3xl overflow-hidden shadow-ambient relative group">
-                    <div class="absolute inset-0 bg-gradient-to-tr from-black/80 to-transparent z-10 p-6 flex flex-col justify-end">
-                        <span class="text-xs font-bold text-white/50 uppercase tracking-widest mb-1">Developer & Architect</span>
-                        <h3 class="text-xl font-bold">시오니 아빠</h3>
-                    </div>
-                    <img src="img/business_card.png" alt="주인장 명함" class="w-full h-64 object-cover object-center group-hover:scale-105 transition-transform duration-700">
-                </div>
-
-                <!-- Donation QR Section -->
-                <div class="bg-white rounded-3xl p-8 border border-black/5 shadow-inner-highlight flex flex-col items-center justify-center text-center">
-                    <div class="w-12 h-12 rounded-full bg-blue-50 text-blue-500 flex items-center justify-center mb-4">
-                        <iconify-icon icon="solar:cup-hot-bold" class="text-2xl"></iconify-icon>
-                    </div>
-                    <h3 class="font-bold text-lg text-textmain mb-1">개발팀 커피 한잔 후원하기</h3>
-                    <p class="text-sm text-textmuted mb-6">여러분들의 따뜻한 후원이 서비스 유지보수 및 다음 업데이트에 큰 힘이 됩니다.</p>
-                    <div class="relative p-3 bg-[#FAF8F5] rounded-2xl border border-black/5 w-44 h-44">
-                        <img src="img/donation_qr.png" alt="후원 QR 코드" class="w-full h-full object-contain rounded-xl mix-blend-multiply">
-                    </div>
-                </div>
-
-            </div>
-
         </div>
+
+        <!-- 두 번째 이미지 (하단 삽입) -->
+        <div class="reveal-slow delay-more w-full flex justify-center mt-12 mb-10">
+            <img src="img/host_footer.png" class="max-w-xs md:max-w-md w-full rounded-3xl shadow-ambient border-[6px] border-white/80 object-cover" alt="주인장 이미지">
+        </div>
+        
     </main>
 
     <script>
@@ -167,19 +166,53 @@
             }
         }
 
+        const isMobileDevice = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+        const accountInfo = { bank: "SBI저축은행", no: "02810134848232" };
+
         document.addEventListener("DOMContentLoaded", () => {
             loadComponent("c-nav", "components/nav.html");
 
-            const observer = new IntersectionObserver((entries, obs) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        entry.target.classList.add('is-visible');
-                        obs.unobserve(entry.target);
-                    }
-                });
-            }, { threshold: 0.05 });
-            document.querySelectorAll('.reveal-up:not(.is-visible)').forEach(el => observer.observe(el));
+            // PC(웹) 환경일 경우 버튼 UI를 계좌 복사로 변경
+            if (!isMobileDevice) {
+                const btnContent = document.getElementById("btn-donation-content");
+                const btn = document.getElementById("btn-donation");
+                if (btnContent) {
+                    btnContent.innerHTML = `
+                        <iconify-icon icon="solar:copy-line-duotone" class="text-[20px] opacity-70"></iconify-icon>
+                        후원 계좌번호 복사하기
+                    `;
+                }
+                if (btn) {
+                    btn.style.backgroundColor = "#2D2721"; // PC는 깔끔하게 다크 색상
+                    btn.style.boxShadow = "0 4px 14px rgba(0,0,0,0.2)";
+                }
+            }
         });
+
+        // 기기 환경에 따른 후원 액션 분기
+        function handleDonationClick() {
+            if (isMobileDevice) {
+                const tossUrl = "supertoss://send?bank=" + encodeURIComponent(accountInfo.bank) + "&accountNo=" + accountInfo.no + "&amount=5000";
+                window.location.href = tossUrl;
+                
+                setTimeout(() => {
+                    if(confirm("토스 앱이 없거나 열리지 않나요?\n계좌번호를 복사하시겠습니까?")) {
+                        copyToClipboard(accountInfo.bank + " " + accountInfo.no);
+                    }
+                }, 2000);
+            } else {
+                // 웹(PC) 환경
+                copyToClipboard(accountInfo.bank + " " + accountInfo.no);
+            }
+        }
+
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText(text).then(() => {
+                alert("계좌번호가 복사되었습니다!\n" + text);
+            }).catch(err => {
+                alert("복사에 실패했습니다. 직접 입력해주세요: " + text);
+            });
+        }
     </script>
 </body>
 </html>
