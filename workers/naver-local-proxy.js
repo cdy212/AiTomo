@@ -39,11 +39,11 @@ export default {
         // 네이버 지역 검색 API URL 구성 (최대 5개 조회)
         const targetUrl = `https://openapi.naver.com/v1/search/local.json?query=${encodeURIComponent(query)}&display=5`;
   
-        // 네이버 API 요청 (환경변수에서 키 주입)
+        // 네이버 API 요청 (환경변수 대신 하드코딩 적용)
         const response = await fetch(targetUrl, {
           headers: {
-            "X-Naver-Client-Id": env.NAVER_CLIENT_ID,
-            "X-Naver-Client-Secret": env.NAVER_CLIENT_SECRET
+            "X-Naver-Client-Id": "oc3qe63frx",
+            "X-Naver-Client-Secret": "bQsnPVbZc9Vn4ekAdobBNpi7QG7GRzUJKoOkRolx"
           }
         });
   
