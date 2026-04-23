@@ -303,6 +303,25 @@
                 </div>
             </div>
 
+            <!-- 동네꿀팁 미니 위젯 -->
+            <div class="bg-black/5 p-1 rounded-[1.25rem] ring-1 ring-black/5 group">
+                <div class="bg-white rounded-2xl p-6 border border-black/[0.03] shadow-inner-highlight">
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="flex items-center gap-2 font-black text-[18px] text-textmain">
+                            <iconify-icon icon="solar:map-point-wave-bold-duotone" class="text-2xl text-[#E87D3E]"></iconify-icon>
+                            동네꿀팁 인기 Top
+                        </div>
+                        <a href="dongnae.html" class="text-[12px] font-bold text-textmuted hover:text-textmain transition-colors flex items-center gap-0.5">
+                            지도 보기 <iconify-icon icon="solar:alt-arrow-right-linear"></iconify-icon>
+                        </a>
+                    </div>
+                    
+                    <div id="mini-ranking-list" class="flex flex-col gap-3">
+                        <div class="text-center text-sm font-semibold text-textmuted py-4">랭킹을 불러오는 중...</div>
+                    </div>
+                </div>
+            </div>
+
         </section>
     </main>
 
@@ -420,10 +439,45 @@
             }
         }
 
+        async function loadDongnaeRanking() {
+            if (window.DataService) {
+                const tips = await window.DataService.getTips();
+                const sortedTips = tips.sort((a, b) => b.likes - a.likes).slice(0, 3);
+                
+                const container = document.getElementById('mini-ranking-list');
+                if (!container) return;
+
+                if (sortedTips.length === 0) {
+                    container.innerHTML = '<div class="text-center text-[13px] font-semibold text-textmuted py-4">아직 제보된 꿀팁이 없습니다.</div>';
+                    return;
+                }
+
+                container.innerHTML = sortedTips.map((tip, idx) => {
+                    return `
+                        <div class="flex justify-between items-center bg-gray-50 p-3 rounded-xl border border-black/5 hover:bg-gray-100 transition-colors cursor-pointer" onclick="location.href='dongnae.html'">
+                            <div class="flex items-center gap-3">
+                                <span class="font-black ${idx === 0 ? 'text-accent' : 'text-gray-400'} text-[15px] w-4 text-center">${idx + 1}</span>
+                                <span class="font-bold text-[14px] text-textmain truncate max-w-[140px]">${tip.placeName}</span>
+                            </div>
+                            <div class="flex items-center gap-2 text-[11px] font-bold">
+                                <span class="flex items-center gap-0.5 text-accent bg-accent/10 px-2 py-0.5 rounded-full"><iconify-icon icon="solar:heart-bold"></iconify-icon> ${tip.likes}</span>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+            }
+        }
+
         // DataService가 준비되면 Feed 렌더링
-        window.addEventListener('DataServiceReady', loadFeed);
+        window.addEventListener('DataServiceReady', () => {
+            loadFeed();
+            loadDongnaeRanking();
+        });
         // 만약 이미 스크립트 로드 되어있다면 즉시 로드 (Fallback)
-        if (window.DataService) loadFeed();
+        if (window.DataService) {
+            loadFeed();
+            loadDongnaeRanking();
+        }
 
         // ------------------
         // 게시글 작성 (UI 간이 연동 및 모듈화 검증용)
