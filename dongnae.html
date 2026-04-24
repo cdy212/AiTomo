@@ -64,21 +64,18 @@
         <!-- 카테고리 필터 탭 -->
         <div class="w-full bg-white border-b border-black/5 z-10 sticky top-[60px] md:top-[72px] shadow-sm">
             <div class="max-w-7xl mx-auto px-4 py-3 flex gap-3 overflow-x-auto no-scrollbar snap-x">
-                <button class="snap-start shrink-0 px-4 py-1.5 rounded-full bg-black text-white text-sm font-bold shadow-md transition-transform hover:scale-105">전체</button>
-                <button class="snap-start shrink-0 px-4 py-1.5 rounded-full bg-white border border-black/10 text-textmuted text-sm font-bold shadow-sm transition-transform hover:scale-105 hover:border-black/30 flex items-center gap-1.5">
-                    <iconify-icon icon="solar:trees-linear" class="text-[#5BA85B]"></iconify-icon> 놀이터
+                <button data-category="all" class="filter-btn snap-start shrink-0 px-4 py-1.5 rounded-full bg-black text-white text-sm font-bold shadow-md transition-transform hover:scale-105">전체</button>
+                <button data-category="playground" class="filter-btn snap-start shrink-0 px-4 py-1.5 rounded-full bg-white border border-black/10 text-textmuted text-sm font-bold shadow-sm transition-transform hover:scale-105 hover:border-black/30 flex items-center gap-1.5">
+                    <iconify-icon icon="solar:trees-linear" class="text-[#5BA85B]"></iconify-icon> 아기놀이터
                 </button>
-                <button class="snap-start shrink-0 px-4 py-1.5 rounded-full bg-white border border-black/10 text-textmuted text-sm font-bold shadow-sm transition-transform hover:scale-105 hover:border-black/30 flex items-center gap-1.5">
+                <button data-category="hospital" class="filter-btn snap-start shrink-0 px-4 py-1.5 rounded-full bg-white border border-black/10 text-textmuted text-sm font-bold shadow-sm transition-transform hover:scale-105 hover:border-black/30 flex items-center gap-1.5">
                     <iconify-icon icon="solar:hospital-linear" class="text-[#E05555]"></iconify-icon> 병원
                 </button>
-                <button class="snap-start shrink-0 px-4 py-1.5 rounded-full bg-white border border-black/10 text-textmuted text-sm font-bold shadow-sm transition-transform hover:scale-105 hover:border-black/30 flex items-center gap-1.5">
+                <button data-category="restaurant" class="filter-btn snap-start shrink-0 px-4 py-1.5 rounded-full bg-white border border-black/10 text-textmuted text-sm font-bold shadow-sm transition-transform hover:scale-105 hover:border-black/30 flex items-center gap-1.5">
                     <iconify-icon icon="solar:chef-hat-linear" class="text-[#E87D3E]"></iconify-icon> 맛집
                 </button>
-                <button class="snap-start shrink-0 px-4 py-1.5 rounded-full bg-white border border-black/10 text-textmuted text-sm font-bold shadow-sm transition-transform hover:scale-105 hover:border-black/30 flex items-center gap-1.5">
-                    <iconify-icon icon="solar:buildings-linear" class="text-[#8B6FD6]"></iconify-icon> 어린이집
-                </button>
-                <button class="snap-start shrink-0 px-4 py-1.5 rounded-full bg-white border border-black/10 text-textmuted text-sm font-bold shadow-sm transition-transform hover:scale-105 hover:border-black/30 flex items-center gap-1.5">
-                    <iconify-icon icon="solar:star-linear" class="text-[#D97DB0]"></iconify-icon> 미용/피부
+                <button data-category="beauty" class="filter-btn snap-start shrink-0 px-4 py-1.5 rounded-full bg-white border border-black/10 text-textmuted text-sm font-bold shadow-sm transition-transform hover:scale-105 hover:border-black/30 flex items-center gap-1.5">
+                    <iconify-icon icon="solar:star-linear" class="text-[#D97DB0]"></iconify-icon> 미용
                 </button>
             </div>
         </div>
@@ -167,60 +164,39 @@
                 <!-- Step 2: 카테고리 선택 -->
                 <div>
                     <label class="block text-sm font-bold text-textmain mb-2">2. 카테고리 <span class="text-accent">*</span></label>
-                    <div class="grid grid-cols-4 gap-2" id="category-selector">
+                    <div class="grid grid-cols-5 gap-2" id="category-selector">
                         <label class="cursor-pointer">
                             <input type="radio" name="report-category" value="playground" class="peer hidden">
-                            <div class="flex flex-col items-center justify-center p-3 border border-black/10 rounded-xl peer-checked:border-[#5BA85B] peer-checked:bg-[#5BA85B]/10 transition-colors">
-                                <iconify-icon icon="solar:trees-linear" class="text-2xl text-[#5BA85B] mb-1"></iconify-icon>
-                                <span class="text-[10px] font-bold text-textmain">놀이터</span>
-                            </div>
-                        </label>
-                        <label class="cursor-pointer">
-                            <input type="radio" name="report-category" value="pool" class="peer hidden">
-                            <div class="flex flex-col items-center justify-center p-3 border border-black/10 rounded-xl peer-checked:border-[#3B9ECC] peer-checked:bg-[#3B9ECC]/10 transition-colors">
-                                <iconify-icon icon="solar:swimming-linear" class="text-2xl text-[#3B9ECC] mb-1"></iconify-icon>
-                                <span class="text-[10px] font-bold text-textmain">수영장</span>
+                            <div class="flex flex-col items-center justify-center p-3 border border-black/10 rounded-xl peer-checked:border-[#5BA85B] peer-checked:bg-[#5BA85B]/10 transition-colors h-full">
+                                <iconify-icon icon="solar:trees-linear" class="text-xl text-[#5BA85B] mb-1"></iconify-icon>
+                                <span class="text-[10px] font-bold text-textmain whitespace-nowrap">아기놀이터</span>
                             </div>
                         </label>
                         <label class="cursor-pointer">
                             <input type="radio" name="report-category" value="hospital" class="peer hidden">
-                            <div class="flex flex-col items-center justify-center p-3 border border-black/10 rounded-xl peer-checked:border-[#E05555] peer-checked:bg-[#E05555]/10 transition-colors">
-                                <iconify-icon icon="solar:hospital-linear" class="text-2xl text-[#E05555] mb-1"></iconify-icon>
+                            <div class="flex flex-col items-center justify-center p-3 border border-black/10 rounded-xl peer-checked:border-[#E05555] peer-checked:bg-[#E05555]/10 transition-colors h-full">
+                                <iconify-icon icon="solar:hospital-linear" class="text-xl text-[#E05555] mb-1"></iconify-icon>
                                 <span class="text-[10px] font-bold text-textmain">병원</span>
                             </div>
                         </label>
                         <label class="cursor-pointer">
                             <input type="radio" name="report-category" value="restaurant" class="peer hidden">
-                            <div class="flex flex-col items-center justify-center p-3 border border-black/10 rounded-xl peer-checked:border-[#E87D3E] peer-checked:bg-[#E87D3E]/10 transition-colors">
-                                <iconify-icon icon="solar:chef-hat-linear" class="text-2xl text-[#E87D3E] mb-1"></iconify-icon>
+                            <div class="flex flex-col items-center justify-center p-3 border border-black/10 rounded-xl peer-checked:border-[#E87D3E] peer-checked:bg-[#E87D3E]/10 transition-colors h-full">
+                                <iconify-icon icon="solar:chef-hat-linear" class="text-xl text-[#E87D3E] mb-1"></iconify-icon>
                                 <span class="text-[10px] font-bold text-textmain">맛집</span>
                             </div>
                         </label>
                         <label class="cursor-pointer">
-                            <input type="radio" name="report-category" value="daycare" class="peer hidden">
-                            <div class="flex flex-col items-center justify-center p-3 border border-black/10 rounded-xl peer-checked:border-[#8B6FD6] peer-checked:bg-[#8B6FD6]/10 transition-colors">
-                                <iconify-icon icon="solar:buildings-linear" class="text-2xl text-[#8B6FD6] mb-1"></iconify-icon>
-                                <span class="text-[10px] font-bold text-textmain">어린이집</span>
-                            </div>
-                        </label>
-                        <label class="cursor-pointer">
-                            <input type="radio" name="report-category" value="kindergarten" class="peer hidden">
-                            <div class="flex flex-col items-center justify-center p-3 border border-black/10 rounded-xl peer-checked:border-[#C47FD0] peer-checked:bg-[#C47FD0]/10 transition-colors">
-                                <iconify-icon icon="solar:backpack-linear" class="text-2xl text-[#C47FD0] mb-1"></iconify-icon>
-                                <span class="text-[10px] font-bold text-textmain">유치원</span>
-                            </div>
-                        </label>
-                        <label class="cursor-pointer">
                             <input type="radio" name="report-category" value="beauty" class="peer hidden">
-                            <div class="flex flex-col items-center justify-center p-3 border border-black/10 rounded-xl peer-checked:border-[#D97DB0] peer-checked:bg-[#D97DB0]/10 transition-colors">
-                                <iconify-icon icon="solar:star-linear" class="text-2xl text-[#D97DB0] mb-1"></iconify-icon>
-                                <span class="text-[10px] font-bold text-textmain">미용/피부</span>
+                            <div class="flex flex-col items-center justify-center p-3 border border-black/10 rounded-xl peer-checked:border-[#D97DB0] peer-checked:bg-[#D97DB0]/10 transition-colors h-full">
+                                <iconify-icon icon="solar:star-linear" class="text-xl text-[#D97DB0] mb-1"></iconify-icon>
+                                <span class="text-[10px] font-bold text-textmain">미용</span>
                             </div>
                         </label>
                         <label class="cursor-pointer">
                             <input type="radio" name="report-category" value="etc" class="peer hidden" id="cat-etc-radio">
-                            <div class="flex flex-col items-center justify-center p-3 border border-black/10 rounded-xl peer-checked:border-[#9E9E9E] peer-checked:bg-[#9E9E9E]/10 transition-colors">
-                                <iconify-icon icon="solar:map-point-linear" class="text-2xl text-[#9E9E9E] mb-1"></iconify-icon>
+                            <div class="flex flex-col items-center justify-center p-3 border border-black/10 rounded-xl peer-checked:border-[#9E9E9E] peer-checked:bg-[#9E9E9E]/10 transition-colors h-full">
+                                <iconify-icon icon="solar:map-point-linear" class="text-xl text-[#9E9E9E] mb-1"></iconify-icon>
                                 <span class="text-[10px] font-bold text-textmain">기타</span>
                             </div>
                         </label>

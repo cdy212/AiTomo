@@ -243,6 +243,26 @@
     <!-- Global Voice FAB Container -->
     <div id="c-voiceUi"></div>
 
+    <!-- 준비중 팝업 (모달) -->
+    <div id="wiki-wip-modal" class="fixed inset-0 z-[200] flex items-center justify-center p-4">
+        <!-- 배경 오버레이 -->
+        <div id="wiki-wip-overlay" class="absolute inset-0 bg-black/60 backdrop-blur-sm transition-opacity duration-300 opacity-0"></div>
+        
+        <!-- 팝업 콘텐츠 -->
+        <div id="wiki-wip-content" class="relative bg-white w-full max-w-sm rounded-3xl p-6 shadow-2xl scale-95 opacity-0 transition-all duration-300 transform">
+            <div class="flex items-center justify-center w-16 h-16 rounded-full bg-accent/10 text-accent mb-5 mx-auto">
+                <iconify-icon icon="solar:cone-bold-duotone" class="text-4xl"></iconify-icon>
+            </div>
+            <h2 class="text-xl font-black text-center text-textmain mb-3">현재 페이지 작업 중</h2>
+            <p class="text-[15px] text-center text-textdim font-medium leading-relaxed mb-6 break-keep-all">
+                작업 중이며 주로 한일부부를 위한 <strong class="text-textmain">육아 생활 할인 미용 등 정보 성 글</strong>을 업로드 예정입니다.
+            </p>
+            <button id="wiki-wip-close" class="w-full bg-accent hover:bg-[#ff5252] text-white font-bold py-3.5 rounded-xl transition-colors active:scale-95 shadow-lg shadow-accent/30">
+                확인했습니다
+            </button>
+        </div>
+    </div>
+
     <!-- Mobile Sticky Action Button -->
     <div
         class="md:hidden fixed bottom-[64px] left-0 right-0 p-4 bg-gradient-to-t from-wbg via-wbg/80 to-transparent z-40 pointer-events-none">
@@ -277,6 +297,32 @@
             loadComponent("c-nav", "components/nav.html");
             // Load Voice FAB (Desktop fixed style)
             loadComponent("c-voiceUi", "components/voice_fab.html");
+
+            // 준비중 팝업 로직
+            setTimeout(() => {
+                const modal = document.getElementById('wiki-wip-modal');
+                const overlay = document.getElementById('wiki-wip-overlay');
+                const content = document.getElementById('wiki-wip-content');
+                const closeBtn = document.getElementById('wiki-wip-close');
+                
+                if (modal) {
+                    overlay.classList.remove('opacity-0');
+                    overlay.classList.add('opacity-100');
+                    content.classList.remove('scale-95', 'opacity-0');
+                    content.classList.add('scale-100', 'opacity-100');
+                    
+                    const hideModal = () => {
+                        overlay.classList.remove('opacity-100');
+                        overlay.classList.add('opacity-0');
+                        content.classList.remove('scale-100', 'opacity-100');
+                        content.classList.add('scale-95', 'opacity-0');
+                        setTimeout(() => modal.classList.add('hidden'), 300);
+                    };
+                    
+                    closeBtn.addEventListener('click', hideModal);
+                    overlay.addEventListener('click', hideModal);
+                }
+            }, 150);
         });
     </script>
 </body>

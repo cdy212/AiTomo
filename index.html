@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport"
         content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    
+
     <!-- PWA Meta Tags -->
     <meta name="theme-color" content="#FEFAF4">
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -13,8 +13,8 @@
     <meta name="apple-mobile-web-app-title" content="AiTomo">
     <link rel="manifest" href="./manifest.json">
     <link rel="apple-touch-icon" href="https://api.iconify.design/solar/tea-cup-bold-duotone.svg?color=%23eb855e">
-    
-    <title>동내애기친구 - 음성중심 메인 대시보드</title>
+
+    <title>한일부부커뮤니티</title>
 
     <!-- Pretendard Font -->
     <link rel="stylesheet" as="style" crossorigin
@@ -149,8 +149,7 @@
                     style="--index: 2;">
                     한일부부 애기 친구분들의 편안한 모임 공간
                 </p>
-                <button
-                    onclick="location.href='qna.html'"
+                <button onclick="location.href='qna.html'"
                     class="mt-6 reveal-up bg-textmain text-white px-5 py-3 rounded-full font-bold text-sm hover:scale-[1.02] active:scale-95 transition-spring flex items-center gap-2 shadow-sm"
                     style="--index: 3;">
                     <iconify-icon icon="solar:cup-hot-linear"></iconify-icon> 커피라운지 수다떨기
@@ -203,7 +202,7 @@
     <main class="max-w-7xl mx-auto px-4 py-10 grid grid-cols-1 lg:grid-cols-12 gap-10 reveal-up" style="--index: 1;">
 
         <!-- Left: Anonymous Q&A Feed (Highest Priority for Needs Analysis) -->
-        <section class="lg:col-span-8 flex flex-col gap-8">
+        <section class="lg:col-span-8 flex flex-col gap-8 order-2 lg:order-1">
 
             <div class="flex flex-col">
                 <div class="flex items-center justify-between mb-4 border-b-2 border-textmain pb-3">
@@ -226,7 +225,7 @@
             </div>
 
             <!-- Secondary Info Wiki (Abstracted Table List) -->
-            <div class="flex flex-col mt-6">
+            <div class="hidden flex-col mt-6">
                 <div class="flex items-center justify-between mb-4 border-b-2 border-textmain pb-3">
                     <div class="flex items-center gap-3">
                         <iconify-icon icon="solar:document-text-line-duotone"
@@ -268,7 +267,7 @@
         </section>
 
         <!-- Right: Admin Feedback / Side Panel -->
-        <section class="lg:col-span-4 flex flex-col gap-10">
+        <section class="lg:col-span-4 flex flex-col gap-10 order-1 lg:order-2">
 
             <!-- Suggestion / Needs Tracker -->
             <div class="hidden bg-black/5 p-1 rounded-[1.25rem] ring-1 ring-black/5 group">
@@ -309,14 +308,16 @@
                 <div class="bg-white rounded-2xl p-6 border border-black/[0.03] shadow-inner-highlight">
                     <div class="flex items-center justify-between mb-4">
                         <div class="flex items-center gap-2 font-black text-[18px] text-textmain">
-                            <iconify-icon icon="solar:map-point-wave-bold-duotone" class="text-2xl text-[#E87D3E]"></iconify-icon>
+                            <iconify-icon icon="solar:map-point-wave-bold-duotone"
+                                class="text-2xl text-[#E87D3E]"></iconify-icon>
                             동네꿀팁 인기 Top
                         </div>
-                        <a href="dongnae.html" class="text-[12px] font-bold text-textmuted hover:text-textmain transition-colors flex items-center gap-0.5">
+                        <a href="dongnae.html"
+                            class="text-[12px] font-bold text-textmuted hover:text-textmain transition-colors flex items-center gap-0.5">
                             지도 보기 <iconify-icon icon="solar:alt-arrow-right-linear"></iconify-icon>
                         </a>
                     </div>
-                    
+
                     <div id="mini-ranking-list" class="flex flex-col gap-3">
                         <div class="text-center text-sm font-semibold text-textmuted py-4">랭킹을 불러오는 중...</div>
                     </div>
@@ -395,7 +396,7 @@
             }
 
             container.innerHTML = ''; // 기존 로딩 삭제
-            
+
             posts.forEach(post => {
                 // 경과 시간 계산
                 const now = new Date();
@@ -444,7 +445,7 @@
             if (window.DataService) {
                 const tips = await window.DataService.getTips();
                 const sortedTips = tips.sort((a, b) => b.likes - a.likes).slice(0, 3);
-                
+
                 const container = document.getElementById('mini-ranking-list');
                 if (!container) return;
 
@@ -488,12 +489,12 @@
             // 여기선 기존 페이지에 있는 본 화면의 "커피라운지에 고민 남기기" 버튼을 타겟. (html: button 안쪽 혹은 별도 아이디)
             // '아이디'가 따로 없으니 텍스트 기반 매핑 또는 쿼리 셀렉터 사용.
             const addPostBtn = document.querySelector('button .solar\\:cup-hot-linear')?.closest('button') || document.querySelector('.lg\\:col-span-8 button.bg-textmain');
-            
+
             if (addPostBtn) {
                 addPostBtn.addEventListener('click', async () => {
                     const title = prompt("커피라운지에 공유할 익명 고민이나 팁을 입력해주세요:");
                     if (!title) return;
-                    
+
                     const region = prompt("관련된 지역 태그(예: 답십리)를 입력할 수 있습니다. 없으면 엔터:") || "";
 
                     const newPost = {

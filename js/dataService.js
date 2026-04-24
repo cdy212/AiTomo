@@ -38,6 +38,8 @@ let db = null;
 
 try {
     const app = initializeApp(firebaseConfig);
+
+
     db = getFirestore(app);
 
     // 인프라.md 규칙 준수: 오프라인 캐시 활성화하여 중복 읽기 비용 최소화
@@ -335,13 +337,13 @@ window.DataService = {
 
         if (db) {
             try {
-                const payload = { 
-                    ...data, 
+                const payload = {
+                    ...data,
                     authorToken,
-                    createdAt: serverTimestamp(), 
-                    likes: 0, 
+                    createdAt: serverTimestamp(),
+                    likes: 0,
                     likedBy: [],
-                    status: 'active' 
+                    status: 'active'
                 };
                 const docRef = await addDoc(collection(db, 'dongnaeTips'), payload);
                 newDocId = docRef.id;
@@ -380,7 +382,7 @@ window.DataService = {
             try {
                 const { arrayUnion } = await import("https://www.gstatic.com/firebasejs/10.9.0/firebase-firestore.js");
                 const tipRef = doc(db, 'dongnaeTips', docId);
-                
+
                 await updateDoc(tipRef, {
                     likes: increment(1),
                     likedBy: arrayUnion(uid)

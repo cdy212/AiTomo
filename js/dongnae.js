@@ -24,14 +24,11 @@ function openMarkerInfoWindow(markerObj) {
 
 // 카테고리별 마커 색상 및 아이콘(이모지) 매핑
 const categoryStyles = {
-    'playground': { color: '#5BA85B', name: '놀이터', emoji: '🛝' },
-    'pool': { color: '#3B9ECC', name: '수영장/키즈풀', emoji: '💦' },
-    'hospital': { color: '#E05555', name: '병원/소아과', emoji: '🏥' },
-    'daycare': { color: '#8B6FD6', name: '어린이집', emoji: '🧸' },
-    'kindergarten': { color: '#C47FD0', name: '유치원', emoji: '🎒' },
-    'restaurant': { color: '#E87D3E', name: '맛집/카페', emoji: '🍽️' },
-    'beauty': { color: '#D97DB0', name: '미용/피부과', emoji: '✂️' },
-    'etc': { color: '#9E9E9E', name: '기타', emoji: '📌' }
+    'playground': { color: '#5BA85B', name: '아기놀이터', icon: 'solar:trees-bold' },
+    'hospital': { color: '#E05555', name: '병원', icon: 'solar:hospital-bold' },
+    'restaurant': { color: '#E87D3E', name: '맛집', icon: 'solar:chef-hat-bold' },
+    'beauty': { color: '#D97DB0', name: '미용', icon: 'solar:star-bold' },
+    'etc': { color: '#9E9E9E', name: '기타', icon: 'solar:map-point-bold' }
 };
 
 // 네이버 지도 초기화 함수
@@ -347,14 +344,14 @@ function renderMarkers(tips) {
     currentMarkers = [];
     if (currentInfoWindow) { currentInfoWindow.close(); currentInfoWindow = null; }
 
-    // 랭킹 동시 업데이트
-    renderRanking(tips);
+    // 필터링 적용된 목록 도출
+    const filteredTips = tips.filter(tip => categoryFilters === 'all' || tip.category === categoryFilters);
+
+    // 랭킹 동시 업데이트 (필터링된 목록 전달)
+    renderRanking(filteredTips);
 
     let renderedCount = 0;
-    tips.forEach((tip, idx) => {
-        // 필터 적용
-        if (categoryFilters !== 'all' && tip.category !== categoryFilters) return;
-
+    filteredTips.forEach((tip, idx) => {
         // 좌표 유효성 검증
         const lat = parseFloat(tip.lat);
         const lng = parseFloat(tip.lng);
@@ -374,7 +371,7 @@ function renderMarkers(tips) {
                     ${tip.placeName}
                 </div>
                 <div class="w-8 h-8 rounded-full shadow-lg flex items-center justify-center" style="background-color: ${style.color};">
-                    <span class="text-white font-bold text-[14px]">${style.emoji || style.name.substring(0, 2)}</span>
+                    <iconify-icon icon="${style.icon || 'solar:map-point-bold'}" class="text-white text-[16px]"></iconify-icon>
                 </div>
                 <div class="w-0 h-0 border-l-[6px] border-l-transparent border-r-[6px] border-r-transparent border-t-[8px]" style="border-top-color: ${style.color};"></div>
             </div>
@@ -502,6 +499,24 @@ async function initializeDongnae() {
         } else {
             console.error('[initializeDongnae] window.DataService 없음!');
         }
+
+        // 4. 카테고리 필터 탭 이벤트 리스너 등록
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+            btn.addEventListener('click', async () => {
+                document.querySelectorAll('.filter-btn').forEach(b => {
+                    b.classList.remove('bg-black', 'text-white');
+                    b.classList.add('bg-white', 'text-textmuted');
+                });
+                btn.classList.remove('bg-white', 'text-textmuted');
+                btn.classList.add('bg-black', 'text-white');
+
+                categoryFilters = btn.getAttribute('data-category');
+                if (window.DataService) {
+                    const tips = await window.DataService.getTips();
+                    renderMarkers(tips);
+                }
+            });
+        });
 
         // 4. 현재 위치 버튼 이벤트 리스너 등록
         document.getElementById('btn-current-location').addEventListener('click', async () => {

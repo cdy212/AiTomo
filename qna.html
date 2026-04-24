@@ -6,7 +6,7 @@
     <meta name="viewport"
         content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <meta name="theme-color" content="#FEFAF4">
-    <title>커피라운지 DEV</title>
+    <title>한일부부커뮤니티</title>
     <link rel="stylesheet" as="style" crossorigin
         href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
     <script src="https://code.iconify.design/iconify-icon/1.0.7/iconify-icon.min.js"></script>
@@ -231,15 +231,23 @@
                 <span class="text-[11px] text-textmuted font-semibold">음성으로 이야기하면 자동 등록됩니다.</span>
             </div>
 
+            <!-- 답변 표시기 -->
+            <div id="reply-indicator" class="hidden items-center justify-between bg-accentlight/20 text-accent border border-accentlight px-3 py-1.5 rounded-xl mb-2">
+                <span id="reply-indicator-text" class="text-[12px] font-bold truncate pr-2"></span>
+                <button id="reply-cancel-btn" class="text-accent hover:text-red-500 shrink-0">
+                    <iconify-icon icon="solar:close-circle-bold" class="text-base"></iconify-icon>
+                </button>
+            </div>
+
             <div
-                class="flex flex-row items-center gap-2 bg-wbg ring-1 ring-black/5 rounded-full p-1.5 focus-within:ring-accent focus-within:bg-white transition-all shadow-inner-highlight">
+                class="flex flex-row items-center gap-1.5 bg-wbg ring-1 ring-black/5 rounded-full p-1.5 focus-within:ring-accent focus-within:bg-white transition-all shadow-inner-highlight">
                 <button id="mic-btn"
-                    class="bg-accent text-white p-3 rounded-full flex items-center justify-center shadow-md hover:scale-105 active:scale-95 transition shrink-0"
+                    class="bg-accent text-white p-2.5 rounded-full flex items-center justify-center shadow-md hover:scale-105 active:scale-95 transition shrink-0"
                     title="음성 입력">
                     <iconify-icon id="mic-icon" icon="solar:microphone-3-bold" class="text-[22px]"></iconify-icon>
                 </button>
                 <input id="post-input" type="text" placeholder="아무 주제나 편하게 이야기해요."
-                    class="flex-1 bg-transparent border-none outline-none text-[15px] font-semibold text-textmain placeholder:text-textmuted/80 py-2 px-2 tracking-tight" />
+                    class="flex-1 min-w-0 bg-transparent border-none outline-none text-[15px] font-semibold text-textmain placeholder:text-textmuted/80 py-2 px-2 tracking-tight" />
                 <button id="img-btn" class="text-textmuted hover:text-accent transition p-2 shrink-0" title="이미지 첨부">
                     <iconify-icon icon="solar:camera-add-linear" class="text-xl"></iconify-icon>
                 </button>
@@ -298,6 +306,7 @@
         let selectedCat = null;
         let attachedImgs = [];   // { dataUrl }[]
         let micListening = false;
+        let replyTargetPostId = null; // 답변 대상 포스트 ID
 
         // =========================================================
         // DOM
@@ -446,37 +455,63 @@
 
             postSubmit.disabled = true; postSubmit.classList.add('opacity-60');
 
-            const data = {
-                author: userName,
-                isLoggedIn,
-                category: selectedCat ? selectedCat.key : null,
-                categoryLabel: selectedCat ? selectedCat.label : null,
-                content: text,
-                images: attachedImgs.map(i => i.dataUrl),  // Base64 저장
-            };
+            if (replyTargetPostId) {
+                const data = { author: userName, content: text };
+                if (attachedImgs.length > 0) data.imageUrl = attachedImgs[0].dataUrl;
+                
+                try {
+                    await window.DataService.addReply(COLLECTION, replyTargetPostId, data);
+                    postInput.value = '';
+                    attachedImgs = []; renderImgPreview();
+                    
+                    replyTargetPostId = null;
+                    document.getElementById('reply-indicator').classList.add('hidden');
+                    document.getElementById('reply-indicator').classList.remove('flex');
+                    
+                    await loadFeed();
+                } catch (e) {
+                    console.error('[submitReply]', e);
+                    alert('답변 등록 중 오류가 발생했습니다.');
+                } finally {
+                    postSubmit.disabled = false; postSubmit.classList.remove('opacity-60');
+                }
+            } else {
+                const data = {
+                    author: userName,
+                    isLoggedIn,
+                    category: selectedCat ? selectedCat.key : null,
+                    categoryLabel: selectedCat ? selectedCat.label : null,
+                    content: text,
+                    images: attachedImgs.map(i => i.dataUrl),
+                };
 
-            try {
-                const newId = await window.DataService.addPost(COLLECTION, data);
-                if (newId) addMyPost(newId);  // 본인 글 sessionStorage 에 기록
+                try {
+                    const newId = await window.DataService.addPost(COLLECTION, data);
+                    if (newId) addMyPost(newId);
 
-                // 입력창 초기화
-                postInput.value = '';
-                attachedImgs = []; renderImgPreview();
-                selectedCat = null; catLabel.textContent = '카테고리';
+                    postInput.value = '';
+                    attachedImgs = []; renderImgPreview();
+                    selectedCat = null; catLabel.textContent = '카테고리';
 
-                // 피드 새로고침
-                await loadFeed();
-            } catch (e) {
-                console.error('[submitPost]', e);
-                alert('등록 중 오류가 발생했습니다.');
-            } finally {
-                postSubmit.disabled = false; postSubmit.classList.remove('opacity-60');
+                    await loadFeed();
+                } catch (e) {
+                    console.error('[submitPost]', e);
+                    alert('등록 중 오류가 발생했습니다.');
+                } finally {
+                    postSubmit.disabled = false; postSubmit.classList.remove('opacity-60');
+                }
             }
         }
 
         postSubmit.addEventListener('click', submitPost);
         postInput.addEventListener('keydown', e => {
             if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); submitPost(); }
+        });
+
+        document.getElementById('reply-cancel-btn').addEventListener('click', () => {
+            replyTargetPostId = null;
+            document.getElementById('reply-indicator').classList.add('hidden');
+            document.getElementById('reply-indicator').classList.remove('flex');
         });
 
         // =========================================================
@@ -658,18 +693,26 @@
                 });
             });
 
-            // ---- 답변 남기기 (입력창으로 포커스 이동) ----
+            // ---- 답변 남기기 (하단 메인 입력창으로 포커스 이동) ----
             feedEl.querySelectorAll('.reply-btn').forEach(btn => {
                 btn.addEventListener('click', () => {
                     const postId = btn.dataset.id;
-                    const replyArea = feedEl.querySelector(`[data-reply-area="${postId}"]`);
-                    if (replyArea) {
-                        const input = replyArea.querySelector('.reply-input');
-                        if (input) {
-                            input.focus();
-                            input.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                        }
+                    const postEl = feedEl.querySelector(`[data-id="${postId}"]`);
+                    let previewText = "작성된 글";
+                    const contentP = postEl.querySelector('.bubble-content p');
+                    if (contentP) {
+                        previewText = contentP.textContent.substring(0, 10) + '...';
                     }
+                    
+                    replyTargetPostId = postId;
+                    const indicator = document.getElementById('reply-indicator');
+                    const indicatorText = document.getElementById('reply-indicator-text');
+                    
+                    indicator.classList.remove('hidden');
+                    indicator.classList.add('flex');
+                    indicatorText.textContent = `"${previewText}" 에 답변 남기는 중`;
+                    
+                    postInput.focus();
                 });
             });
         }
@@ -699,22 +742,24 @@
                 <div id="replies-list-${postId}" class="flex flex-col gap-1">
                     ${repliesHtml || '<p class="text-[12px] text-textmuted py-2 ml-1">첫 번째 답변을 남겨보세요!</p>'}
                 </div>
-                <!-- 답변 입력줄 -->
-                <div class="flex items-center gap-2 mt-3 bg-black/[0.02] rounded-2xl p-2 ring-1 ring-black/5">
-                    <button class="reply-mic-btn bg-accent text-white p-2 rounded-full flex items-center justify-center shrink-0 hover:scale-105 transition active:scale-95" data-post="${postId}" title="음성 입력">
-                        <iconify-icon icon="solar:microphone-3-bold" class="text-[16px]"></iconify-icon>
-                    </button>
-                    <input type="text" class="reply-input flex-1 bg-transparent border-none outline-none text-[13px] font-semibold text-textmain placeholder:text-textmuted py-1 px-1" placeholder="답변을 남겨주세요..." data-post="${postId}"/>
-                    <button class="reply-img-btn text-textmuted hover:text-accent transition p-1.5 shrink-0" data-post="${postId}" title="이미지">
-                        <iconify-icon icon="solar:camera-add-linear" class="text-[16px]"></iconify-icon>
-                    </button>
-                    <button class="reply-send-btn bg-accent text-white p-2 rounded-full shrink-0 flex items-center justify-center hover:bg-accentlight transition active:scale-95" data-post="${postId}">
-                        <iconify-icon icon="solar:plain-bold-duotone" class="text-[15px]"></iconify-icon>
-                    </button>
+                <!-- 답변 입력줄 영역 숨김 -->
+                <div class="hidden">
+                    <div class="flex items-center gap-2 mt-3 bg-black/[0.02] rounded-2xl p-2 ring-1 ring-black/5">
+                        <button class="reply-mic-btn bg-accent text-white p-2 rounded-full flex items-center justify-center shrink-0 hover:scale-105 transition active:scale-95" data-post="${postId}" title="음성 입력">
+                            <iconify-icon icon="solar:microphone-3-bold" class="text-[16px]"></iconify-icon>
+                        </button>
+                        <input type="text" class="reply-input flex-1 bg-transparent border-none outline-none text-[13px] font-semibold text-textmain placeholder:text-textmuted py-1 px-1" placeholder="답변을 남겨주세요..." data-post="${postId}"/>
+                        <button class="reply-img-btn text-textmuted hover:text-accent transition p-1.5 shrink-0" data-post="${postId}" title="이미지">
+                            <iconify-icon icon="solar:camera-add-linear" class="text-[16px]"></iconify-icon>
+                        </button>
+                        <button class="reply-send-btn bg-accent text-white p-2 rounded-full shrink-0 flex items-center justify-center hover:bg-accentlight transition active:scale-95" data-post="${postId}">
+                            <iconify-icon icon="solar:plain-bold-duotone" class="text-[15px]"></iconify-icon>
+                        </button>
+                    </div>
+                    <!-- 답변 이미지 미리보기 -->
+                    <div class="reply-img-preview hidden flex gap-2 mt-1 flex-wrap" data-post="${postId}"></div>
+                    <input type="file" class="reply-file-input hidden" accept="image/*" data-post="${postId}"/>
                 </div>
-                <!-- 답변 이미지 미리보기 -->
-                <div class="reply-img-preview hidden flex gap-2 mt-1 flex-wrap" data-post="${postId}"></div>
-                <input type="file" class="reply-file-input hidden" accept="image/*" data-post="${postId}"/>
             </div>`;
 
             // 답변 입력 이벤트 바인딩

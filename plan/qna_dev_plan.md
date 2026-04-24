@@ -1,4 +1,4 @@
-# 커피라운지 DEV 개발 플랜 (0_qna_dev.html)
+# 한일부부커뮤니티 개발 플랜 (0_qna_dev.html)
 
 > 파일: `0_qna_dev.html`  
 > 원본 보존: `0_qna.html` (수정 금지)  
