@@ -22,6 +22,8 @@ import {
     limit,
     serverTimestamp
 } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-firestore.js";
+import { getAnalytics, logEvent } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-analytics.js";
+
 
 // aitomo-e108f Firebase Config
 const firebaseConfig = {
@@ -35,9 +37,11 @@ const firebaseConfig = {
 };
 
 let db = null;
+let analytics = null;
 
 try {
     const app = initializeApp(firebaseConfig);
+    analytics = getAnalytics(app);
 
 
     db = getFirestore(app);
@@ -448,9 +452,36 @@ window.DataService = {
             }
             return false;
         }
+    },
+
+    // Analytics Helper
+    trackPageView: (pageName) => {
+        if (analytics) {
+            logEvent(analytics, 'page_view', {
+                page_title: pageName,
+                page_location: window.location.href,
+                page_path: window.location.pathname
+            });
+            console.log(`[Analytics] Tracked page view: ${pageName}`);
+        }
+    },
+
+    trackEvent: (eventName, eventParams = {}) => {
+        if (analytics) {
+            logEvent(analytics, eventName, eventParams);
+            console.log(`[Analytics] Tracked event: ${eventName}`, eventParams);
+        }
     }
 };
 
 // DataService 준비 완료 이벤트 발행
 window.dispatchEvent(new CustomEvent('DataServiceReady'));
 console.log("[DataService] 초기화 완료 (Firebase 모드:", !!db, ")");
+
+// 자동으로 현재 페이지 뷰 트래킹
+if (window.DataService && window.DataService.trackPageView) {
+    // DOM이 완전히 로드된 후 타이틀을 읽기 위해 약간 지연 또는 그대로 실행
+    setTimeout(() => {
+        window.DataService.trackPageView(document.title || 'Unknown Page');
+    }, 500);
+}

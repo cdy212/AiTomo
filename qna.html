@@ -6,7 +6,7 @@
     <meta name="viewport"
         content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <meta name="theme-color" content="#FEFAF4">
-    <title>한일부부커뮤니티</title>
+    <title>한일부부커뮤니티 Q&A</title>
     <link rel="stylesheet" as="style" crossorigin
         href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
     <script src="https://code.iconify.design/iconify-icon/1.0.7/iconify-icon.min.js"></script>
@@ -232,7 +232,8 @@
             </div>
 
             <!-- 답변 표시기 -->
-            <div id="reply-indicator" class="hidden items-center justify-between bg-accentlight/20 text-accent border border-accentlight px-3 py-1.5 rounded-xl mb-2">
+            <div id="reply-indicator"
+                class="hidden items-center justify-between bg-accentlight/20 text-accent border border-accentlight px-3 py-1.5 rounded-xl mb-2">
                 <span id="reply-indicator-text" class="text-[12px] font-bold truncate pr-2"></span>
                 <button id="reply-cancel-btn" class="text-accent hover:text-red-500 shrink-0">
                     <iconify-icon icon="solar:close-circle-bold" class="text-base"></iconify-icon>
@@ -458,16 +459,16 @@
             if (replyTargetPostId) {
                 const data = { author: userName, content: text };
                 if (attachedImgs.length > 0) data.imageUrl = attachedImgs[0].dataUrl;
-                
+
                 try {
                     await window.DataService.addReply(COLLECTION, replyTargetPostId, data);
                     postInput.value = '';
                     attachedImgs = []; renderImgPreview();
-                    
+
                     replyTargetPostId = null;
                     document.getElementById('reply-indicator').classList.add('hidden');
                     document.getElementById('reply-indicator').classList.remove('flex');
-                    
+
                     await loadFeed();
                 } catch (e) {
                     console.error('[submitReply]', e);
@@ -703,15 +704,15 @@
                     if (contentP) {
                         previewText = contentP.textContent.substring(0, 10) + '...';
                     }
-                    
+
                     replyTargetPostId = postId;
                     const indicator = document.getElementById('reply-indicator');
                     const indicatorText = document.getElementById('reply-indicator-text');
-                    
+
                     indicator.classList.remove('hidden');
                     indicator.classList.add('flex');
                     indicatorText.textContent = `"${previewText}" 에 답변 남기는 중`;
-                    
+
                     postInput.focus();
                 });
             });

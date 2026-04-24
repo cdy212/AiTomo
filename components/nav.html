@@ -140,6 +140,23 @@
                 }
             });
         }
+
+        // 메뉴 클릭 애널리틱스 트래킹 이벤트 등록
+        const allMenus = Object.values(pageMappers).flat();
+        allMenus.forEach(id => {
+            const el = document.getElementById(id);
+            if(el) {
+                el.addEventListener('click', () => {
+                    if (window.DataService && window.DataService.trackEvent) {
+                        window.DataService.trackEvent('menu_click', {
+                            menu_id: id,
+                            menu_name: el.innerText.trim(),
+                            menu_type: id.startsWith('nav-') ? 'global_nav' : 'bottom_tab'
+                        });
+                    }
+                });
+            }
+        });
     }, 100);
 
     // PWA Install Logic

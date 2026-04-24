@@ -1,19 +1,23 @@
 <!DOCTYPE html>
 <html lang="ko">
+
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>동네꿀팁 - 동내애기친구</title>
-    
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>한일부부커뮤니티 동네꿀팁</title>
+
     <!-- CSS / Tailwind -->
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="css/style.css">
-    
+
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Pretendard:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    
+    <link
+        href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Pretendard:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet">
+
     <!-- Iconify -->
     <script src="https://code.iconify.design/iconify-icon/1.0.7/iconify-icon.min.js"></script>
 
@@ -37,10 +41,11 @@
             }
         }
     </script>
-    
+
     <!-- 네이버 지도 API (발급된 Client ID 적용, 최신 통합 플랫폼 정책 ncpKeyId 사용) -->
     <script type="text/javascript" src="https://oapi.map.naver.com/openapi/v3/maps.js?ncpKeyId=oc3qe63frx"></script>
 </head>
+
 <body class="bg-wbg font-sans text-textmain antialiased selection:bg-accent/20">
 
     <!-- Header Navigation (공통) -->
@@ -60,21 +65,26 @@
     </script>
 
     <main class="w-full h-[100dvh] pt-[60px] pb-[64px] md:pt-[72px] md:pb-0 flex flex-col relative">
-        
+
         <!-- 카테고리 필터 탭 -->
         <div class="w-full bg-white border-b border-black/5 z-10 sticky top-[60px] md:top-[72px] shadow-sm">
             <div class="max-w-7xl mx-auto px-4 py-3 flex gap-3 overflow-x-auto no-scrollbar snap-x">
-                <button data-category="all" class="filter-btn snap-start shrink-0 px-4 py-1.5 rounded-full bg-black text-white text-sm font-bold shadow-md transition-transform hover:scale-105">전체</button>
-                <button data-category="playground" class="filter-btn snap-start shrink-0 px-4 py-1.5 rounded-full bg-white border border-black/10 text-textmuted text-sm font-bold shadow-sm transition-transform hover:scale-105 hover:border-black/30 flex items-center gap-1.5">
+                <button data-category="all"
+                    class="filter-btn snap-start shrink-0 px-4 py-1.5 rounded-full bg-black text-white text-sm font-bold shadow-md transition-transform hover:scale-105">전체</button>
+                <button data-category="playground"
+                    class="filter-btn snap-start shrink-0 px-4 py-1.5 rounded-full bg-white border border-black/10 text-textmuted text-sm font-bold shadow-sm transition-transform hover:scale-105 hover:border-black/30 flex items-center gap-1.5">
                     <iconify-icon icon="solar:trees-linear" class="text-[#5BA85B]"></iconify-icon> 아기놀이터
                 </button>
-                <button data-category="hospital" class="filter-btn snap-start shrink-0 px-4 py-1.5 rounded-full bg-white border border-black/10 text-textmuted text-sm font-bold shadow-sm transition-transform hover:scale-105 hover:border-black/30 flex items-center gap-1.5">
+                <button data-category="hospital"
+                    class="filter-btn snap-start shrink-0 px-4 py-1.5 rounded-full bg-white border border-black/10 text-textmuted text-sm font-bold shadow-sm transition-transform hover:scale-105 hover:border-black/30 flex items-center gap-1.5">
                     <iconify-icon icon="solar:hospital-linear" class="text-[#E05555]"></iconify-icon> 병원
                 </button>
-                <button data-category="restaurant" class="filter-btn snap-start shrink-0 px-4 py-1.5 rounded-full bg-white border border-black/10 text-textmuted text-sm font-bold shadow-sm transition-transform hover:scale-105 hover:border-black/30 flex items-center gap-1.5">
+                <button data-category="restaurant"
+                    class="filter-btn snap-start shrink-0 px-4 py-1.5 rounded-full bg-white border border-black/10 text-textmuted text-sm font-bold shadow-sm transition-transform hover:scale-105 hover:border-black/30 flex items-center gap-1.5">
                     <iconify-icon icon="solar:chef-hat-linear" class="text-[#E87D3E]"></iconify-icon> 맛집
                 </button>
-                <button data-category="beauty" class="filter-btn snap-start shrink-0 px-4 py-1.5 rounded-full bg-white border border-black/10 text-textmuted text-sm font-bold shadow-sm transition-transform hover:scale-105 hover:border-black/30 flex items-center gap-1.5">
+                <button data-category="beauty"
+                    class="filter-btn snap-start shrink-0 px-4 py-1.5 rounded-full bg-white border border-black/10 text-textmuted text-sm font-bold shadow-sm transition-transform hover:scale-105 hover:border-black/30 flex items-center gap-1.5">
                     <iconify-icon icon="solar:star-linear" class="text-[#D97DB0]"></iconify-icon> 미용
                 </button>
             </div>
@@ -84,53 +94,65 @@
         <div class="flex-1 relative bg-gray-200">
             <!-- 네이버 지도 SDK가 렌더링될 타겟 엘리먼트 -->
             <div id="map" class="w-full h-full bg-gray-100 flex items-center justify-center text-textmuted text-sm">
-                지도를 불러오는 중입니다...<br/>(API 키 등록 필요)
+                지도를 불러오는 중입니다...<br />(API 키 등록 필요)
             </div>
 
             <!-- 현재 위치 버튼 -->
-            <button id="btn-current-location" class="absolute bottom-6 right-4 md:right-6 bg-white p-3 rounded-full shadow-lg border border-black/5 hover:bg-gray-50 transition-colors z-20">
+            <button id="btn-current-location"
+                class="absolute bottom-6 right-4 md:right-6 bg-white p-3 rounded-full shadow-lg border border-black/5 hover:bg-gray-50 transition-colors z-20">
                 <iconify-icon icon="solar:target-linear" class="text-2xl text-textmain"></iconify-icon>
             </button>
 
             <!-- 랭킹 오버레이 위젯 (하단 배치) -->
-            <div class="absolute bottom-4 left-4 md:left-6 right-4 md:right-auto md:w-[320px] bg-white/90 backdrop-blur-md rounded-2xl shadow-xl border border-white p-4 z-20">
-                <div class="flex items-center justify-between cursor-pointer" onclick="document.getElementById('ranking-list-wrap').classList.toggle('hidden'); this.querySelector('iconify-icon:last-child').setAttribute('icon', document.getElementById('ranking-list-wrap').classList.contains('hidden') ? 'solar:alt-arrow-up-linear' : 'solar:alt-arrow-down-linear')">
+            <div
+                class="absolute bottom-4 left-4 md:left-6 right-4 md:right-auto md:w-[320px] bg-white/90 backdrop-blur-md rounded-2xl shadow-xl border border-white p-4 z-20">
+                <div class="flex items-center justify-between cursor-pointer"
+                    onclick="document.getElementById('ranking-list-wrap').classList.toggle('hidden'); this.querySelector('iconify-icon:last-child').setAttribute('icon', document.getElementById('ranking-list-wrap').classList.contains('hidden') ? 'solar:alt-arrow-up-linear' : 'solar:alt-arrow-down-linear')">
                     <h3 class="font-extrabold flex items-center gap-1.5 text-textmain">
-                        <iconify-icon icon="solar:ranking-bold-duotone" class="text-yellow-500 text-xl"></iconify-icon> 주변 인기 꿀팁 TOP 10
+                        <iconify-icon icon="solar:ranking-bold-duotone" class="text-yellow-500 text-xl"></iconify-icon>
+                        주변 인기 꿀팁 TOP 10
                     </h3>
                     <iconify-icon icon="solar:alt-arrow-up-linear" class="text-textmuted"></iconify-icon>
                 </div>
                 <!-- 아코디언 래퍼 (기본 펼침) -->
                 <div id="ranking-list-wrap" class="mt-3">
-                    <div id="ranking-list" class="flex flex-col gap-2 max-h-[200px] overflow-y-auto custom-scrollbar"></div>
-                    <button id="ranking-more-btn" class="hidden w-full mt-2 py-2 text-xs font-bold text-accent bg-accent/5 hover:bg-accent/10 rounded-xl transition-colors">
+                    <div id="ranking-list" class="flex flex-col gap-2 max-h-[200px] overflow-y-auto custom-scrollbar">
+                    </div>
+                    <button id="ranking-more-btn"
+                        class="hidden w-full mt-2 py-2 text-xs font-bold text-accent bg-accent/5 hover:bg-accent/10 rounded-xl transition-colors">
                         더보기 ▾
                     </button>
                 </div>
             </div>
         </div>
-        
+
     </main>
 
     <!-- FAB: 제보하기 버튼 -->
-    <button id="btn-report" class="fixed bottom-20 md:bottom-8 right-4 md:right-8 bg-black hover:bg-gray-800 text-white px-5 py-4 rounded-full shadow-[0_8px_30px_rgba(0,0,0,0.2)] font-extrabold flex items-center gap-2 transition-transform hover:scale-105 active:scale-95 z-50 group">
-        <iconify-icon icon="solar:pen-new-square-linear" class="text-2xl group-hover:rotate-12 transition-transform"></iconify-icon>
+    <button id="btn-report"
+        class="fixed bottom-20 md:bottom-8 right-4 md:right-8 bg-black hover:bg-gray-800 text-white px-5 py-4 rounded-full shadow-[0_8px_30px_rgba(0,0,0,0.2)] font-extrabold flex items-center gap-2 transition-transform hover:scale-105 active:scale-95 z-50 group">
+        <iconify-icon icon="solar:pen-new-square-linear"
+            class="text-2xl group-hover:rotate-12 transition-transform"></iconify-icon>
         <span class="hidden md:inline">꿀팁 제보하기</span>
     </button>
 
     <!-- 제보하기 모달 (Bottom Sheet 형태) -->
     <div id="report-modal" class="fixed inset-0 z-[100] hidden">
         <!-- 배경 오버레이 -->
-        <div id="report-modal-overlay" class="absolute inset-0 bg-black/40 backdrop-blur-sm transition-opacity opacity-0"></div>
-        
+        <div id="report-modal-overlay"
+            class="absolute inset-0 bg-black/40 backdrop-blur-sm transition-opacity opacity-0"></div>
+
         <!-- 바텀 시트 컨테이너 -->
-        <div id="report-modal-content" class="absolute bottom-0 left-0 right-0 md:left-1/2 md:-translate-x-1/2 md:w-full md:max-w-lg bg-white rounded-t-3xl md:rounded-3xl md:bottom-10 shadow-2xl transition-transform translate-y-full flex flex-col h-[85vh] md:h-auto md:max-h-[85vh] duration-300">
+        <div id="report-modal-content"
+            class="absolute bottom-0 left-0 right-0 md:left-1/2 md:-translate-x-1/2 md:w-full md:max-w-lg bg-white rounded-t-3xl md:rounded-3xl md:bottom-10 shadow-2xl transition-transform translate-y-full flex flex-col h-[85vh] md:h-auto md:max-h-[85vh] duration-300">
             <!-- 헤더 -->
             <div class="flex items-center justify-between px-6 py-4 border-b border-black/5 shrink-0">
                 <h2 class="text-lg font-extrabold text-textmain flex items-center gap-2">
-                    <iconify-icon icon="solar:map-point-wave-bold-duotone" class="text-accent text-2xl"></iconify-icon> 꿀팁 제보하기
+                    <iconify-icon icon="solar:map-point-wave-bold-duotone" class="text-accent text-2xl"></iconify-icon>
+                    꿀팁 제보하기
                 </h2>
-                <button id="btn-close-report" class="p-2 text-textmuted hover:bg-gray-100 rounded-full transition-colors">
+                <button id="btn-close-report"
+                    class="p-2 text-textmuted hover:bg-gray-100 rounded-full transition-colors">
                     <iconify-icon icon="solar:close-circle-linear" class="text-2xl"></iconify-icon>
                 </button>
             </div>
@@ -139,64 +161,83 @@
             <div class="flex-1 overflow-y-auto p-6 space-y-6 custom-scrollbar">
                 <!-- Step 1: 상호명 검색 -->
                 <div>
-                    <label class="block text-sm font-bold text-textmain mb-2">1. 장소 검색 <span class="text-accent">*</span></label>
+                    <label class="block text-sm font-bold text-textmain mb-2">1. 장소 검색 <span
+                            class="text-accent">*</span></label>
                     <div class="flex gap-2 relative">
                         <div class="relative flex-1">
-                            <iconify-icon icon="solar:magnifer-linear" class="absolute left-3 top-1/2 -translate-y-1/2 text-textmuted text-lg"></iconify-icon>
-                            <input type="text" id="report-search-input" placeholder="상호명 입력 (예: 꿈나무놀이터)" class="w-full pl-10 pr-4 py-3 bg-wbg border border-black/10 rounded-xl focus:outline-none focus:border-accent focus:ring-2 focus:ring-accent/20 transition-all text-sm font-medium">
+                            <iconify-icon icon="solar:magnifer-linear"
+                                class="absolute left-3 top-1/2 -translate-y-1/2 text-textmuted text-lg"></iconify-icon>
+                            <input type="text" id="report-search-input" placeholder="상호명 입력 (예: 꿈나무놀이터)"
+                                class="w-full pl-10 pr-4 py-3 bg-wbg border border-black/10 rounded-xl focus:outline-none focus:border-accent focus:ring-2 focus:ring-accent/20 transition-all text-sm font-medium">
                         </div>
-                        <button id="btn-search-place" class="bg-black text-white px-5 rounded-xl font-bold text-sm hover:bg-gray-800 transition-colors whitespace-nowrap">검색</button>
+                        <button id="btn-search-place"
+                            class="bg-black text-white px-5 rounded-xl font-bold text-sm hover:bg-gray-800 transition-colors whitespace-nowrap">검색</button>
                     </div>
                     <!-- 검색 결과 영역 -->
-                    <div id="search-results" class="mt-2 bg-white border border-black/10 rounded-xl overflow-hidden hidden shadow-sm max-h-[160px] overflow-y-auto">
+                    <div id="search-results"
+                        class="mt-2 bg-white border border-black/10 rounded-xl overflow-hidden hidden shadow-sm max-h-[160px] overflow-y-auto">
                         <!-- JS로 결과 렌더링 -->
                     </div>
                     <!-- 선택된 장소 표시 (히든) -->
-                    <div id="selected-place" class="mt-3 p-4 bg-accent/5 border border-accent/20 rounded-xl hidden flex items-center justify-between">
+                    <div id="selected-place"
+                        class="mt-3 p-4 bg-accent/5 border border-accent/20 rounded-xl hidden flex items-center justify-between">
                         <div>
                             <div id="selected-place-name" class="font-bold text-textmain">장소명</div>
                             <div id="selected-place-addr" class="text-xs text-textmuted mt-0.5">주소</div>
                         </div>
-                        <button id="btn-reselect-place" class="text-xs font-bold text-accent hover:underline whitespace-nowrap ml-2">다시 선택</button>
+                        <button id="btn-reselect-place"
+                            class="text-xs font-bold text-accent hover:underline whitespace-nowrap ml-2">다시 선택</button>
                     </div>
                 </div>
 
                 <!-- Step 2: 카테고리 선택 -->
                 <div>
-                    <label class="block text-sm font-bold text-textmain mb-2">2. 카테고리 <span class="text-accent">*</span></label>
+                    <label class="block text-sm font-bold text-textmain mb-2">2. 카테고리 <span
+                            class="text-accent">*</span></label>
                     <div class="grid grid-cols-5 gap-2" id="category-selector">
                         <label class="cursor-pointer">
                             <input type="radio" name="report-category" value="playground" class="peer hidden">
-                            <div class="flex flex-col items-center justify-center p-3 border border-black/10 rounded-xl peer-checked:border-[#5BA85B] peer-checked:bg-[#5BA85B]/10 transition-colors h-full">
-                                <iconify-icon icon="solar:trees-linear" class="text-xl text-[#5BA85B] mb-1"></iconify-icon>
+                            <div
+                                class="flex flex-col items-center justify-center p-3 border border-black/10 rounded-xl peer-checked:border-[#5BA85B] peer-checked:bg-[#5BA85B]/10 transition-colors h-full">
+                                <iconify-icon icon="solar:trees-linear"
+                                    class="text-xl text-[#5BA85B] mb-1"></iconify-icon>
                                 <span class="text-[10px] font-bold text-textmain whitespace-nowrap">아기놀이터</span>
                             </div>
                         </label>
                         <label class="cursor-pointer">
                             <input type="radio" name="report-category" value="hospital" class="peer hidden">
-                            <div class="flex flex-col items-center justify-center p-3 border border-black/10 rounded-xl peer-checked:border-[#E05555] peer-checked:bg-[#E05555]/10 transition-colors h-full">
-                                <iconify-icon icon="solar:hospital-linear" class="text-xl text-[#E05555] mb-1"></iconify-icon>
+                            <div
+                                class="flex flex-col items-center justify-center p-3 border border-black/10 rounded-xl peer-checked:border-[#E05555] peer-checked:bg-[#E05555]/10 transition-colors h-full">
+                                <iconify-icon icon="solar:hospital-linear"
+                                    class="text-xl text-[#E05555] mb-1"></iconify-icon>
                                 <span class="text-[10px] font-bold text-textmain">병원</span>
                             </div>
                         </label>
                         <label class="cursor-pointer">
                             <input type="radio" name="report-category" value="restaurant" class="peer hidden">
-                            <div class="flex flex-col items-center justify-center p-3 border border-black/10 rounded-xl peer-checked:border-[#E87D3E] peer-checked:bg-[#E87D3E]/10 transition-colors h-full">
-                                <iconify-icon icon="solar:chef-hat-linear" class="text-xl text-[#E87D3E] mb-1"></iconify-icon>
+                            <div
+                                class="flex flex-col items-center justify-center p-3 border border-black/10 rounded-xl peer-checked:border-[#E87D3E] peer-checked:bg-[#E87D3E]/10 transition-colors h-full">
+                                <iconify-icon icon="solar:chef-hat-linear"
+                                    class="text-xl text-[#E87D3E] mb-1"></iconify-icon>
                                 <span class="text-[10px] font-bold text-textmain">맛집</span>
                             </div>
                         </label>
                         <label class="cursor-pointer">
                             <input type="radio" name="report-category" value="beauty" class="peer hidden">
-                            <div class="flex flex-col items-center justify-center p-3 border border-black/10 rounded-xl peer-checked:border-[#D97DB0] peer-checked:bg-[#D97DB0]/10 transition-colors h-full">
-                                <iconify-icon icon="solar:star-linear" class="text-xl text-[#D97DB0] mb-1"></iconify-icon>
+                            <div
+                                class="flex flex-col items-center justify-center p-3 border border-black/10 rounded-xl peer-checked:border-[#D97DB0] peer-checked:bg-[#D97DB0]/10 transition-colors h-full">
+                                <iconify-icon icon="solar:star-linear"
+                                    class="text-xl text-[#D97DB0] mb-1"></iconify-icon>
                                 <span class="text-[10px] font-bold text-textmain">미용</span>
                             </div>
                         </label>
                         <label class="cursor-pointer">
-                            <input type="radio" name="report-category" value="etc" class="peer hidden" id="cat-etc-radio">
-                            <div class="flex flex-col items-center justify-center p-3 border border-black/10 rounded-xl peer-checked:border-[#9E9E9E] peer-checked:bg-[#9E9E9E]/10 transition-colors h-full">
-                                <iconify-icon icon="solar:map-point-linear" class="text-xl text-[#9E9E9E] mb-1"></iconify-icon>
+                            <input type="radio" name="report-category" value="etc" class="peer hidden"
+                                id="cat-etc-radio">
+                            <div
+                                class="flex flex-col items-center justify-center p-3 border border-black/10 rounded-xl peer-checked:border-[#9E9E9E] peer-checked:bg-[#9E9E9E]/10 transition-colors h-full">
+                                <iconify-icon icon="solar:map-point-linear"
+                                    class="text-xl text-[#9E9E9E] mb-1"></iconify-icon>
                                 <span class="text-[10px] font-bold text-textmain">기타</span>
                             </div>
                         </label>
@@ -204,8 +245,10 @@
                     <!-- 기타 카테고리 직접 입력 -->
                     <div id="etc-category-input-wrap" class="hidden mt-3">
                         <div class="relative">
-                            <iconify-icon icon="solar:pen-linear" class="absolute left-3 top-1/2 -translate-y-1/2 text-textmuted text-lg"></iconify-icon>
-                            <input type="text" id="etc-category-input" placeholder="카테고리를 직접 입력해주세요 (미입력 시 '기타')" maxlength="20"
+                            <iconify-icon icon="solar:pen-linear"
+                                class="absolute left-3 top-1/2 -translate-y-1/2 text-textmuted text-lg"></iconify-icon>
+                            <input type="text" id="etc-category-input" placeholder="카테고리를 직접 입력해주세요 (미입력 시 '기타')"
+                                maxlength="20"
                                 class="w-full pl-10 pr-4 py-3 bg-wbg border border-[#9E9E9E]/40 rounded-xl focus:outline-none focus:border-[#9E9E9E] focus:ring-2 focus:ring-[#9E9E9E]/20 transition-all text-sm font-medium">
                         </div>
                     </div>
@@ -213,14 +256,17 @@
 
                 <!-- Step 3: 설명/메모 -->
                 <div>
-                    <label class="block text-sm font-bold text-textmain mb-2">3. 꿀팁 메모 <span class="text-textmuted font-normal">(선택)</span></label>
-                    <textarea id="report-memo" rows="3" placeholder="어떤 점이 좋았나요? (예: 주차장이 넓어요, 사장님이 친절해요)" class="w-full p-4 bg-wbg border border-black/10 rounded-xl focus:outline-none focus:border-accent focus:ring-2 focus:ring-accent/20 transition-all text-sm font-medium resize-none"></textarea>
+                    <label class="block text-sm font-bold text-textmain mb-2">3. 꿀팁 메모 <span
+                            class="text-textmuted font-normal">(선택)</span></label>
+                    <textarea id="report-memo" rows="3" placeholder="어떤 점이 좋았나요? (예: 주차장이 넓어요, 사장님이 친절해요)"
+                        class="w-full p-4 bg-wbg border border-black/10 rounded-xl focus:outline-none focus:border-accent focus:ring-2 focus:ring-accent/20 transition-all text-sm font-medium resize-none"></textarea>
                 </div>
             </div>
 
             <!-- 하단 버튼 -->
             <div class="p-4 border-t border-black/5 shrink-0 bg-white md:rounded-b-3xl">
-                <button id="btn-submit-report" class="w-full bg-accent hover:bg-[#ff5252] text-white font-black py-4 rounded-xl shadow-lg shadow-accent/30 transition-transform active:scale-[0.98]">
+                <button id="btn-submit-report"
+                    class="w-full bg-accent hover:bg-[#ff5252] text-white font-black py-4 rounded-xl shadow-lg shadow-accent/30 transition-transform active:scale-[0.98]">
                     등록하기
                 </button>
             </div>
@@ -229,8 +275,9 @@
 
     <!-- Firebase DataService 연동 스크립트 -->
     <script type="module" src="js/dataService.js"></script>
-    
+
     <!-- 동네꿀팁 지도 렌더링 및 제어 로직 -->
     <script src="js/dongnae.js"></script>
 </body>
+
 </html>
